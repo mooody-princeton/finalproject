@@ -20,7 +20,7 @@ PostSchema.methods.upvote = function(cb) {
 };
 
 // Flag post
-PostSchema.methods.flag = function(cb) {
+PostSchema.methods.downvote = function(cb) {
     this.flags += 1;
     this.save(cb);
 }

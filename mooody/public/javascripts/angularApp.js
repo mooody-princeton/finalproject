@@ -146,7 +146,7 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
         });
     };
     o.downvoteComment = function(post, comment) {
-        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/upvote', null, {
+        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/downvote', null, {
             headers: { Authorization: 'Bearer ' + auth.getToken() }
         }).success(function(data){
             comment.flags += 1;

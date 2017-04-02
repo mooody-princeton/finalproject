@@ -80,8 +80,8 @@
         <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
             <span class="glyphicon glyphicon-heart" ng-click="incrementUpvotes(comment)"></span>
             {{comment.upvotes}}
-            <span class="glyphicon glyphicon-flag" ng-click="incrementFlags(post)"></span>
-            {{post.flags}}
+            <span class="glyphicon glyphicon-flag" ng-click="incrementFlags(comment)"></span>
+            {{comment.flags}}
             <span style="font-size:20px; margin-left:10px;">
                 {{comment.body}}
             </span>
