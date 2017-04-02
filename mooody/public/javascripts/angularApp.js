@@ -86,6 +86,7 @@ function($http, $window) {
 		});
 	};
 	auth.logIn = function(user) {
+        console.log("In auth.logIn in angularApp.js");
 		return $http.post('/login', user).success(function(data) {
 			auth.saveToken(data.token);
 		});
