@@ -4,5 +4,36 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #48b6fc;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #a66820;
+}
+
+.navbar-default {
+    background-color: white;
+}
+.navbar-default .navbar-brand {
+    font-size: 35px;
+    color: #48b6fc;
+}
+.navbar-default i {
+    font-size:25px;
+}
+.navbar-form .form-group input {
+    width:500px;
+}
+
+.mood-panels {
+    margin-top: 10px;
+    padding: 10px;
+    float: center;
+}
+.mood-panels ul {
+    list-style-type: none;
+}
+.mood-panels li {
+    display: inline;
 }

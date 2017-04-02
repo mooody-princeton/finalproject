@@ -3,7 +3,8 @@
 var mongoose = require('mongoose');
 require('./models/Posts');
 require('./models/Comments');
-mongoose.connect('mongodb://localhost/news');
+require('./models/Users');
+mongoose.connect('mongodb://localhost/news'); // NOTE: change the name of the db for a new one
 
 // Express stuff (connect front-end with back-end)
 var express = require('express');
@@ -22,8 +23,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

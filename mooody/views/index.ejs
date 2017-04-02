@@ -1,97 +1,156 @@
 <html>
 <head>
-  <title>mooody</title>
-  <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
-  <script src="/javascripts/angularApp.js"></script>
-  <style> .glyphicon-thumbs-up { cursor:pointer } </style>
+    <meta charset="utf-8">
+    <title>mooody</title>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/stylesheets/twemoji-awesome.css" rel="stylesheet">
+    <link href="/stylesheets/style.css" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
+    <script src="/javascripts/angularApp.js"></script>
 </head>
-<body ng-app="mooody"> <!--ng-controller="MainCtrl"-->
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-        <ui-view></ui-view>
+
+<body ng-app="mooody">
+    <nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavCtrl">
+    <!--<nav class="navbar navbar-default pull-right">-->
+          <a class="navbar-brand" href="#">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-triumph"></i>dy</a>
+          <ul class="nav navbar-nav">
+              <li ng-show="isLoggedIn()"><a>{{ currentUser() }}</a></li>
+              <li ng-show="isLoggedIn()"><a href="" ng-click="logOut()">Log Out</a></li>
+              <li ng-hide="isLoggedIn()"><a href="/#/login">Log In</a></li>
+              <li ng-hide="isLoggedIn()"><a href="/#/register">Register</a></li>
+          </ul>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <ui-view></ui-view>
+        </div>
     </div>
-  </div>
 
 <!-- home.html -->
-      <script type="text/ng-template" id="/home.html">
-      <div class="page-header">
-        <h1>mooody</h1>
-      </div>
+    <script type="text/ng-template" id="/home.html">
+    <form ng-hide="!isLoggedIn()" ng-submit="addPost()" style="margin-top:30px;">
+        <div class="form-inline">
+            <div class="form-group">
+                <input type="text"
+                class="form-control"
+                placeholder="Why are you mooody?"
+                ng-model="title"></input>
+                <button type="submit" class="btn btn-primary">Post</button>
+            </div>
+        </div>
+    </form>
+    <div ng-hide="isLoggedIn()">
+	  <h4>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can post.</h4>
+	</div>
 
-      <div ng-repeat="post in posts | orderBy:'-upvotes'">
-        <span class="glyphicon glyphicon-thumbs-up"
-          ng-click="incrementUpvotes(post)"></span>
-        {{post.upvotes}}
+    <div class="mood-panels">
+        <ul>
+            <li>Happy</li>
+            <li>Sad</li>
+            <li>Angry</li>
+        </ul>
+    </div>
+
+    <div ng-repeat="post in posts | orderBy:'-upvotes'">
+        <span class="glyphicon glyphicon-heart" ng-click="incrementUpvotes(post)"></span>
+            {{post.upvotes}}
+        <span class="glyphicon glyphicon-flag" ng-click="incrementFlags(post)"></span>
+            {{post.flags}}
         <span style="font-size:20px; margin-left:10px;">
-          <a ng-show="post.link" href="{{post.link}}">
             {{post.title}}
-          </a>
-          <span ng-hide="post.link">
-            {{post.title}}
-          </span>
         </span>
         <span>
             <a href="#/posts/{{post._id}}">Comments</a>
-        </span>
+            ({{post.comments.length}})
+        </span><br><br>
       </div>
-
-      <form ng-submit="addPost()"
-        style="margin-top:30px;">
-        <h3>Add a new post</h3>
-
-        <div class="form-group">
-          <input type="text"
-            class="form-control"
-            placeholder="Title"
-            ng-model="title"></input>
-        </div>
-        <div class="form-group">
-          <input type="text"
-          class="form-control"
-          placeholder="Link"
-          ng-model="link"></input>
-        </div>
-        <button type="submit" class="btn btn-primary">Post</button>
-      </form>
     </script>
 
 <!-- posts.html -->
     <script type="text/ng-template" id="/posts.html">
-  <div class="page-header">
-    <h3>
-      <a ng-show="post.link" href="{{post.link}}">
-        {{post.title}}
-      </a>
-      <span ng-hide="post.link">
-        {{post.title}}
-      </span>
-    </h3>
-  </div>
+        <div>
+            <a href="javascript:history.back()"><h2><span class="glyphicon glyphicon-circle-arrow-left"></span> Back</h2></a>
+            <h2>{{post.title}}</h2>
+        </div>
 
-  <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
-    <span class="glyphicon glyphicon-thumbs-up"
-      ng-click="incrementUpvotes(comment)"></span>
-    {{comment.upvotes}} - by {{comment.author}}
-    <span style="font-size:20px; margin-left:10px;">
-      {{comment.body}}
-    </span>
-  </div>
+        <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
+            <span class="glyphicon glyphicon-heart" ng-click="incrementUpvotes(comment)"></span>
+            {{comment.upvotes}}
+            <span class="glyphicon glyphicon-flag" ng-click="incrementFlags(post)"></span>
+            {{post.flags}}
+            <span style="font-size:20px; margin-left:10px;">
+                {{comment.body}}
+            </span>
+        </div>
 
-  <form ng-submit="addComment()"
-    style="margin-top:30px;">
-    <h3>Add a new comment</h3>
+        <form ng-hide="!isLoggedIn()" ng-submit="addComment()" style="margin-top:30px;">
+            <div class="form-inline" class="form-group">
+                <input type="text"
+                class="form-control"
+                placeholder="Add a new comment"
+                ng-model="body"></input>
+                <button type="submit" class="btn btn-primary">Post</button>
+            </div>
+        </form>
+        <div ng-hide="isLoggedIn()">
+	           <h4>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can comment.</h4>
+	    </div>
+    </script>
 
-    <div class="form-group">
-      <input type="text"
-      class="form-control"
-      placeholder="Comment"
-      ng-model="body"></input>
-    </div>
-    <button type="submit" class="btn btn-primary">Post</button>
-  </form>
+<!-- register.html -->
+    <script type="text/ng-template" id="/register.html">
+        <div ng-show="error" class="alert alert-danger row">
+    	    <span>{{ error.message }}</span>
+        </div>
 
-</script>
+        <form ng-submit="register()" style="margin-top:30px;">
+    	    <h3>Register</h3>
+            <div class="form-group">
+                <input type="text"
+                class="form-control"
+                placeholder="Username"
+                ng-model="user.username"></input>
+            </div>
+            <div class="form-group">
+                <input type="password"
+                class="form-control"
+                placeholder="Password"
+                ng-model="user.password"></input>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </script>
+
+<!-- login.html -->
+    <script type="text/ng-template" id="/login.html">
+        <div ng-show="error" class="alert alert-danger row">
+            <span>{{ error.message }}</span>
+        </div>
+
+        <form ng-submit="logIn()" style="margin-top:30px;">
+            <h3>Log In</h3>
+            <div class="form-group">
+                <input type="text"
+                class="form-control"
+                placeholder="Username"
+                ng-model="user.username"></input>
+            </div>
+            <div class="form-group">
+                <input type="password"
+                class="form-control"
+                placeholder="Password"
+                ng-model="user.password"></input>
+            </div>
+            <button type="submit" class="btn btn-primary">Log In</button>
+        </form>
+    </script>
+
 </body>
 </html>
+
+<!-- NOTE: Emoji support from http://ellekasai.github.io/twemoji-awesome/ -->
+<!-- NOTE: MEAN stack tutorial from https://thinkster.io/tutorials/mean-stack -->

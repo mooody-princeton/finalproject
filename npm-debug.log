@@ -1,22 +1,20 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'install' ]
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'start' ]
 2 info using npm@2.14.12
 3 info using node@v4.3.1
 4 verbose config Skipping project config: /Users/lindyzeng/.npmrc. (matches userconfig)
-5 verbose readDependencies loading dependencies from /Users/lindyzeng/package.json
-6 error install Couldn't read dependencies
-7 verbose stack Error: ENOENT: no such file or directory, open '/Users/lindyzeng/package.json'
-7 verbose stack     at Error (native)
-8 verbose cwd /Users/lindyzeng/Desktop/Princeton/Junior/COS333/finalproj/finalproject
-9 error Darwin 16.4.0
-10 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install"
-11 error node v4.3.1
-12 error npm  v2.14.12
-13 error path /Users/lindyzeng/package.json
-14 error code ENOPACKAGEJSON
-15 error errno -2
-16 error syscall open
-17 error package.json ENOENT: no such file or directory, open '/Users/lindyzeng/package.json'
-17 error package.json This is most likely not a problem with npm itself.
-17 error package.json npm can't find a package.json file in your current directory.
-18 verbose exit [ -2, true ]
+5 verbose stack Error: ENOENT: no such file or directory, open '/Users/lindyzeng/package.json'
+5 verbose stack     at Error (native)
+6 verbose cwd /Users/lindyzeng/Desktop/Princeton/Junior/COS333/finalproj/finalproject
+7 error Darwin 16.4.0
+8 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "start"
+9 error node v4.3.1
+10 error npm  v2.14.12
+11 error path /Users/lindyzeng/package.json
+12 error code ENOENT
+13 error errno -2
+14 error syscall open
+15 error enoent ENOENT: no such file or directory, open '/Users/lindyzeng/package.json'
+15 error enoent This is most likely not a problem with npm itself
+15 error enoent and is related to npm not being able to find a file.
+16 verbose exit [ -2, true ]
