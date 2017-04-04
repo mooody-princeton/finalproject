@@ -37,3 +37,12 @@ a:hover {
 .mood-panels li {
     display: inline;
 }
+.mood-panels i {
+    font-size: 40px;
+}
+.order-panels ul {
+    list-style-type: none;
+}
+.order-panels li {
+    display: inline;
+}

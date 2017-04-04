@@ -44,18 +44,25 @@
         </div>
     </form>
     <div ng-hide="isLoggedIn()">
-	  <h4>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can post.</h4>
+	  <h4>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can post.</h4><br>
 	</div>
 
+    <div class="order-panels">
+        <ul>
+            <li><button ng-click="tab('all')" class="btn btn-default">ALL POSTS</button></li>
+            <li><button ng-click="tab('new')" class="btn btn-success">RECENT</button></li>
+            <li><button ng-click="tab('hot')" class="btn btn-danger">HOT</button></li>
+        </ul>
+    </div>
     <div class="mood-panels">
         <ul>
-            <li>Happy</li>
-            <li>Sad</li>
-            <li>Angry</li>
+            <li><button ng-click="tab('happy')" class="btn btn-default"><i class="twa twa-smile"></i></button></li>
+            <li><button ng-click="tab('sad')" class="btn btn-default"><i class="twa twa-cry"></i></button></li>
+            <li><button ng-click="tab('angry')" class="btn btn-default"><i class="twa twa-triumph"></i></button></li>
         </ul>
     </div>
 
-    <div ng-repeat="post in posts | orderBy:'-upvotes'">
+    <div ng-repeat="post in posts | filter: filters | orderBy: orders"> <!-- can also order by '-flags', '-upvotes' -->
         <span class="glyphicon glyphicon-heart" ng-click="incrementUpvotes(post)"></span>
             {{post.upvotes}}
         <span class="glyphicon glyphicon-flag" ng-click="incrementFlags(post)"></span>
@@ -65,7 +72,7 @@
         </span>
         <span>
             <a href="#/posts/{{post._id}}">Comments</a>
-            ({{post.comments.length}})
+            ({{post.comments.length}}) {{post.time | date:'dd-MMM-yy HH:mm'}}
         </span><br><br>
       </div>
     </script>
@@ -84,7 +91,7 @@
             {{comment.flags}}
             <span style="font-size:20px; margin-left:10px;">
                 {{comment.body}}
-            </span>
+            </span><br><br>
         </div>
 
         <form ng-hide="!isLoggedIn()" ng-submit="addComment()" style="margin-top:30px;">

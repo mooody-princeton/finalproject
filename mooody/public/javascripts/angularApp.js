@@ -159,10 +159,31 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
 // Main Controller
 app.controller('MainCtrl', ['$scope', 'posts', 'auth',
     function($scope, posts, auth) {
-        $scope.posts = posts.posts;
+        // $scope.posts = posts.posts;
+        // Comment below out when backend is ready
+        $scope.posts = [
+            {title:"test1-h", upvotes:10, flags:3, mood:"happy", time:new Date("October 13, 2014 11:13:00")},
+            {title:"test2-h", upvotes:2, flags:3, mood:"happy", time:new Date("October 13, 2014 11:14:00")},
+            {title:"test3-h", upvotes:2, flags:3, mood:"happy", time:new Date("October 13, 2014 11:15:00")},
+            {title:"test4-h", upvotes:4, flags:3, mood:"happy", time:new Date("October 13, 2014 11:16:00")},
+            {title:"test5-h", upvotes:2, flags:3, mood:"happy", time:new Date("October 13, 2014 11:17:00")},
+            {title:"test1-s", upvotes:2, flags:3, mood:"sad", time:new Date("October 14, 2014 11:13:00")},
+            {title:"test2-s", upvotes:2, flags:3, mood:"sad", time:new Date("October 14, 2014 11:14:00")},
+            {title:"test3-s", upvotes:11, flags:3, mood:"sad", time:new Date("October 14, 2014 11:15:00")},
+            {title:"test4-s", upvotes:2, flags:3, mood:"sad", time:new Date("October 14, 2014 11:16:00")},
+            {title:"test5-s", upvotes:1, flags:3, mood:"sad", time:new Date("October 14, 2014 11:17:00")},
+            {title:"test1-a", upvotes:2, flags:3, mood:"angry", time:new Date("October 11, 2014 11:13:00")},
+            {title:"test2-a", upvotes:0, flags:3, mood:"angry", time:new Date("October 11, 2014 11:14:00")},
+            {title:"test3-a", upvotes:2, flags:3, mood:"angry", time:new Date("October 11, 2014 11:15:00")},
+            {title:"test4-a", upvotes:3, flags:3, mood:"angry", time:new Date("October 11, 2014 11:16:00")},
+            {title:"test5-a", upvotes:4, flags:3, mood:"angry", time:new Date("October 11, 2014 11:17:00")},
+        ];
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.title = '';
+        $scope.filters = {};
+        $scope.orders = '-time';
 
+        // Add post
         $scope.addPost = function() {
             if (!$scope.title || $scope.title === '') { return; }
 
@@ -170,14 +191,39 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 title: $scope.title,
             });
             $scope.title = '';
-            $scope.link = '';
         };
+        // Upvote post
         $scope.incrementUpvotes = function(post) {
             posts.upvote(post);
         };
+        // Flag post
         $scope.incrementFlags = function(post) {
             posts.downvote(post);
         };
+        // Filter posts by mood
+        $scope.tab = function(tab) {
+            console.log("In mood tab filter");
+            console.log(tab);
+            if (tab === 'happy') {
+                $scope.filters.mood = 'happy';
+            }
+            else if (tab === 'sad') {
+                $scope.filters.mood = 'sad';
+            }
+            else if (tab === 'angry') {
+                $scope.filters.mood = 'angry';
+            }
+            else if (tab === 'new') {
+                $scope.orders = "-time";
+            } else if (tab === 'hot') {
+                $scope.orders = "-upvotes";
+            }
+            else {
+                $scope.filters = {};
+            }
+            //$scope.posts = posts.posts;
+            console.log($scope.filters.mood);
+        }
     }]);
 
 // Posts Controller
