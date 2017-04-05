@@ -37,8 +37,12 @@
             <div class="form-group">
                 <input type="text"
                 class="form-control"
-                placeholder="Why are you mooody!!!?"
+                placeholder="What's on your mind?"
                 ng-model="title"></input>
+                <input type="text"
+                class="form-control"
+                placeholder="If you need to elaborate... (optional)"
+                ng-model="body"></input>
                 <button type="submit" class="btn btn-primary">Post</button>
             </div>
         </div>
@@ -70,9 +74,12 @@
         <span style="font-size:20px; margin-left:10px;">
             {{post.title}}
         </span>
+        <span style="font-size:20px; margin-left:10px;">
+            {{post.body}}
+        </span>
         <span>
             <a href="#/posts/{{post._id}}">Comments</a>
-            ({{post.comments.length}}) {{post.time | date:'dd-MMM-yy HH:mm'}}
+            ({{post.comments.length}}) {{post.date | date:'dd-MMM-yy HH:mm'}}
         </span><br><br>
       </div>
     </script>
@@ -82,6 +89,7 @@
         <div>
             <a href="javascript:history.back()"><h2><span class="glyphicon glyphicon-circle-arrow-left"></span> Back</h2></a>
             <h2>{{post.title}}</h2>
+            <h3>{{post.body}}</h3>
         </div>
 
         <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">

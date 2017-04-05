@@ -6,7 +6,7 @@ var app = angular.module('mooody', ['ui.router']);
 app.config(['$stateProvider','$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
 
-  $stateProvider.state('home', {
+    $stateProvider.state('home', {
       url: '/home',
       templateUrl: '/home.html',
       controller: 'MainCtrl',
@@ -159,9 +159,8 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
 // Main Controller
 app.controller('MainCtrl', ['$scope', 'posts', 'auth',
     function($scope, posts, auth) {
-        // $scope.posts = posts.posts;
-        // Comment below out when backend is ready
-        $scope.posts = [
+        // Tests below can be used when back-end gets disabled for some reason
+        /*$scope.posts = [
             {title:"test1-h", upvotes:10, flags:3, mood:"happy", time:new Date("October 13, 2014 11:13:00")},
             {title:"test2-h", upvotes:2, flags:3, mood:"happy", time:new Date("October 13, 2014 11:14:00")},
             {title:"test3-h", upvotes:2, flags:3, mood:"happy", time:new Date("October 13, 2014 11:15:00")},
@@ -177,11 +176,14 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
             {title:"test3-a", upvotes:2, flags:3, mood:"angry", time:new Date("October 11, 2014 11:15:00")},
             {title:"test4-a", upvotes:3, flags:3, mood:"angry", time:new Date("October 11, 2014 11:16:00")},
             {title:"test5-a", upvotes:4, flags:3, mood:"angry", time:new Date("October 11, 2014 11:17:00")},
-        ];
+        ];*/
+        $scope.posts = posts.posts;
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.title = '';
+        $scope.body = '';
         $scope.filters = {};
-        $scope.orders = '-time';
+        $scope.filters.mood = 'happy'
+        $scope.orders = '-date';
 
         // Add post
         $scope.addPost = function() {
@@ -189,8 +191,12 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
 
             posts.create({
                 title: $scope.title,
+                body: $scope.body,
+                mood: $scope.filters.mood,
+                date: new Date()
             });
             $scope.title = '';
+            $scope.body = '';
         };
         // Upvote post
         $scope.incrementUpvotes = function(post) {
@@ -214,7 +220,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.filters.mood = 'angry';
             }
             else if (tab === 'new') {
-                $scope.orders = "-time";
+                $scope.orders = "-date";
             } else if (tab === 'hot') {
                 $scope.orders = "-upvotes";
             }

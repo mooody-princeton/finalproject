@@ -4,13 +4,13 @@ var mongoose = require('mongoose');
 
 var PostSchema = new mongoose.Schema({
   title: String,
-  //link: String,
+  body: String,
   upvotes: {type: Number, default: 0},
   flags: {type: Number, default: 0},
+  mood: String,
+  date: Date,
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }]
-  // post type: happy, sad, angry
   // list of upvotes, flags from users
-  // Date/time
 });
 
 // Upvote post
