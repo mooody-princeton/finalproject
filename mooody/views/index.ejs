@@ -10,6 +10,33 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
     <script src="/javascripts/angularApp.js"></script>
+
+
+  <!--- Info for charts--->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Mood', 'Number of People'],
+          ['Happy',     15],
+          ['Angry',      6],
+          ['Sad',        5]
+        ]);
+        var options = {
+          title: '',
+          legend:{ position: 'none' },
+          slices: {0: {color: '#48b6fc'}, 1: {color: '#3A92CA'}, 2: {color: '#255C7F'}},
+          pieSliceText: 'none',
+          chartArea:{left:75,top:0,width:'50%',height:'100%'},
+          pieHole: 0.6,
+          tooltip: { trigger: 'selection', text:'none', ignorebounds:'True' },
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        chart.draw(data, options);
+      }
+    </script>
 </head>
 
 <body ng-app="mooody">
@@ -29,6 +56,17 @@
             <ui-view></ui-view>
         </div>
     </div>
+
+    <!--- sidebar--->
+<div class="sidebar"><center><h3>Princeton's Mood:</h3>
+<div id="donutchart"></div>
+<h4>Update your mood:</h4> <!--- make buttons functional--->
+<button><i class="twa twa-smile"></i></button>
+<button><i class="twa twa-cry"></i></button>
+<button><i class="twa twa-triumph"></i></button>
+</center>
+</div>
+
 
 <!-- home.html -->
     <script type="text/ng-template" id="/home.html">

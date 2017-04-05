@@ -46,3 +46,15 @@ a:hover {
 .order-panels li {
     display: inline;
 }
+.sidebar {
+  position:fixed;
+  vertical-align:top;
+  padding-left: 0%;
+  padding-top: 10%;
+  width:25%;
+  right:0;
+  top:0;
+  bottom:0;
+  color: #48b6fc;
+  border-left: 1px solid #ddd;
+}
