@@ -2,6 +2,8 @@ angular.module('mooody', ['ui.router'])
 
 var app = angular.module('mooody', ['ui.router']);
 
+// UI Routing *********************************************
+
 // URL Routing for UI (switching between home, login, register, and comments pages)
 app.config(['$stateProvider','$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
@@ -51,7 +53,9 @@ app.config(['$stateProvider','$urlRouterProvider',
   $urlRouterProvider.otherwise('home');
 }]);
 
-// Authorization module
+// Factories **********************************************
+
+// Authorization factory
 app.factory('auth', ['$http', '$window',
 function($http, $window) {
 	var auth = {};
@@ -98,7 +102,7 @@ function($http, $window) {
 	return auth;
 }]);
 
-// Posting module
+// Posts factory
 app.factory('posts', ['$http', 'auth', function($http, auth) {
     var o = {
         posts: []
@@ -156,27 +160,11 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
     return o;
 }]);
 
-// Main Controller
+// Controllers ********************************************
+
+// Main Controller (home page)
 app.controller('MainCtrl', ['$scope', 'posts', 'auth',
     function($scope, posts, auth) {
-        // Tests below can be used when back-end gets disabled for some reason
-        /*$scope.posts = [
-            {title:"test1-h", upvotes:10, flags:3, mood:"happy", time:new Date("October 13, 2014 11:13:00")},
-            {title:"test2-h", upvotes:2, flags:3, mood:"happy", time:new Date("October 13, 2014 11:14:00")},
-            {title:"test3-h", upvotes:2, flags:3, mood:"happy", time:new Date("October 13, 2014 11:15:00")},
-            {title:"test4-h", upvotes:4, flags:3, mood:"happy", time:new Date("October 13, 2014 11:16:00")},
-            {title:"test5-h", upvotes:2, flags:3, mood:"happy", time:new Date("October 13, 2014 11:17:00")},
-            {title:"test1-s", upvotes:2, flags:3, mood:"sad", time:new Date("October 14, 2014 11:13:00")},
-            {title:"test2-s", upvotes:2, flags:3, mood:"sad", time:new Date("October 14, 2014 11:14:00")},
-            {title:"test3-s", upvotes:11, flags:3, mood:"sad", time:new Date("October 14, 2014 11:15:00")},
-            {title:"test4-s", upvotes:2, flags:3, mood:"sad", time:new Date("October 14, 2014 11:16:00")},
-            {title:"test5-s", upvotes:1, flags:3, mood:"sad", time:new Date("October 14, 2014 11:17:00")},
-            {title:"test1-a", upvotes:2, flags:3, mood:"angry", time:new Date("October 11, 2014 11:13:00")},
-            {title:"test2-a", upvotes:0, flags:3, mood:"angry", time:new Date("October 11, 2014 11:14:00")},
-            {title:"test3-a", upvotes:2, flags:3, mood:"angry", time:new Date("October 11, 2014 11:15:00")},
-            {title:"test4-a", upvotes:3, flags:3, mood:"angry", time:new Date("October 11, 2014 11:16:00")},
-            {title:"test5-a", upvotes:4, flags:3, mood:"angry", time:new Date("October 11, 2014 11:17:00")},
-        ];*/
         $scope.posts = posts.posts;
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.title = '';
@@ -188,7 +176,6 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         // Add post
         $scope.addPost = function() {
             if (!$scope.title || $scope.title === '') { return; }
-
             posts.create({
                 title: $scope.title,
                 body: $scope.body,
@@ -277,7 +264,7 @@ app.controller('AuthCtrl', ['$scope', '$state', 'auth',
         };
     }]);
 
-// Nav Controller
+// Navbar Controller
 app.controller('NavCtrl', ['$scope', 'auth',
     function($scope, auth) {
         $scope.isLoggedIn = auth.isLoggedIn;

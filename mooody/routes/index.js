@@ -11,7 +11,7 @@ var User = mongoose.model('User');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
-/******************************************************************************/
+// Routing functions **************************************
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
