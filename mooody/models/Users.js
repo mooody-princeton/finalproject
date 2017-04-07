@@ -6,7 +6,8 @@ var jwt = require('jsonwebtoken');
 var UserSchema = new mongoose.Schema({
   username: {type: String, lowercase: true, unique: true},
   hash: String,
-  salt: String
+  salt: String,
+  mood: String
   // Banned?, Time since ban
 });
 
@@ -34,6 +35,11 @@ UserSchema.methods.validPassword = function(password) {
   var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString('hex');
 
   return this.hash === hash;
+};
+
+UserSchema.methods.changeMood = function(mood){
+  this.mood = mood;
+  this.save();
 };
 
 mongoose.model('User', UserSchema);

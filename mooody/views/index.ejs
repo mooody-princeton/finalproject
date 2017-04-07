@@ -11,8 +11,7 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
     <script src="/javascripts/angularApp.js"></script>
 
-
-  <!--- Info for charts--->
+<!-- Info for charts -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load("current", {packages:["corechart"]});
@@ -39,7 +38,11 @@
     </script>
 </head>
 
+<!--****************************************************-->
+
 <body ng-app="mooody">
+
+<!-- Navbar -->
     <nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavCtrl">
     <!--<nav class="navbar navbar-default pull-right">-->
           <a class="navbar-brand" href="#">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-triumph"></i>dy</a>
@@ -51,25 +54,32 @@
           </ul>
     </nav>
 
+<!-- Display the rest of the page -->
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <ui-view></ui-view>
         </div>
     </div>
 
-    <!--- sidebar--->
-<div class="sidebar"><center><h3>Princeton's Mood:</h3>
-<div id="donutchart"></div>
-<h4>Update your mood:</h4> <!--- make buttons functional--->
-<button><i class="twa twa-smile"></i></button>
-<button><i class="twa twa-cry"></i></button>
-<button><i class="twa twa-triumph"></i></button>
-</center>
-</div>
+<!-- Side bar -->
+    <div class="sidebar">
+        <center>
+            <h3>Princeton's Mood:</h3>
+            <div id="donutchart"></div>
+            <div>
+                <h4>Update your mood:</h4> <!-- make buttons functional-->
+                <button><i class="twa twa-smile"></i></button>
+                <button><i class="twa twa-cry"></i></button>
+                <button><i class="twa twa-triumph"></i></button>
+            </div>
+        </center>
+    </div>
 
 
 <!-- home.html -->
     <script type="text/ng-template" id="/home.html">
+    
+    <!-- Section to add a new post -->
     <form ng-hide="!isLoggedIn()" ng-submit="addPost()" style="margin-top:30px;">
         <div class="form-inline">
             <div class="form-group">
@@ -89,6 +99,7 @@
 	  <h4>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can post.</h4><br>
 	</div>
 
+    <!-- Mood tabs and filters -->
     <div class="order-panels">
         <ul>
             <li><button ng-click="tab('all')" class="btn btn-default">ALL POSTS</button></li>
@@ -104,6 +115,7 @@
         </ul>
     </div>
 
+    <!-- Display posts -->
     <div ng-repeat="post in posts | filter: filters | orderBy: orders"> <!-- can also order by '-flags', '-upvotes' -->
         <span class="glyphicon glyphicon-heart" ng-click="incrementUpvotes(post)"></span>
             {{post.upvotes}}
@@ -124,12 +136,17 @@
 
 <!-- posts.html -->
     <script type="text/ng-template" id="/posts.html">
+
+        <!-- Header -->
         <div>
-            <a href="javascript:history.back()"><h2><span class="glyphicon glyphicon-circle-arrow-left"></span> Back</h2></a>
+            <a href="javascript:history.back()">
+                <h2><span class="glyphicon glyphicon-circle-arrow-left"></span> Back</h2>
+            </a>
             <h2>{{post.title}}</h2>
             <h3>{{post.body}}</h3>
         </div>
 
+        <!-- Display comments -->
         <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
             <span class="glyphicon glyphicon-heart" ng-click="incrementUpvotes(comment)"></span>
             {{comment.upvotes}}
@@ -140,6 +157,7 @@
             </span><br><br>
         </div>
 
+        <!-- Section to add a new comment -->
         <form ng-hide="!isLoggedIn()" ng-submit="addComment()" style="margin-top:30px;">
             <div class="form-inline" class="form-group">
                 <input type="text"
@@ -150,16 +168,19 @@
             </div>
         </form>
         <div ng-hide="isLoggedIn()">
-	           <h4>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can comment.</h4>
+	       <h4>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can comment.</h4>
 	    </div>
     </script>
 
 <!-- register.html -->
     <script type="text/ng-template" id="/register.html">
+
+        <!-- Error message -->
         <div ng-show="error" class="alert alert-danger row">
     	    <span>{{ error.message }}</span>
         </div>
 
+        <!-- Registration form -->
         <form ng-submit="register()" style="margin-top:30px;">
     	    <h3>Register</h3>
             <div class="form-group">
@@ -180,10 +201,13 @@
 
 <!-- login.html -->
     <script type="text/ng-template" id="/login.html">
+
+        <!-- Error message -->
         <div ng-show="error" class="alert alert-danger row">
             <span>{{ error.message }}</span>
         </div>
 
+        <!-- Login form -->
         <form ng-submit="logIn()" style="margin-top:30px;">
             <h3>Log In</h3>
             <div class="form-group">
