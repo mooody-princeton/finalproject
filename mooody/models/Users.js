@@ -37,9 +37,10 @@ UserSchema.methods.validPassword = function(password) {
   return this.hash === hash;
 };
 
-UserSchema.methods.changeMood = function(mood){
+// Change user's mood
+UserSchema.methods.changeMoodTo = function(mood, cb){
   this.mood = mood;
-  this.save();
+  this.save(cb);
 };
 
 mongoose.model('User', UserSchema);

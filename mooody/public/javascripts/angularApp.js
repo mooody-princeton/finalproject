@@ -15,6 +15,9 @@ app.config(['$stateProvider','$urlRouterProvider',
       resolve: {
           postPromise: ['posts', function(posts) {
               return posts.getAll();
+          }],
+          moodPromise: ['auth', function(auth) {
+                return auth.getUserMood(auth.currentUserId());
           }]
       }
     });
@@ -58,7 +61,9 @@ app.config(['$stateProvider','$urlRouterProvider',
 // Authorization factory
 app.factory('auth', ['$http', '$window',
 function($http, $window) {
-	var auth = {};
+	var auth = {
+        usermood: []
+    };
 	auth.saveToken = function(token) {
 		$window.localStorage['mooody-token'] = token;
 	};
@@ -76,6 +81,7 @@ function($http, $window) {
 			return false;
 		}
 	};
+    // Return current user's id
 	auth.currentUser = function() {
 		if (auth.isLoggedIn()) {
 			var token = auth.getToken();
@@ -84,6 +90,14 @@ function($http, $window) {
 			return payload.username;
 		}
 	};
+    auth.currentUserId = function() {
+        if (auth.isLoggedIn()) {
+            var token = auth.getToken();
+            var payload = JSON.parse($window.atob(token.split('.')[1]));
+
+            return payload._id;
+        }
+    };
 	auth.register = function(user) {
 		return $http.post('/register', user).success(function(data) {
 			auth.saveToken(data.token);
@@ -98,6 +112,22 @@ function($http, $window) {
 	auth.logOut = function() {
 		$window.localStorage.removeItem('mooody-token');
 	};
+    // Return current user's mood by setting factory variable property
+    auth.getUserMood = function(userid) {
+        return $http.get('/usermood/' + userid, null, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).success(function(data) {
+            angular.copy(data, auth.usermood);
+        });
+    };
+    // Set current user's mood
+    auth.setUserMood = function(userid, moodString) {
+        return $http.put('/usermood/' + userid + '/changemood', {newmood: moodString}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).success(function(data) {
+            angular.copy(data, auth.usermood);
+        });
+    };
 
 	return auth;
 }]);
@@ -269,5 +299,26 @@ app.controller('NavCtrl', ['$scope', 'auth',
     function($scope, auth) {
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.currentUser = auth.currentUser;
+        $scope.currentUserId = auth.currentUserId;
         $scope.logOut = auth.logOut;
+    }]);
+
+// Sidebar Controller
+app.controller('SidebarCtrl', ['$scope', 'auth',
+    function($scope, auth) {
+        $scope.isLoggedIn = auth.isLoggedIn;
+        $scope.currentUser = auth.currentUser;
+        $scope.currentUserId = auth.currentUserId;
+        $scope.currentMood = auth.usermood;
+
+        // Update user mood
+        $scope.setMoodTo = function(moodString) {
+            // If same mood as current mood, don't do anything
+            if ($scope.currentMood[0].mood == moodString) {
+                return;
+            }
+            // Set to new mood
+            auth.setUserMood($scope.currentUserId(), moodString);
+
+         };
     }]);

@@ -4,21 +4,22 @@ var router = express.Router();
 var passport = require('passport');
 var jwt = require('express-jwt');
 
-// Mongo schemas
+// Mongo Schemas ******************************************
+
 var Post = mongoose.model('Post');
 var Comment = mongoose.model('Comment');
 var User = mongoose.model('User');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
-// Routing functions **************************************
+// Routing functions for posts/comments *******************
 
-/* GET home page. */
+// GET home page
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-// Get/put Posts
+// GET posts
 router.get('/posts', function(req, res, next) {
   Post.find(function(err, posts){
     if(err) { return next(err); }
@@ -27,6 +28,7 @@ router.get('/posts', function(req, res, next) {
   });
 });
 
+// POST a post
 router.post('/posts', function(req, res, next) {
   var post = new Post(req.body);
 
@@ -37,6 +39,7 @@ router.post('/posts', function(req, res, next) {
   });
 });
 
+// 
 router.param('post', function(req, res, next, id) {
   var query = Post.findById(id);
 
@@ -116,6 +119,8 @@ router.put('/posts/:post/comments/:comment/downvote', auth, function(req, res, n
   });
 });
 
+// Routing functions for login/registration ***************
+
 router.post('/register', function(req, res, next){
     console.log("In index.js");
     if(!req.body.username || !req.body.password){
@@ -125,6 +130,7 @@ router.post('/register', function(req, res, next){
 
     var user = new User();
     user.username = req.body.username;
+    user.mood = 'Select one below!';
     user.setPassword(req.body.password)
     user.save(function (err){
         if(err) { return next(err); }
@@ -148,6 +154,34 @@ router.post('/login', function(req, res, next){
         return res.status(401).json(info);
     }
     })(req, res, next);
+});
+
+// Routing functions for user-related stuff ***************
+
+// Set user parameter
+router.param('user', function(req, res, next, id) {
+  var query = User.findById(id);
+
+  query.exec(function (err, userdocument){
+    if (err) { return next(err); }
+    if (!userdocument) { return next(new Error('can\'t find user')); }
+
+    req.userdocument = userdocument;
+    return next();
+  });
+});
+
+// Get current mood of user
+router.get('/usermood/:user', function(req, res, next) {
+  res.json([{mood: req.userdocument.mood}]);
+});
+
+// Set new mood for user
+router.put('/usermood/:user/changemood', function(req, res, next) {
+  req.userdocument.changeMoodTo(req.body.newmood, function(err, curruser){
+    if (err) { return next(err); }
+    res.json([{mood: curruser.mood}]);
+  });
 });
 
 module.exports = router;
