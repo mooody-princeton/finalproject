@@ -14,10 +14,15 @@ app.config(['$stateProvider','$urlRouterProvider',
       controller: 'MainCtrl',
       resolve: {
           postPromise: ['posts', function(posts) {
-              return posts.getAll();
+                return posts.getAll();
           }],
           moodPromise: ['auth', function(auth) {
-                return auth.getUserMood(auth.currentUserId());
+                if (auth.isLoggedIn()) {
+                    return auth.getUserMood(auth.currentUserId());
+                }
+          }],
+          socialmoodPromise: ['auth', function(auth) {
+                return auth.getSocialMood();
           }]
       }
     });
@@ -28,6 +33,11 @@ app.config(['$stateProvider','$urlRouterProvider',
       resolve: {
           post: ['$stateParams', 'posts', function($stateParams, posts) {
               return posts.get($stateParams.id);
+          }],
+          moodPromise: ['auth', function(auth) {
+                if (auth.isLoggedIn()) {
+                    return auth.getUserMood(auth.currentUserId());
+                }
           }]
       }
     });
@@ -58,11 +68,12 @@ app.config(['$stateProvider','$urlRouterProvider',
 
 // Factories **********************************************
 
-// Authorization factory
+// Authorization factory, simultaneously takes care of mood tracking
 app.factory('auth', ['$http', '$window',
 function($http, $window) {
 	var auth = {
-        usermood: []
+        usermood: [],
+        socialmood: []
     };
 	auth.saveToken = function(token) {
 		$window.localStorage['mooody-token'] = token;
@@ -128,7 +139,12 @@ function($http, $window) {
             angular.copy(data, auth.usermood);
         });
     };
-
+    // Get current social mood stats
+    auth.getSocialMood = function() {
+        return $http.get('/socialmood').success(function(data) {
+               angular.copy(data, auth.socialmood);
+            });
+    };
 	return auth;
 }]);
 
@@ -304,12 +320,13 @@ app.controller('NavCtrl', ['$scope', 'auth',
     }]);
 
 // Sidebar Controller
-app.controller('SidebarCtrl', ['$scope', 'auth',
-    function($scope, auth) {
+app.controller('SidebarCtrl', ['$scope', '$http', 'auth',
+    function($scope, $http, auth) {
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
         $scope.currentMood = auth.usermood;
+        $scope.currentSocialMood = auth.socialmood;
 
         // Update user mood
         $scope.setMoodTo = function(moodString) {
@@ -317,6 +334,9 @@ app.controller('SidebarCtrl', ['$scope', 'auth',
             if ($scope.currentMood[0].mood == moodString) {
                 return;
             }
+            // Decrement social mood count of current mood
+            // Will be done asap
+
             // Set to new mood
             auth.setUserMood($scope.currentUserId(), moodString);
 

@@ -16,6 +16,7 @@ mongoose.connect('mongodb://localhost/news'); // NOTE: change the name of the db
 require('./models/Posts');
 require('./models/Comments');
 require('./models/Users');
+require('./models/SocialMood');
 require('./config/passport');
 
 var index = require('./routes/index');

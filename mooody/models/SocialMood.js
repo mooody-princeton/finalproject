@@ -8,4 +8,4 @@ var SocialMoodSchema = new mongoose.Schema({
   angry: {type: Number, default: 0}
 });
 
-mongoose.model('SocialMood', SocialMoodSchema);
+mongoose.model('SocialMood', SocialMoodSchema, 'socialmood');

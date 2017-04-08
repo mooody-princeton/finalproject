@@ -9,6 +9,7 @@ var jwt = require('express-jwt');
 var Post = mongoose.model('Post');
 var Comment = mongoose.model('Comment');
 var User = mongoose.model('User');
+var SocialMood = mongoose.model('SocialMood');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
@@ -181,6 +182,16 @@ router.put('/usermood/:user/changemood', function(req, res, next) {
   req.userdocument.changeMoodTo(req.body.newmood, function(err, curruser){
     if (err) { return next(err); }
     res.json([{mood: curruser.mood}]);
+  });
+});
+
+// Routing functions for social mood **********************
+
+// Return single social mood document
+router.get('/socialmood', function(req, res, next) {
+  SocialMood.find(function(err, socmood){
+    if(err) { return next(err); }
+    res.json(socmood);
   });
 });
 
