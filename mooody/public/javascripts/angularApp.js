@@ -38,6 +38,9 @@ app.config(['$stateProvider','$urlRouterProvider',
                 if (auth.isLoggedIn()) {
                     return auth.getUserMood(auth.currentUserId());
                 }
+          }],
+          socialmoodPromise: ['auth', function(auth) {
+                return auth.getSocialMood();
           }]
       }
     });
@@ -92,7 +95,6 @@ function($http, $window) {
 			return false;
 		}
 	};
-    // Return current user's id
 	auth.currentUser = function() {
 		if (auth.isLoggedIn()) {
 			var token = auth.getToken();
@@ -101,6 +103,7 @@ function($http, $window) {
 			return payload.username;
 		}
 	};
+    // Return current user's id
     auth.currentUserId = function() {
         if (auth.isLoggedIn()) {
             var token = auth.getToken();
@@ -144,6 +147,22 @@ function($http, $window) {
         return $http.get('/socialmood').success(function(data) {
                angular.copy(data, auth.socialmood);
             });
+    };
+    // Decrement a social mood count
+    auth.decrementSocialMood = function(oldMood) {
+        return $http.put('/socialmood/decrement', {mood: oldMood}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).success(function(data) {
+            angular.copy(data, auth.socialmood);
+        });
+    };
+    // Increment a social mood count
+    auth.incrementSocialMood = function(newMood) {
+        return $http.put('/socialmood/increment', {mood: newMood}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).success(function(data) {
+            angular.copy(data, auth.socialmood);
+        });
     };
 	return auth;
 }]);
@@ -334,11 +353,22 @@ app.controller('SidebarCtrl', ['$scope', '$http', 'auth',
             if ($scope.currentMood[0].mood == moodString) {
                 return;
             }
-            // Decrement social mood count of current mood
-            // Will be done asap
-
-            // Set to new mood
-            auth.setUserMood($scope.currentUserId(), moodString);
+            // If not new user, decrement social mood count of current mood
+            if ($scope.currentMood[0].mood != 'Select one below!') {
+                auth.decrementSocialMood($scope.currentMood[0].mood).then(function(){
+                    // Then, set to new mood
+                    auth.setUserMood($scope.currentUserId(), moodString).then(function(){
+                        // Finally, increment social mood count of newly selected mood
+                        auth.incrementSocialMood(moodString); 
+                    });
+                });
+            }
+            // If new user, then nothing to decrement (the rest remains the same)
+            else {
+                auth.setUserMood($scope.currentUserId(), moodString).then(function(){
+                    auth.incrementSocialMood(moodString); 
+                });
+            }
 
          };
     }]);

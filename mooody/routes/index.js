@@ -195,4 +195,26 @@ router.get('/socialmood', function(req, res, next) {
   });
 });
 
+// Decrement social mood count
+router.put('/socialmood/decrement', function(req, res, next) {
+  SocialMood.find(function(err, socmood){
+    if(err) { return next(err); }
+    socmood[0].decrement(req.body.mood, function(err, updatedsocmood) {
+       if (err) { return next(err); }
+       res.json([updatedsocmood]);
+    });
+  });
+});
+
+// Increment social mood count
+router.put('/socialmood/increment', function(req, res, next) {
+  SocialMood.find(function(err, socmood){
+    if(err) { return next(err); }
+    socmood[0].increment(req.body.mood, function(err, updatedsocmood) {
+       if (err) { return next(err); }
+       res.json([updatedsocmood]);
+    });
+  });
+});
+
 module.exports = router;

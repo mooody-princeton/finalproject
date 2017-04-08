@@ -8,4 +8,16 @@ var SocialMoodSchema = new mongoose.Schema({
   angry: {type: Number, default: 0}
 });
 
+// Decrement social mood count
+SocialMoodSchema.methods.decrement = function(mood, cb) {
+	this[mood] -= 1;
+	this.save(cb);
+};
+
+// Increment social mood count
+SocialMoodSchema.methods.increment = function(mood, cb) {
+	this[mood] += 1;
+	this.save(cb);
+};
+
 mongoose.model('SocialMood', SocialMoodSchema, 'socialmood');
