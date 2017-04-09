@@ -1,10 +1,17 @@
+/* Format body */
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 20px;
+  font: 14px "Roboto", Helvetica, Arial, sans-serif;
 }
 
+/* Format links */
 a {
   color: #48b6fc;
+}
+
+a:active, a:visited, a:focus {
+    text-decoration: none;
+    color: #48b6fc;
 }
 
 a:hover {
@@ -12,84 +19,4 @@ a:hover {
     color: #a66820;
 }
 
-.form-inline {
-    width: 1000px;
-}
-#form-title {
-    width:300px;
-}
-#form-body {
-    width:600px;
-}
-
-.postfeed {
-    padding: 0px;
-    width:1000px;
-    border-style: solid;
-    border-bottom-width: 1px;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    border-color: lightgray;
-}
-.postfeed ul {
-    list-style-type: none;
-}
-.postfeed li {
-    display: inline;
-    padding: 10px;
-}
-
-.navbar-default {
-    background-color: white;
-}
-.navbar-default .navbar-brand {
-    font-size: 35px;
-    color: #48b6fc;
-}
-.navbar-default i {
-    font-size:25px;
-}
-.navbar-form .form-group input {
-    width:500px;
-}
-
-.mood-panels {
-    margin-top: 10px;
-    padding: 10px;
-    float: center;
-    width: 1000px;
-    border-style: solid;
-    border-bottom-width: 1px;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    border-color: lightgray;
-}
-.mood-panels ul {
-    list-style-type: none;
-}
-.mood-panels li {
-    display: inline;
-}
-.mood-panels i {
-    font-size: 20px;
-}
-/*.order-panels ul {
-    list-style-type: none;
-}
-.order-panels li {
-    display: inline;
-}*/
-.sidebar {
-  position:fixed;
-  vertical-align:top;
-  padding-left: 0%;
-  padding-top: 10%;
-  width:25%;
-  right:0;
-  top:0;
-  bottom:0;
-  color: #48b6fc;
-  border-left: 1px solid #ddd;
-}
+/* add custom styling here with comments */
