@@ -251,9 +251,6 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         $scope.placeholder = 'Why are you happy?'
         $scope.inFilter = true;
 
-        // Initialize toggle for new/hot posts
-        $('#order-toggle').bootstrapToggle();
-
         // Add post
         $scope.addPost = function() {
             if (!$scope.title || $scope.title === '') { return; }
@@ -303,8 +300,8 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         };
 
         // Toggle posts by date or upvotes
-        $scope.toggle = function() {
-            if ($('#order-toggle').prop('checked') == true) {
+        $scope.toggle = function(order) {
+            if (order == 'hot') {
                 $scope.orders = '-upvotes';
             }
             else {
