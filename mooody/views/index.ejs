@@ -47,11 +47,11 @@
             <div ng-show="isLoggedIn()">
                 <h3>Hi, {{currentUser()}}!</h3>
                 <h3>Current mood: {{currentMood[0].mood}}</h3>
-                <div class="ct-chart  ct-perfect-fourth"></div>
                 <!--- ^ graph! --->
             </div>
             <h3>Princeton's Mood:</h3>
             <!-- Example of how to use social mood data from back-end -->
+            <div class="ct-chart  ct-perfect-fourth"></div>
             {{"H: " + currentSocialMood[0].happy}} {{"S: " + currentSocialMood[0].sad}} {{"A: " + currentSocialMood[0].angry}}
             <div ng-show="isLoggedIn()">
                 <h4>Update your mood:</h4>
