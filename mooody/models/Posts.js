@@ -9,8 +9,9 @@ var PostSchema = new mongoose.Schema({
   flags: {type: Number, default: 0},
   mood: String,
   date: Date,
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }]
-  // list of upvotes, flags from users
+  comments: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' } ],
+  userUpvotes: [ {type: mongoose.Schema.Types.ObjectId, ref:'User'} ],
+  userFlags: [ {type: mongoose.Schema.Types.ObjectId, ref: 'User'} ]
 });
 
 // Upvote post

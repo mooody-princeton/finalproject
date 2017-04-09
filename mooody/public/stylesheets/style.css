@@ -12,6 +12,34 @@ a:hover {
     color: #a66820;
 }
 
+.form-inline {
+    width: 1000px;
+}
+#form-title {
+    width:300px;
+}
+#form-body {
+    width:600px;
+}
+
+.postfeed {
+    padding: 0px;
+    width:1000px;
+    border-style: solid;
+    border-bottom-width: 1px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-color: lightgray;
+}
+.postfeed ul {
+    list-style-type: none;
+}
+.postfeed li {
+    display: inline;
+    padding: 10px;
+}
+
 .navbar-default {
     background-color: white;
 }
@@ -30,6 +58,13 @@ a:hover {
     margin-top: 10px;
     padding: 10px;
     float: center;
+    width: 1000px;
+    border-style: solid;
+    border-bottom-width: 1px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-color: lightgray;
 }
 .mood-panels ul {
     list-style-type: none;
@@ -38,14 +73,14 @@ a:hover {
     display: inline;
 }
 .mood-panels i {
-    font-size: 40px;
+    font-size: 20px;
 }
-.order-panels ul {
+/*.order-panels ul {
     list-style-type: none;
 }
 .order-panels li {
     display: inline;
-}
+}*/
 .sidebar {
   position:fixed;
   vertical-align:top;

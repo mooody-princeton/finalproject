@@ -237,6 +237,11 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         $scope.filters = {};
         $scope.filters.mood = 'happy'
         $scope.orders = '-date';
+        $scope.placeholder = 'Why are you happy?'
+        $scope.inFilter = true;
+
+        // Initialize toggle for new/hot posts
+        $('#order-toggle').bootstrapToggle();
 
         // Add post
         $scope.addPost = function() {
@@ -250,37 +255,55 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
             $scope.title = '';
             $scope.body = '';
         };
+
         // Upvote post
         $scope.incrementUpvotes = function(post) {
             posts.upvote(post);
         };
+
         // Flag post
         $scope.incrementFlags = function(post) {
             posts.downvote(post);
         };
+
         // Filter posts by mood
         $scope.tab = function(tab) {
-            console.log("In mood tab filter");
-            console.log(tab);
             if (tab === 'happy') {
                 $scope.filters.mood = 'happy';
+                $scope.placeholder = 'Why are you happy?'
+                $scope.inFilter = true;
             }
             else if (tab === 'sad') {
                 $scope.filters.mood = 'sad';
+                $scope.placeholder = 'Why are you sad?'
+                $scope.inFilter = true;
             }
             else if (tab === 'angry') {
                 $scope.filters.mood = 'angry';
-            }
-            else if (tab === 'new') {
-                $scope.orders = "-date";
-            } else if (tab === 'hot') {
-                $scope.orders = "-upvotes";
+                $scope.placeholder = 'Why are you angry?'
+                $scope.inFilter = true;
             }
             else {
                 $scope.filters = {};
+                $scope.placeholder = 'Filter by mood in order to post'
+                $scope.inFilter = false;
             }
-            //$scope.posts = posts.posts;
-            console.log($scope.filters.mood);
+            $scope.posts = posts.posts;
+        };
+
+        // Toggle posts by date or upvotes
+        $scope.toggle = function() {
+            if ($('#order-toggle').prop('checked') == true) {
+                $scope.orders = '-upvotes';
+            }
+            else {
+                $scope.orders = '-date';
+            }
+        };
+
+        // Determine whether to disable "Post" button based on filter
+        $scope.isInFilter = function() {
+            return $scope.inFilter;
         }
     }]);
 
@@ -405,7 +428,6 @@ app.controller('SidebarCtrl', ['$scope', 'auth',
         });
 
         // END CHART DATA
-
 
         // Update user mood
         $scope.setMoodTo = function(moodString) {
