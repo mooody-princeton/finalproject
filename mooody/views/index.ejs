@@ -65,19 +65,6 @@
 <!-- home.html -->
     <script type="text/ng-template" id="/home.html">
 
-    <!-- Section to add a new post -->
-    <!-- <form class="w3-container" ng-hide="!isLoggedIn()" ng-submit="addPost()">
-        <div class="w3-quarter">
-            <input type="text" class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title"></input>
-        </div>
-        <div class="w3-half">
-            <input type="text" class="w3-input w3-border" placeholder="If you need to elaborate...(optional)" ng-model="body" id="form-body"></input>
-        </div>
-        <div class="w3-quarter">
-            <button ng-disabled="!isInFilter()" type="submit" class="w3-button w3-blue w3-border w3-border-blue">Post</button>
-        </div>
-    </form> -->
-
     <div ng-hide="isLoggedIn()">
 	  <h4>Please <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> to post.</h4><br>
 	</div>
@@ -91,21 +78,21 @@
                 <a class="w3-bar-item w3-button w3-mobile w3-round" ng-click="tab('angry')"><i class="twa twa-triumph"></i></a>
             </div>
         </div>
-        <div class="w3-container w3-half">
+        <div class="w3-container w3-rest"> <!--- third --->
             <div class="w3-bar w3-xlarge">
-                <a class="w3-bar-item w3-button w3-mobile w3-round" ng-click="toggle('hot')"><i class="twa twa-fire"></i></a>
-                <a class="w3-bar-item w3-button w3-mobile w3-round" ng-click="toggle('new')"><i class="twa twa-clock1"></i></a>
+                <a class="w3-bar-item w3-button w3-mobile w3-round w3-right" ng-click="toggle('hot')"><i class="twa twa-fire"></i></a>
+                <a class="w3-bar-item w3-button w3-mobile w3-round w3-right" ng-click="toggle('new')"><i class="twa twa-clock1"></i></a>
             </div>
         </div>
     </div>
     <form class="w3-container w3-padding-16" ng-hide="!isLoggedIn()" ng-submit="addPost()">
-        <div class="w3-quarter">
+        <div class="w3-third"> <!--- quarter --->
             <input type="text" class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title"></input>
         </div>
         <div class="w3-half">
             <input type="text" class="w3-input w3-border" placeholder="If you need to elaborate...(optional)" ng-model="body" id="form-body"></input>
         </div>
-        <div class="w3-quarter">
+        <div class="w3-rest"> <!--- quarter --->
             <button ng-disabled="!isInFilter()" type="submit" class="w3-button w3-blue w3-border w3-border-blue">Post</button>
         </div>
     </form>

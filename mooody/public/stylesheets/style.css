@@ -14,7 +14,7 @@ a:active, a:visited, a:focus {
 }
 a:hover {
     text-decoration: none;
-    color: #a66820;
+    color: #7acafd;
 }
 
 /* Format buttons at bottom of each post */
@@ -27,3 +27,23 @@ a:hover {
 }
 
 /* add custom styling here with comments */
+
+/* coloring flags and hover over */
+.glyphicon.glyphicon-flag{
+  color: #ccc;
+}
+.glyphicon.glyphicon-flag:hover{
+   cursor: pointer;
+}
+
+/* coloring hearts and hover over */
+.glyphicon.glyphicon-heart{
+  color: #cc2b00;
+}
+.glyphicon.glyphicon-heart:hover{
+  transition: opacity .2s ease-in-out;
+  -moz-transition: opacity .2s ease-in-out;
+  -webkit-transition: opacity .2s ease-in-out;
+  opacity:0.8;
+  cursor: pointer;
+}
