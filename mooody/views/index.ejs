@@ -4,13 +4,12 @@
     <title>mooody</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <!--<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">-->
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="/stylesheets/twemoji-awesome.css" rel="stylesheet">
     <link href="/stylesheets/style.css" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
     <script src="/javascripts/angularApp.js"></script>
@@ -36,7 +35,7 @@
     </div>
 
 <!-- Display the rest of the page -->
-    <div class="w3-row-padding">
+    <div class="w3-row-padding w3-padding-16">
         <!-- Sidebar (1/3 width) -->
         <div class="w3-container w3-third" ng-controller="SidebarCtrl">
             <center>
@@ -83,7 +82,7 @@
 	</div>
 
     <div class="w3-row-padding">
-        <div class="w3-container w3-half">
+        <div class="w3-container w3-half w3-mobile">
             <div class="w3-bar">
                 <a class="w3-bar-item w3-button w3-mobile" ng-click="tab('all')">ALL POSTS</a>
                 <a class="w3-bar-item w3-button w3-mobile" ng-click="tab('happy')" class="active"><i class="twa twa-smile"></i></a>
@@ -91,7 +90,7 @@
                 <a class="w3-bar-item w3-button w3-mobile" ng-click="tab('angry')"><i class="twa twa-triumph"></i></a>
             </div>
         </div>
-        <div class="w3-container w3-half">
+        <div class="w3-container w3-half w3-mobile">
             <div class="w3-bar">
                 <a class="w3-bar-item w3-button w3-mobile" ng-click="toggle('hot')"><i class="twa twa-fire"></i></a>
                 <a class="w3-bar-item w3-button w3-mobile" ng-click="toggle('new')"><i class="twa twa-clock1"></i></a>
@@ -111,7 +110,7 @@
                 </span><br><br>
             </div>
                 <span>
-                    <ul>
+                    <ul class="post-buttons">
                         <li>{{post.date | date:'MMM dd hh:mm a'}}</li>
                         <li><span class="glyphicon glyphicon-heart" ng-click="incrementUpvotes(post)"></span>
                         {{post.upvotes}}</li>

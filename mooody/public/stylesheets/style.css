@@ -8,15 +8,22 @@ body {
 a {
   color: #48b6fc;
 }
-
 a:active, a:visited, a:focus {
     text-decoration: none;
     color: #48b6fc;
 }
-
 a:hover {
     text-decoration: none;
     color: #a66820;
+}
+
+/* Format buttons at bottom of each post */
+.post-buttons ul {
+    list-style-type: none;
+}
+.post-buttons li {
+    display: inline;
+    padding: 5px;
 }
 
 /* add custom styling here with comments */
