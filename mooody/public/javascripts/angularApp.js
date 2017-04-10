@@ -235,6 +235,17 @@ app.service('socialinfo', function($http) {
     return promise;
 });
 
+// Load user mood info upon accessing website, for sidebar
+app.service('usermoodinfo', ['$http', 'auth', function($http, auth) {
+    var promise = $http.get('/usermood/' + auth.currentUserId(), null, {
+        headers: { Authorization: 'Bearer ' + auth.getToken()}
+    }).success(function(data) {
+        var usermoodinfo = data;
+        return usermoodinfo;
+    });
+    return promise;
+}]);
+
 // Controllers ********************************************
 
 // Main Controller (home page)
@@ -394,8 +405,8 @@ app.controller('NavCtrl', ['$scope', 'auth',
     }]);
 
 // Sidebar Controller
-app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo',
-    function($scope, auth, socialinfo) {
+app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
+    function($scope, auth, socialinfo, usermoodinfo) {
         // Wait until we get the social mood info...
         socialinfo.then(function(data) {
             auth.socialmood = data.data;
@@ -451,11 +462,33 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo',
 
         // END CHART DATA
 
-        // The following doesn't rely on the socialinfo service's promise
+        // Wait to get user info
+        usermoodinfo.then(function(data) {
+            auth.usermood = data.data;
+            $scope.currentMood = auth.usermood;
+            if ($scope.currentMood[0].mood === 'happy') {
+                $scope.active_mood_h = 'w3-gray';
+                $scope.active_mood_s = '';
+                $scope.active_mood_a = '';
+            } else if ($scope.currentMood[0].mood === 'sad') {
+                $scope.active_mood_h = '';
+                $scope.active_mood_s = 'w3-gray';
+                $scope.active_mood_a = '';
+            } else if ($scope.currentMood[0].mood === 'angry') {
+                $scope.active_mood_h = '';
+                $scope.active_mood_s = '';
+                $scope.active_mood_a = 'w3-gray';
+            } else {
+                $scope.active_mood_h = '';
+                $scope.active_mood_s = '';
+                $scope.active_mood_a = '';
+            }
+        });
+
+        // The following doesn't rely on the socialinfo/usermoodinfo service's promise
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
-        $scope.currentMood = auth.usermood;
 
         // Update user mood
         $scope.setMoodTo = function(moodString) {

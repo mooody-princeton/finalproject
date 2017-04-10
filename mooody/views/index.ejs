@@ -49,7 +49,7 @@
                 {{"H: " + currentSocialMood[0].happy}} {{"S: " + currentSocialMood[0].sad}} {{"A: " + currentSocialMood[0].angry}}
                 <div ng-show="isLoggedIn()">
                     <h4>Update your mood:</h4>
-                    <div class="w3-bar">
+                    <div class="w3-bar w3-xlarge">
                         <a class="w3-bar-item w3-button {{active_mood_h}}" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
                         <a class="w3-bar-item w3-button {{active_mood_s}}" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
                         <a class="w3-bar-item w3-button {{active_mood_a}}" ng-click="setMoodTo('angry')"><i class="twa twa-triumph"></i></a>
@@ -98,7 +98,7 @@
     </form>
 
     <!-- Display posts -->
-    <div class="w3-container" ng-repeat="post in posts | filter: filters | orderBy: orders">
+    <div class="w3-container w3-border-bottom w3-border-gray" ng-repeat="post in posts | filter: filters | orderBy: orders">
         <div> <!--class="w3-card"-->
             <div><br>
                 <span style="font-size:20px; margin-left:10px;">
