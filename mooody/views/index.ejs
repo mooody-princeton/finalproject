@@ -72,13 +72,13 @@
     <div class="w3-row-padding">
         <div class="w3-container w3-half">
             <div class="w3-bar w3-xlarge">
-                <a class="w3-bar-item w3-button w3-mobile" ng-click="tab('all')" style="font-size:20.5px;">ALL POSTS</a>
                 <a class="w3-bar-item w3-button w3-mobile w3-bottombar {{active_h}}" ng-click="tab('happy')"><i class="twa twa-smile"></i></a>
                 <a class="w3-bar-item w3-button w3-mobile w3-bottombar {{active_s}}" ng-click="tab('sad')"><i class="twa twa-cry"></i></a>
                 <a class="w3-bar-item w3-button w3-mobile w3-bottombar {{active_a}}" ng-click="tab('angry')"><i class="twa twa-triumph"></i></a>
+                <a class="w3-bar-item w3-button w3-mobile" ng-click="tab('all')" style="font-size:20.5px;">View All</a>
             </div>
         </div>
-        <div class="w3-container w3-rest"> <!--- third --->
+        <div class="w3-container w3-rest"> <!-- third -->
             <div class="w3-bar w3-xlarge">
                 <a class="w3-bar-item w3-button w3-mobile w3-right w3-bottombar {{active_hot}}" ng-click="toggle('hot')"><i class="twa twa-fire"></i></a>
                 <a class="w3-bar-item w3-button w3-mobile w3-right w3-bottombar {{active_new}}" ng-click="toggle('new')"><i class="twa twa-clock1"></i></a>
@@ -86,13 +86,13 @@
         </div>
     </div>
     <form class="w3-container w3-padding-16" ng-hide="!isLoggedIn()" ng-submit="addPost()">
-        <div class="w3-third"> <!--- quarter --->
+        <div class="w3-third"> <!-- quarter -->
             <input type="text" class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title"></input>
         </div>
         <div class="w3-half">
             <input type="text" class="w3-input w3-border" placeholder="If you need to elaborate...(optional)" ng-model="body" id="form-body"></input>
         </div>
-        <div class="w3-rest"> <!--- quarter --->
+        <div class="w3-rest"> <!-- quarter -->
             <button ng-disabled="!isInFilter()" type="submit" class="w3-button w3-blue w3-border w3-border-blue">Post</button>
         </div>
     </form>
@@ -116,7 +116,7 @@
                         <li><span class="glyphicon glyphicon-flag" ng-click="incrementFlags(post)"></span>
                         {{post.flags}}</li>
                         <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment"></span></a>
-                            ({{post.comments.length}})</li>
+                            {{post.comments.length}}</li>
                     </ul>
                 </span>
             </div>
