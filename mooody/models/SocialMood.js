@@ -6,7 +6,7 @@ var SocialMoodSchema = new mongoose.Schema({
   happy: {type: Number, default: 0},
   sad: {type: Number, default: 0},
   angry: {type: Number, default: 0},
-  userHappy: [ {type: String } ],
+  // userHappy: [ {type: String } ],
   userSad: [ {type: String } ],
   userAngry: [ {type: String } ]
 });
