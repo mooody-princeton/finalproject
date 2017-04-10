@@ -118,7 +118,6 @@ function($http, $window) {
 		});
 	};
 	auth.logIn = function(user) {
-        console.log("In auth.logIn in angularApp.js");
 		return $http.post('/login', user).success(function(data) {
 			auth.saveToken(data.token);
 		});
@@ -245,11 +244,20 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.title = '';
         $scope.body = '';
+
+        // Filter by mood and order by date/popularity
         $scope.filters = {};
         $scope.filters.mood = 'happy'
         $scope.orders = '-date';
         $scope.placeholder = 'Why are you happy?'
         $scope.inFilter = true;
+
+        // Highlight tabs
+        $scope.active_h = 'w3-border-yellow';
+        $scope.active_s = '';
+        $scope.active_a = '';
+        $scope.active_hot = '';
+        $scope.active_new = 'w3-border-blue';
 
         // Add post
         $scope.addPost = function() {
@@ -280,21 +288,33 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.filters.mood = 'happy';
                 $scope.placeholder = 'Why are you happy?'
                 $scope.inFilter = true;
+                $scope.active_h = 'w3-border-yellow';
+                $scope.active_s = '';
+                $scope.active_a = '';
             }
             else if (tab === 'sad') {
                 $scope.filters.mood = 'sad';
                 $scope.placeholder = 'Why are you sad?'
                 $scope.inFilter = true;
+                $scope.active_h = '';
+                $scope.active_s = 'w3-border-blue';
+                $scope.active_a = '';
             }
             else if (tab === 'angry') {
                 $scope.filters.mood = 'angry';
                 $scope.placeholder = 'Why are you angry?'
                 $scope.inFilter = true;
+                $scope.active_h = '';
+                $scope.active_s = '';
+                $scope.active_a = 'w3-border-red';
             }
             else {
                 $scope.filters = {};
                 $scope.placeholder = 'Filter by mood in order to post'
                 $scope.inFilter = false;
+                $scope.active_h = '';
+                $scope.active_s = '';
+                $scope.active_a = '';
             }
             $scope.posts = posts.posts;
         };
@@ -303,9 +323,13 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         $scope.toggle = function(order) {
             if (order == 'hot') {
                 $scope.orders = '-upvotes';
+                $scope.active_hot = 'w3-border-red';
+                $scope.active_new = '';
             }
             else {
                 $scope.orders = '-date';
+                $scope.active_hot = '';
+                $scope.active_new = 'w3-border-blue';
             }
         };
 
@@ -436,11 +460,11 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo',
         // Update user mood
         $scope.setMoodTo = function(moodString) {
             // If same mood as current mood, don't do anything
-            if ($scope.currentMood[0].mood == moodString) {
+            if ($scope.currentMood[0].mood === moodString) {
                 return;
             }
             // If not new user, decrement social mood count of current mood
-            if ($scope.currentMood[0].mood != 'Select one below!') {
+            if ($scope.currentMood[0].mood !== 'Select one below!') {
                 auth.decrementSocialMood($scope.currentMood[0].mood).then(function(){
                     // Then, set to new mood
                     auth.setUserMood($scope.currentUserId(), moodString).then(function(){
@@ -454,6 +478,25 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo',
                 auth.setUserMood($scope.currentUserId(), moodString).then(function(){
                     auth.incrementSocialMood(moodString);
                 });
+            }
+
+            // Highlight buttons
+            if (moodString === 'happy') {
+                $scope.active_mood_h = 'w3-gray';
+                $scope.active_mood_s = '';
+                $scope.active_mood_a = '';
+            } else if (moodString === 'sad') {
+                $scope.active_mood_h = '';
+                $scope.active_mood_s = 'w3-gray';
+                $scope.active_mood_a = '';
+            } else if (moodString === 'angry'){
+                $scope.active_mood_h = '';
+                $scope.active_mood_s = '';
+                $scope.active_mood_a = 'w3-gray';
+            } else {
+                $scope.active_mood_h = '';
+                $scope.active_mood_s = '';
+                $scope.active_mood_a = '';
             }
          };
     }]);

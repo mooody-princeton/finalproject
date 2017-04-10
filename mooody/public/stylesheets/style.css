@@ -26,8 +26,6 @@ a:hover {
     padding: 5px;
 }
 
-/* add custom styling here with comments */
-
 /* coloring flags and hover over */
 .glyphicon.glyphicon-flag{
   color: #ccc;
@@ -47,3 +45,11 @@ a:hover {
   opacity:0.8;
   cursor: pointer;
 }
+
+/* Format sidebar */
+#mood-sidebar {
+
+}
+
+
+/* add custom styling here with comments */
