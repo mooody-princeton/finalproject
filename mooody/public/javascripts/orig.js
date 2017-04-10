@@ -183,19 +183,19 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
             o.posts.push(data);
         });
     };
-    o.upvote = function(userid, post) {
-        return $http.put('/posts/' + post._id + '/upvote', {usr: userid}, {
+    o.upvote = function(post) {
+        return $http.put('/posts/' + post._id + '/upvote', null, {
             headers: { Authorization: 'Bearer ' + auth.getToken()}
         }).success(function(data) {
-            post.upvotes = data.userUpvotes.length;
+            post.upvotes += 1;
             });
     };
-    o.downvote = function(userid, post) {
-        return $http.put('/posts/' + post._id + '/downvote', {usr: userid}, {
-            headers: { Authorization: 'Bearer ' + auth.getToken()}
-	    }).success(function(data){
-            post.flags = data.userFlags.length;
-	        });
+    o.downvote = function(post) {
+        return $http.put('/posts/' + post._id + '/downvote', null, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+	  }).success(function(data){
+          post.flags += 1;
+	     });
 	};
     o.get = function(id) {
         return $http.get('/posts/' + id).then(function(res){
@@ -207,18 +207,18 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
              headers: { Authorization: 'Bearer ' + auth.getToken() }
         });
     };
-    o.upvoteComment = function(userid, post, comment) {
-        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/upvote', {usr: userid}, {
+    o.upvoteComment = function(post, comment) {
+        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/upvote', null, {
             headers: { Authorization: 'Bearer ' + auth.getToken() }
         }).success(function(data){
-            comment.upvotes = data.userUpvotes.length;
+            comment.upvotes += 1;
         });
     };
-    o.downvoteComment = function(userid, post, comment) {
-        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/downvote', {usr: userid}, {
+    o.downvoteComment = function(post, comment) {
+        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/downvote', null, {
             headers: { Authorization: 'Bearer ' + auth.getToken() }
         }).success(function(data){
-            comment.flags = data.userFlags.length;
+            comment.flags += 1;
         });
     };
     return o;
@@ -234,17 +234,6 @@ app.service('socialinfo', function($http) {
     });
     return promise;
 });
-
-// Load user mood info upon accessing website, for sidebar
-app.service('usermoodinfo', ['$http', 'auth', function($http, auth) {
-    var promise = $http.get('/usermood/' + auth.currentUserId(), null, {
-        headers: { Authorization: 'Bearer ' + auth.getToken()}
-    }).success(function(data) {
-        var usermoodinfo = data;
-        return usermoodinfo;
-    });
-    return promise;
-}]);
 
 // Controllers ********************************************
 
@@ -285,12 +274,12 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
 
         // Upvote post
         $scope.incrementUpvotes = function(post) {
-            posts.upvote(auth.currentUserId(), post);
+            posts.upvote(post);
         };
 
         // Flag post
         $scope.incrementFlags = function(post) {
-            posts.downvote(auth.currentUserId(), post);
+            posts.downvote(post);
         };
 
         // Filter posts by mood
@@ -366,10 +355,10 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
           $scope.body = '';
         };
         $scope.incrementUpvotes = function(comment) {
-            posts.upvoteComment(auth.currentUserId(), post, comment);
+            posts.upvoteComment(post, comment);
         };
         $scope.incrementFlags = function(comment) {
-            posts.downvoteComment(auth.currentUserId(), post, comment);
+            posts.downvoteComment(post, comment);
         };
     }]);
 
@@ -405,8 +394,8 @@ app.controller('NavCtrl', ['$scope', 'auth',
     }]);
 
 // Sidebar Controller
-app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
-    function($scope, auth, socialinfo, usermoodinfo) {
+app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo',
+    function($scope, auth, socialinfo) {
         // Wait until we get the social mood info...
         socialinfo.then(function(data) {
             auth.socialmood = data.data;
@@ -462,33 +451,11 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
 
         // END CHART DATA
 
-        // Wait to get user info
-        usermoodinfo.then(function(data) {
-            auth.usermood = data.data;
-            $scope.currentMood = auth.usermood;
-            if ($scope.currentMood[0].mood === 'happy') {
-                $scope.active_mood_h = 'w3-gray';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = '';
-            } else if ($scope.currentMood[0].mood === 'sad') {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = 'w3-gray';
-                $scope.active_mood_a = '';
-            } else if ($scope.currentMood[0].mood === 'angry') {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = 'w3-gray';
-            } else {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = '';
-            }
-        });
-
-        // The following doesn't rely on the socialinfo/usermoodinfo service's promise
+        // The following doesn't rely on the socialinfo service's promise
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
+        $scope.currentMood = auth.usermood;
 
         // Update user mood
         $scope.setMoodTo = function(moodString) {
