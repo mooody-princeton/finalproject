@@ -383,14 +383,14 @@ app.controller('AuthCtrl', ['$scope', '$state', 'auth',
                 console.log("Error in angularApp.js");
                 $scope.error = error;
             }).then(function() {
-                $state.go('home');
+                auth.getUserMood(auth.currentUserId()).then(function() {$state.go('home');});
             });
         };
         $scope.logIn = function() {
             auth.logIn($scope.user).error(function(error) {
                 $scope.error = error;
             }).then(function() {
-                $state.go('home');
+                auth.getUserMood(auth.currentUserId()).then(function() {$state.go('home');});
             });
         };
     }]);
@@ -460,35 +460,29 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
             window.setInterval(function() {chart.update({series:[auth.socialmood[0].happy, auth.socialmood[0].sad, auth.socialmood[0].angry]})}, 10000);
         });
 
-        // END CHART DATA
-
-        // Wait to get user info
+        // Wait to get user info (if logged in upon initial website bootup)
         usermoodinfo.then(function(data) {
             auth.usermood = data.data;
             $scope.currentMood = auth.usermood;
-            if ($scope.currentMood[0].mood === 'happy') {
-                $scope.active_mood_h = 'w3-gray';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = '';
-            } else if ($scope.currentMood[0].mood === 'sad') {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = 'w3-gray';
-                $scope.active_mood_a = '';
-            } else if ($scope.currentMood[0].mood === 'angry') {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = 'w3-gray';
-            } else {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = '';
-            }
         });
 
-        // The following doesn't rely on the socialinfo/usermoodinfo service's promise
+        // The following doesn't rely on service promises
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
+        $scope.currentSocialMood = auth.socialmood;
+        $scope.currentMood = auth.usermood; // In case the usermoodinfo promise fails
+
+        // Check if current mood is equal to the parameter, to help decide which mood button to highlight
+        $scope.checkMood = function(moodString) {
+            // Button only gets highlighted if current mood is equal to button mood (new users have nothing highlighted)
+            if ($scope.currentMood[0].mood === moodString) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        };
 
         // Update user mood
         $scope.setMoodTo = function(moodString) {
@@ -511,25 +505,6 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
                 auth.setUserMood($scope.currentUserId(), moodString).then(function(){
                     auth.incrementSocialMood(moodString);
                 });
-            }
-
-            // Highlight buttons
-            if (moodString === 'happy') {
-                $scope.active_mood_h = 'w3-gray';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = '';
-            } else if (moodString === 'sad') {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = 'w3-gray';
-                $scope.active_mood_a = '';
-            } else if (moodString === 'angry'){
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = 'w3-gray';
-            } else {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = '';
             }
          };
     }]);
