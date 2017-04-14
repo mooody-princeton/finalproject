@@ -17,7 +17,7 @@ var PostSchema = new mongoose.Schema({
 // Upvote post
 PostSchema.methods.upvote = function(userid, cb) {
   if (this.userUpvotes.indexOf(userid) == -1) this.userUpvotes.push(userid);
-  else this.userUpvotes.pop(userid);
+  else this.userUpvotes.splice(this.userUpvotes.indexOf(userid),1);
   this.upvotes = this.userUpvotes.length;
   this.save(cb);
 };
