@@ -15,7 +15,7 @@ var CommentSchema = new mongoose.Schema({
 // Upvote comment
 CommentSchema.methods.upvote = function(userid, cb) {
   if (this.userUpvotes.indexOf(userid) == -1) this.userUpvotes.push(userid);
-  else this.userUpvotes.pop(userid);
+  else this.userUpvotes.splice(this.userUpvotes.indexOf(userid),1);
   this.upvotes = this.userUpvotes.length;
   this.save(cb);
 }
@@ -23,7 +23,7 @@ CommentSchema.methods.upvote = function(userid, cb) {
 // Flag comment
 CommentSchema.methods.downvote = function(userid, cb) {
   if (this.userFlags.indexOf(userid) == -1) this.userFlags.push(userid);
-  else this.userFlags.pop(userid);
+  else this.userFlags.splice(this.userFlags.indexOf(userid),1);
   this.flags = this.userFlags.length;
   this.save(cb);
 }

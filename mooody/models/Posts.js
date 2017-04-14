@@ -25,7 +25,7 @@ PostSchema.methods.upvote = function(userid, cb) {
 // Flag post
 PostSchema.methods.downvote = function(userid, cb) {
   if (this.userFlags.indexOf(userid) == -1) this.userFlags.push(userid);
-  else this.userFlags.pop(userid);
+  else this.userFlags.splice(this.userFlags.indexOf(userid),1);
   this.flags = this.userFlags.length;
   this.save(cb);
 }
