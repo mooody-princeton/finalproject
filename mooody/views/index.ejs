@@ -15,6 +15,9 @@
     <script src="/javascripts/angularApp.js"></script>
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 </head>
 
@@ -166,20 +169,37 @@
     	    <span>{{ error.message }}</span>
         </div>
 
-        <!-- Registration form -->
-        <form class="w3-container" ng-submit="register()">
-    	    <h3>Register</h3>
-            <p>Note about Princeton email needed to register here...</p>
-            <div>
-                <input type="text" class="w3-input w3-border" placeholder="Username" ng-model="user.username"></input>
+        <!-- Registration form with validator -->
+        <h3>Register</h3>
+        <br>
+        <form data-toggle="validator" role="form" ng-submit="register()">
+            <div class="form-group">
+                <label for="inputName" class="control-label">Username</label>
+                <input type="text" class="form-control" id="inputName" placeholder="Username" ng-model="user.username" required>
             </div>
-            <div>
-                <input type="password" class="w3-input w3-border" placeholder="Password" ng-model="user.password"></input>
+            <div class="form-group has-feedback">
+                <label for="inputTwitter" class="control-label">Princeton Email</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Netid">
+                    <span class="input-group-addon">@</span>
+                    <input type="text" class="form-control" placeholder="Anything in-between (if any)">
+                    <span class="input-group-addon">princeton.edu</span>
+                </div>
+                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
             </div>
-            <div>
-                <button type="submit" class="w3-button w3-blue w3-border w3-border-blue">Register</button>
-            </div>
-        </form>
+            <div class="form-group">
+                <label for="inputPassword" class="control-label">Password</label>
+                <div class="form-inline row">
+                  <div class="form-group col-sm-6">
+                    <input type="password" data-minlength="1" class="form-control" id="inputPassword" placeholder="Password" ng-model="user.password" required>
+                    <div class="help-block">Minimum of 1 characters</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary">Sign me up!</button>
+              </div>
+            </form>
     </script>
 
 <!-- login.html -->
@@ -190,20 +210,27 @@
             <span>{{ error.message }}</span>
         </div>
 
-        <!-- Login form -->
-        <form class="w3-container" ng-submit="logIn()">
-            <h3>Log In</h3>
-            <p>Something about Princeton email needed to login here...</p>
-            <div>
-                <input type="text" class="w3-input w3-border" placeholder="Username" ng-model="user.username"></input>
+        <!-- Login form with validator -->
+        <h3>Log In</h3>
+        <br>
+        <form data-toggle="validator" role="form" ng-submit="logIn()">
+            <div class="form-group">
+                <label for="inputName" class="control-label">Username</label>
+                <input type="text" class="form-control" id="inputName" placeholder="Username" ng-model="user.username" required>
             </div>
-            <div>
-                <input type="password" class="w3-input w3-border" placeholder="Password" ng-model="user.password"></input>
-            </div>
-            <div>
-                <button type="submit" class="w3-button w3-blue w3-border w3-border-blue">Log In</button>
-            </div>
-        </form>
+            <div class="form-group">
+                <label for="inputPassword" class="control-label">Password</label>
+                <div class="form-inline row">
+                  <div class="form-group col-sm-6">
+                    <input type="password" data-minlength="1" class="form-control" id="inputPassword" placeholder="Password" ng-model="user.password" required>
+                    <div class="help-block">Minimum of 1 characters</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary">Log in!</button>
+              </div>
+            </form>
     </script>
 
 </body>
