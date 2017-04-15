@@ -265,9 +265,9 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
 
         // Highlight tabs
         $scope.active_h = 'w3-border-yellow';
-        $scope.active_s = '';
-        $scope.active_a = '';
-        $scope.active_hot = '';
+        $scope.active_s = 'w3-border-inactive';
+        $scope.active_a = 'w3-border-inactive';
+        $scope.active_hot = 'w3-border-inactive';
         $scope.active_new = 'w3-border-blue';
 
         // Add post
@@ -300,32 +300,32 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.placeholder = 'Why are you happy?'
                 $scope.inFilter = true;
                 $scope.active_h = 'w3-border-yellow';
-                $scope.active_s = '';
-                $scope.active_a = '';
+                $scope.active_s = 'w3-border-inactive';
+                $scope.active_a = 'w3-border-inactive';
             }
             else if (tab === 'sad') {
                 $scope.filters.mood = 'sad';
                 $scope.placeholder = 'Why are you sad?'
                 $scope.inFilter = true;
-                $scope.active_h = '';
+                $scope.active_h = 'w3-border-inactive';
                 $scope.active_s = 'w3-border-blue';
-                $scope.active_a = '';
+                $scope.active_a = 'w3-border-inactive';
             }
             else if (tab === 'angry') {
                 $scope.filters.mood = 'angry';
                 $scope.placeholder = 'Why are you angry?'
                 $scope.inFilter = true;
-                $scope.active_h = '';
-                $scope.active_s = '';
+                $scope.active_h = 'w3-border-inactive';
+                $scope.active_s = 'w3-border-inactive';
                 $scope.active_a = 'w3-border-red';
             }
             else {
                 $scope.filters = {};
                 $scope.placeholder = 'Filter by mood in order to post'
                 $scope.inFilter = false;
-                $scope.active_h = '';
-                $scope.active_s = '';
-                $scope.active_a = '';
+                $scope.active_h = 'w3-border-inactive';
+                $scope.active_s = 'w3-border-inactive';
+                $scope.active_a = 'w3-border-inactive';
             }
             $scope.posts = posts.posts;
         };
@@ -335,11 +335,11 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
             if (order == 'hot') {
                 $scope.orders = '-upvotes';
                 $scope.active_hot = 'w3-border-red';
-                $scope.active_new = '';
+                $scope.active_new = 'w3-border-inactive';
             }
             else {
                 $scope.orders = '-date';
-                $scope.active_hot = '';
+                $scope.active_hot = 'w3-border-inactive';
                 $scope.active_new = 'w3-border-blue';
             }
         };
