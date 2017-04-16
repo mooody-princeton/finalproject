@@ -7,17 +7,18 @@ body {
 }
 
 /* Format links */
-a {
+/*a {
   color: #48b6fc;
+  text-decoration: none;
 }
-a:active, a:visited, a:focus {
+a:visited, a:focus {
     text-decoration: none;
     color: #48b6fc;
 }
 a:hover {
     text-decoration: none;
     color: #7acafd;
-}
+}*/
 
 /* Format buttons at bottom of each post */
 .post-buttons ul {
@@ -30,18 +31,18 @@ a:hover {
 }
 
 /* coloring flags and hover over */
-.glyphicon.glyphicon-flag{
+.glyphicon.glyphicon-flag {
   color: #ddd;
 }
-.glyphicon.glyphicon-flag:hover{
+.glyphicon.glyphicon-flag:hover {
    cursor: pointer;
 }
 
 /* coloring hearts and hover over */
-.glyphicon.glyphicon-heart{
+.glyphicon.glyphicon-heart {
   color: #cc2b00;
 }
-.glyphicon.glyphicon-heart:hover{
+.glyphicon.glyphicon-heart:hover {
   transition: opacity .2s ease-in-out;
   -moz-transition: opacity .2s ease-in-out;
   -webkit-transition: opacity .2s ease-in-out;
@@ -60,13 +61,13 @@ a:hover {
   border-color: #79C5FF !important;
 }
 
-.w3-border-inactive{
+.w3-border-inactive {
   border-color: #ddd !important;
 }
-.w3-button:hover{
+.w3-button:hover {
   background-color:#ddd !important;
 }
-.w3-button:focus{
+.w3-button:focus {
   background-color:#ddd !important;
 }
 
@@ -79,5 +80,19 @@ a:hover {
     margin-right:300px;
 }
 
+/* post title and body */
+.post-title {
+    font-size:20px;
+    margin-left:10px;
+    color:#666666;
+}
+.post-body {
+    font-size:15px;
+    margin-left:10px;
+}
+.comment {
+    font-size:20px;
+    margin-left:10px;
+}
 
 /* add custom styling here with comments */
