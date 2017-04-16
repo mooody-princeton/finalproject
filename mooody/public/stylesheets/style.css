@@ -2,6 +2,8 @@
 body {
   padding: 20px;
   font: 14px "Roboto", Helvetica, Arial, sans-serif;
+  font-weight:200;
+  background-color: #fafafa !important;
 }
 
 /* Format links */
@@ -24,11 +26,12 @@ a:hover {
 .post-buttons li {
     display: inline;
     padding: 5px;
+    color:#ccc;
 }
 
 /* coloring flags and hover over */
 .glyphicon.glyphicon-flag{
-  color: #ccc;
+  color: #ddd;
 }
 .glyphicon.glyphicon-flag:hover{
    cursor: pointer;
@@ -53,3 +56,25 @@ a:hover {
 
 
 /* add custom styling here with comments */
+
+
+
+.post{
+  border-style: solid;
+  border-color: #ddd !important;
+  margin: 0px auto 15px;
+}
+.post:hover{
+  transition-duration: 0.4s;
+  border-color: #79C5FF !important;
+}
+
+.w3-border-inactive{
+  border-color: #ddd !important;
+}
+.w3-button:hover{
+  background-color:#ddd !important;
+}
+.w3-button:focus{
+  background-color:#ddd !important;
+}
