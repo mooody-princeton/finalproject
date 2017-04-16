@@ -8,7 +8,7 @@ var ejs = require('ejs');
 
 // Twilio SMS verification
 var twilio = require('twilio');
-var client = twilio("AC81ea8300e37e8108abc992eaaa2728fa", 
+var client = twilio("AC81ea8300e37e8108abc992eaaa2728fa",
   "4208d7046ce5b2a5b8a54e7b6b636690");
 var twilionum = '+16092450655';
 
@@ -71,7 +71,7 @@ router.post('/posts', function(req, res, next) {
   });
 });
 
-// 
+//
 router.param('post', function(req, res, next, id) {
   var query = Post.findById(id);
 
@@ -104,7 +104,7 @@ router.get('/posts/:post', function(req, res) {
 });
 
 router.put('/posts/:post/upvote', auth, function(req, res, next) {
-  req.post.upvote(req.body.usr, function(err, post){ 
+  req.post.upvote(req.body.usr, function(err, post){
     if (err) { return next(err); }
 
     res.json(post);
@@ -183,7 +183,7 @@ router.post('/register', function(req, res, next){
         if (err) return console.log("Couldn't create verification token", err);
         // Send confirmation SMS if successful so far
         client.sendMessage({
-            to: '+16094552701',
+            to: '+15105652971',
             from: twilionum,
             body: 'Hello from Mooody! This is your code: ' + token
         });

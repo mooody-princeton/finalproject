@@ -49,16 +49,7 @@ a:hover {
   cursor: pointer;
 }
 
-/* Format sidebar */
-#mood-sidebar {
-
-}
-
-
-/* add custom styling here with comments */
-
-
-
+/* post formatting */
 .post{
   border-style: solid;
   border-color: #ddd !important;
@@ -78,3 +69,15 @@ a:hover {
 .w3-button:focus{
   background-color:#ddd !important;
 }
+
+/* mood side bar */
+#moodSidebar {
+    width:300px;
+    right:0
+}
+#mainContent {
+    margin-right:300px;
+}
+
+
+/* add custom styling here with comments */
