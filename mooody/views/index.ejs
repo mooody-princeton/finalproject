@@ -32,8 +32,8 @@
     <div class="w3-top">
         <div class="w3-bar w3-white w3-large" ng-controller="NavCtrl">
                   <a class="w3-bar-item" href="#" style="text-decoration: none;">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-triumph"></i>dy</a>
-                  <a class="w3-bar-item w3-button" href="https://mooody-princeton.github.io/">About</a>
-                  <!--<a class="w3-bar-item w3-button" ng-show="isLoggedIn()">{{ currentUser() }}</a>-->
+                  <a class="w3-bar-item w3-button" href="https://mooody-princeton.github.io/" style="text-decoration: none;">About</a>
+                  <!--<a class="w3-bar-item w3-button" ng-show="isLoggedIn()" style="text-decoration: none;">{{ currentUser() }}</a>-->
                   <a class="w3-bar-item w3-button" ng-show="isLoggedIn()" href="" ng-click="logOut()" style="text-decoration: none;">Log Out</a>
                   <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/login" style="text-decoration: none;">Log In</a>
                   <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/register" style="text-decoration: none;">Register</a>
@@ -78,7 +78,7 @@
     <script type="text/ng-template" id="/home.html">
 
     <div ng-hide="isLoggedIn()">
-	  <h4>Please <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> to post.</h4><br>
+	  <span class="post-title">Please <a href="/#/login" style="text-decoration:none;">Log In</a> or <a href="/#/register" style="text-decoration:none;">Register</a> to post.</span><br><br>
 	</div>
 
     <div>
@@ -169,7 +169,7 @@
             </div>
         </form>
         <div class="w3-container" ng-hide="isLoggedIn()">
-	       <h4>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can comment.</h4>
+	       <span class="post-title">You need to <a href="/#/login" style="text-decoration:none;">Log In</a> or <a href="/#/register" style="text-decoration:none;">Register</a> before you can comment.</span>
 	    </div>
     </script>
 
