@@ -52,7 +52,7 @@
                     </div>
                     <div class="w3-padding-16"></div>
                     <span class="w3-padding-16 post-title">Princeton's Mood:</span>
-                    <div class="ct-chart  ct-perfect-fourth"></div>
+                    <div class="ct-chart  ct-minor-second" id="chart"></div>
                     {{"H: " + currentSocialMood[0].happy}} {{"S: " + currentSocialMood[0].sad}} {{"A: " + currentSocialMood[0].angry}}
                     <div ng-show="isLoggedIn()">
                         <br><span class="post-body">Update your mood: </span>
@@ -69,7 +69,7 @@
         </div><br><br>
         <!-- Postsfeed, login/registration page -->
         <div class="w3-container w3-main" id="mainContent">
-            <button class="w3-button w3-hide-large w3-right w3-text-blue" onclick="w3_open()"><i class="glyphicon glyphicon-chevron-left"></i></button>
+            <button class="w3-button w3-hide-large w3-right w3-text-blue" onclick="w3_open()" id="toggleOn"><i class="glyphicon glyphicon-chevron-left"></i></button>
             <ui-view></ui-view>
         </div>
     </div>

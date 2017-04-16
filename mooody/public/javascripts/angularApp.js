@@ -432,57 +432,30 @@ app.controller('NavCtrl', ['$scope', 'auth',
 // Sidebar Controller
 app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
     function($scope, auth, socialinfo, usermoodinfo) {
-        // Wait until we get the social mood info...
+
+        // Wait until we get the social mood info...then render the chart
         socialinfo.then(function(data) {
             auth.socialmood = data.data;
             $scope.currentSocialMood = auth.socialmood;
 
             // Create chart
-            var chart = new Chartist.Pie('.ct-chart', {
-              series: [auth.socialmood[0].happy, auth.socialmood[0].sad, auth.socialmood[0].angry],
-              labels: ["happy", "angry", "sad"]
-            }, {
-              donut: true,
-              showLabel: false
-            });
+            var chart = create_chart(auth.socialmood);
 
             // Draw chart
             chart.on('draw', function(data) {
-              if(data.type === 'slice') {
-                // Get the total path length in order to use for dash array animation
-                var pathLength = data.element._node.getTotalLength();
-                // Set a dasharray that matches the path length as prerequisite to animate dashoffset
-                data.element.attr({
-                  'stroke-dasharray': pathLength + 'px ' + pathLength + 'px'
-                });
-                // Create animation definition while also assigning an ID to the animation for later sync usage
-                var animationDefinition = {
-                  'stroke-dashoffset': {
-                    id: 'anim' + data.index,
-                    dur: 1000,
-                    from: -pathLength + 'px',
-                    to:  '0px',
-                    easing: Chartist.Svg.Easing.easeOutQuint,
-                    // We need to use `fill: 'freeze'` otherwise our animation will fall back to initial (not visible)
-                    fill: 'freeze'
-                  }
-                };
-                // If this was not the first slice, we need to time the animation so that it uses the end sync event of the previous animation
-                if(data.index !== 0) {
-                  animationDefinition['stroke-dashoffset'].begin = 'anim' + (data.index - 1) + '.end';
-                }
-                // We need to set an initial value before the animation starts as we are not in guided mode which would do that for us
-                data.element.attr({
-                  'stroke-dashoffset': -pathLength + 'px'
-                });
-                // We can't use guided mode as the animations need to rely on setting begin manually
-                // See http://gionkunz.github.io/chartist-js/api-documentation.html#chartistsvg-function-animate
-                data.element.animate(animationDefinition, false);
-              }
+                draw_chart(data);
             });
 
             // Dynamically update chart every few seconds with new data
-            window.setInterval(function() {chart.update({series:[auth.socialmood[0].happy, auth.socialmood[0].sad, auth.socialmood[0].angry]})}, 10000);
+            window.setInterval(function() {
+                chart.update({series:[auth.socialmood[0].happy, auth.socialmood[0].sad, auth.socialmood[0].angry]})
+            }, 10000);
+
+            // Redraw when sidebar is toggled
+            var toggle = document.getElementById("toggleOn");
+            toggle.addEventListener('click', function() {
+                chart.update({series:[auth.socialmood[0].happy, auth.socialmood[0].sad, auth.socialmood[0].angry]});
+            });
         });
 
         // Wait to get user info (if logged in upon initial website bootup)
