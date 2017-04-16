@@ -183,7 +183,7 @@ router.post('/register', function(req, res, next){
         if (err) return console.log("Couldn't create verification token", err);
         // Send confirmation SMS if successful so far
         client.sendMessage({
-            to: '+15105652971',
+            to: '+16094552701', // Recipient number (either user's, or your own for testing) 
             from: twilionum,
             body: 'Hello from Mooody! This is your code: ' + token
         });
