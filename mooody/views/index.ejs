@@ -16,8 +16,12 @@
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <!-- Bootstrap 3.3.7 -->
+    <script src="https://code.jquery.com/jquery-2.2.4.js"
+    integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+    crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 
 </head>
 
@@ -34,6 +38,7 @@
                   <a class="w3-bar-item w3-button" ng-show="isLoggedIn()" href="" ng-click="logOut()">Log Out</a>
                   <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/login">Log In</a>
                   <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/register">Register</a>
+                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/verify">Activate account</a>
         </div>
     </div>
 
@@ -177,16 +182,26 @@
                 <label for="inputName" class="control-label">Username</label>
                 <input type="text" class="form-control" id="inputName" placeholder="Username" ng-model="user.username" required>
             </div>
+            <!-- For phone verification -->
             <div class="form-group has-feedback">
-                <label for="inputTwitter" class="control-label">Princeton Email</label>
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Netid">
-                    <span class="input-group-addon">@</span>
-                    <input type="text" class="form-control" placeholder="Anything in-between (if any)">
-                    <span class="input-group-addon">princeton.edu</span>
+                <label for="inputTwitter" class="control-label">Phone Number</label>
+                <div class="input-group" id="phoneform">
+                    <span class="input-group-addon">+1</span>
+                    <input type="text" class="form-control" placeholder="Phone number" name="phoneNumber" ng-model="user.phonenum" required>
                 </div>
                 <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
             </div>
+            <!-- For email verification (ditched) -->
+            <!-- <div class="form-group has-feedback">
+                <label for="inputTwitter" class="control-label">Princeton Email</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Netid" ng-model="user.netid" required>
+                    <span class="input-group-addon">@</span>
+                    <input type="text" class="form-control" placeholder="Anything in-between (if any)" ng-model="user.optional">
+                    <span class="input-group-addon">princeton.edu</span>
+                </div>
+                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            </div> -->
             <div class="form-group">
                 <label for="inputPassword" class="control-label">Password</label>
                 <div class="form-inline row">
@@ -216,14 +231,13 @@
         <form data-toggle="validator" role="form" ng-submit="logIn()">
             <div class="form-group">
                 <label for="inputName" class="control-label">Username</label>
-                <input type="text" class="form-control" id="inputName" placeholder="Username" ng-model="user.username" required>
+                <input type="text" class="form-control" id="inputName" placeholder="Username" ng-model="user.username">
             </div>
             <div class="form-group">
                 <label for="inputPassword" class="control-label">Password</label>
                 <div class="form-inline row">
                   <div class="form-group col-sm-6">
-                    <input type="password" data-minlength="1" class="form-control" id="inputPassword" placeholder="Password" ng-model="user.password" required>
-                    <div class="help-block">Minimum of 1 characters</div>
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="user.password" required>
                   </div>
                 </div>
               </div>
@@ -231,8 +245,34 @@
                 <button type="submit" class="btn btn-primary">Log in!</button>
               </div>
             </form>
+
+        <a class="w3-button" href="/#/verify">Click here if you have the verification code to activate your account.</a>
     </script>
 
+<!-- verify.html -->
+    <script type="text/ng-template" id="/verify.html">
+
+        <!-- Status message -->
+        <div ng-show="error" class="w3-panel w3-pale-red">
+            <span>{{ error.failmessage }}</span>
+        </div>
+        <div ng-show="success" class="w3-panel w3-pale-green">
+            <span>{{ success.successmessage }}</span>
+        </div>
+
+        <h3>Enter your 6-character verification code below.</h3>
+        <br>
+        <form data-toggle="validator" role="form" ng-submit="verifyNow()">
+            <div class="form-group">
+                <label for="inputName" class="control-label">Code (case sensitive)</label>
+                <input type="text" class="form-control" id="inputName" placeholder="Code" ng-model="code" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Activate your account!</button>
+            </div>
+        </form>
+        {{code}}
+    </script>
 </body>
 </html>
 

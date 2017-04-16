@@ -66,6 +66,17 @@ app.config(['$stateProvider','$urlRouterProvider',
                 }
             }]
     });
+    $stateProvider.state('verify', {
+        url : '/verify',
+        templateUrl : '/verify.html',
+        controller : 'AuthCtrl',
+        onEnter : ['$state', 'auth',
+            function($state, auth) {
+                if (auth.isLoggedIn()) {
+                    $state.go('home');
+                }
+            }]
+    });
   $urlRouterProvider.otherwise('home');
 }]);
 
@@ -125,6 +136,10 @@ function($http, $window) {
 	auth.logOut = function() {
 		$window.localStorage.removeItem('mooody-token');
 	};
+    // Verify user account for activation
+    auth.verify = function(tokenparam) {
+        return $http.put('/verify', {tokenfield: tokenparam});
+    };
     // Return current user's mood by setting factory variable property
     auth.getUserMood = function(userid) {
         return $http.get('/usermood/' + userid, null, {
@@ -383,7 +398,8 @@ app.controller('AuthCtrl', ['$scope', '$state', 'auth',
                 console.log("Error in angularApp.js");
                 $scope.error = error;
             }).then(function() {
-                auth.getUserMood(auth.currentUserId()).then(function() {$state.go('home');});
+                auth.logOut();
+                $state.go('verify');
             });
         };
         $scope.logIn = function() {
@@ -391,6 +407,15 @@ app.controller('AuthCtrl', ['$scope', '$state', 'auth',
                 $scope.error = error;
             }).then(function() {
                 auth.getUserMood(auth.currentUserId()).then(function() {$state.go('home');});
+            });
+        };
+        $scope.verifyNow = function() {
+            auth.verify($scope.code).error(function(error) {
+                $scope.error = error;
+                $scope.success = false;
+            }).success(function(msg){
+                $scope.success = msg;
+                $scope.error = false;
             });
         };
     }]);
@@ -475,8 +500,14 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
 
         // Check if current mood is equal to the parameter, to help decide which mood button to highlight
         $scope.checkMood = function(moodString) {
+            if ($scope.currentMood.length === 0) {
+                return false;
+            }
+            else if ("undefined" === typeof $scope.currentMood[0].mood) {
+                return false;
+            }
             // Button only gets highlighted if current mood is equal to button mood (new users have nothing highlighted)
-            if ($scope.currentMood[0].mood === moodString) {
+            else if ($scope.currentMood[0].mood === moodString) {
                 return true;
             }
             else {

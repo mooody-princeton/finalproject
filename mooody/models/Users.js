@@ -4,11 +4,13 @@ var jwt = require('jsonwebtoken');
 
 
 var UserSchema = new mongoose.Schema({
-  username: {type: String, lowercase: true, unique: true},
+  username: {type: String, lowercase: true, unique: true, required: true},
   hash: String,
   salt: String,
-  mood: String
-  // Banned?, Time since ban
+  mood: String,
+  phonenum: {type: Number, unique:true, required: true},
+  // email: {type: String, lowercase: true, unique: true},
+  verified: Boolean
 });
 
 UserSchema.methods.generateJWT = function() {

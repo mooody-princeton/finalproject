@@ -3,6 +3,18 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var jwt = require('express-jwt');
+var uuid = require('node-uuid-v4');
+var ejs = require('ejs');
+
+// Twilio SMS verification
+var twilio = require('twilio');
+var client = twilio("AC81ea8300e37e8108abc992eaaa2728fa", 
+  "4208d7046ce5b2a5b8a54e7b6b636690");
+var twilionum = '+16092450655';
+
+// Email verification (not working with princeton.edu, so we're using phone verification instead)
+var key = "b8bae4ae-8d3e-449b-aaec-2d822d74eabc";
+var postmark = require("postmark")(key);
 
 // Mongo Schemas ******************************************
 
@@ -10,8 +22,27 @@ var Post = mongoose.model('Post');
 var Comment = mongoose.model('Comment');
 var User = mongoose.model('User');
 var SocialMood = mongoose.model('SocialMood');
+var Token = mongoose.model('Token');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
+
+// Functions **********************************************
+
+// Email verification (not working with princeton.edu, so we're using phone verification instead)
+// function sendVerificationEmail(options, done) {
+//     var deliver = function (textBody) {
+//         postmark.send({
+//             "From": "xyyu@princeton.edu",
+//             "To": 'lindyzeng.lz@gmail.com', //options.email,
+//             "Subject": "Verify your Mooody account",
+//             "TextBody": 'lol' //textBody
+//         }, done);
+//     };
+//     ejs.renderFile("views/email-text.ejs", options, function (err, textBody) {
+//         if (err) return done(err);
+//         deliver(textBody)
+//     });
+// }
 
 // Routing functions for posts/comments *******************
 
@@ -120,7 +151,7 @@ router.put('/posts/:post/comments/:comment/downvote', auth, function(req, res, n
   });
 });
 
-// Routing functions for login/registration ***************
+// Routing functions for login/registration/verification ***************
 
 router.post('/register', function(req, res, next){
     console.log("In index.js");
@@ -132,11 +163,50 @@ router.post('/register', function(req, res, next){
     var user = new User();
     user.username = req.body.username;
     user.mood = 'Select one below!';
+    user.phonenum = "+1" + req.body.phonenum;
+
+    // Disabled email verification
+    // var tempString = '';
+    // if (req.body.hasOwnProperty('optional') && "undefined" !== typeof req.body.optional) {
+    //   tempString = req.body.optional;
+    // }
+    // user.email = req.body.netid + "@" + tempString + "princeton.edu";
+
+    user.verified = false;
     user.setPassword(req.body.password)
-    user.save(function (err){
-        if(err) { return next(err); }
-    return res.json({token: user.generateJWT()})
-    });
+    // Save new user
+    user.save(function(err, user) {
+      if(err) { return next(err); }
+      // Create new token for newly registered user
+      var newtoken = new Token({_userid: user._id});
+      newtoken.createToken(function(err, token) {
+        if (err) return console.log("Couldn't create verification token", err);
+        // Send confirmation SMS if successful so far
+        client.sendMessage({
+            to: '+16094552701',
+            from: twilionum,
+            body: 'Hello from Mooody! This is your code: ' + token
+        });
+        console.log("Twilio SMS sent");
+      });
+
+      // Send confirmation email (disabled)
+      // var message = {
+      //   email: user.email,
+      //   name: user.username,
+      //   verifyURL: 'lol'
+      // };
+      // sendVerificationEmail(message, function (error, success) {
+      //   if (error) {
+      //       console.error("Unable to send via postmark: " + error.message);
+      //       return;
+      //   }
+      //   console.info("Sent to postmark for delivery");
+      // });
+
+      // Response
+      return res.json({token: user.generateJWT()});
+      });
 });
 
 router.post('/login', function(req, res, next){
@@ -155,6 +225,20 @@ router.post('/login', function(req, res, next){
         return res.status(401).json(info);
     }
     })(req, res, next);
+});
+
+router.put('/verify', function(req, res, next){
+  Token.findOne({token: req.body.tokenfield}, function(err, doc) {
+    if (err || doc == null) return res.status(400).json({failmessage: 'Verification failed. Try again?'});
+    User.findOne({_id: doc._userid}, function(err, user) {
+      if (err) return res.status(400).json({failmessage: 'Verification failed. Try again?'});
+      user.verified = true;
+      user.save(function(err) {
+        if (err) return res.status(400).json({failmessage: 'Verification failed. Try again?'});
+        else return res.json({successmessage: 'Verification successful! You can now proceed to log in.'});
+      });
+    });
+  });
 });
 
 // Routing functions for user-related stuff ***************
