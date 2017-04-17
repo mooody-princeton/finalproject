@@ -7,18 +7,18 @@ body {
 }
 
 /* Format links */
-/*a {
-  color: #48b6fc;
+a {
+  color: #2196f3;
   text-decoration: none;
 }
 a:visited, a:focus {
     text-decoration: none;
-    color: #48b6fc;
+    color: #2196f3;
 }
 a:hover {
     text-decoration: none;
-    color: #7acafd;
-}*/
+    color: #87ceeb;
+}
 
 /* Format buttons at bottom of each post */
 .post-buttons ul {
@@ -40,7 +40,7 @@ a:hover {
 
 /* coloring hearts and hover over */
 .glyphicon.glyphicon-heart {
-  color: #cc2b00;
+  color: #f44336;
 }
 .glyphicon.glyphicon-heart:hover {
   transition: opacity .2s ease-in-out;
@@ -48,6 +48,7 @@ a:hover {
   -webkit-transition: opacity .2s ease-in-out;
   opacity:0.8;
   cursor: pointer;
+  color: #fd7b7b;
 }
 
 /* post formatting */
@@ -78,6 +79,51 @@ a:hover {
 }
 #mainContent {
     margin-right:300px;
+}
+
+/* chart colors */
+.ct-series-a .ct-bar, .ct-series-a .ct-line, .ct-series-a .ct-point, .ct-series-a .ct-slice-donut {
+    stroke: #ffeb3b;
+}
+.ct-series-b .ct-bar, .ct-series-b .ct-line, .ct-series-b .ct-point, .ct-series-b .ct-slice-donut {
+    stroke: #2196f3;
+}
+.ct-series-c .ct-bar, .ct-series-c .ct-line, .ct-series-c .ct-point, .ct-series-c .ct-slice-donut {
+    stroke: #f44336;
+}
+
+/* chart tooltip */
+.tooltip {
+    position: absolute;
+    display: inline-block;
+    min-width: 5em;
+    padding: 8px 10px;
+    background: #bbbbbb;
+    color: #000000;
+    text-align: center;
+    pointer-events: none;
+    z-index: 100;
+    transition: opacity .2s linear;
+}
+/* chart tooltip arrow */
+.tooltip:before {
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    border: solid transparent;
+    content: ' ';
+    height: 0;
+    width: 0;
+    pointer-events: none;
+    border-color: rgba(251, 249, 228, 0);
+    border-top-color: #bbbbbb;
+    border-width: 7px;
+    margin-left: -8px;
+}
+&.hide {
+    display: block;
+    opacity: 0;
+    visibility: hidden;
 }
 
 /* post title and body */

@@ -3,23 +3,31 @@
     <meta charset="utf-8">
     <title>mooody</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link href="/stylesheets/twemoji-awesome.css" rel="stylesheet">
-    <link href="/stylesheets/style.css" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
     <script src="/javascripts/angularApp.js"></script>
     <script src="/javascripts/sidebar.js"></script>
+
+    <!-- Chartist -->
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script src="/javascripts/chartist-plugin-fill-donut.js"></script>
+    <script src="/javascripts/chartist-plugin-tooltip.js"></script>
+    <link rel="stylesheet" href="/stylesheets/chartist-plugin-tooltip.css"></script>
+
     <!-- Bootstrap 3.3.7 -->
     <script src="https://code.jquery.com/jquery-2.2.4.js"
     integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
     crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <link href="/stylesheets/style.css" rel="stylesheet">
 
 
 </head>
@@ -32,12 +40,12 @@
     <div class="w3-top">
         <div class="w3-bar w3-white w3-large" ng-controller="NavCtrl">
                   <a class="w3-bar-item" href="#" style="text-decoration: none;">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-triumph"></i>dy</a>
-                  <a class="w3-bar-item w3-button" href="https://mooody-princeton.github.io/" style="text-decoration: none;">About</a>
+                  <a class="w3-bar-item w3-button" href="https://mooody-princeton.github.io/">About</a>
                   <!--<a class="w3-bar-item w3-button" ng-show="isLoggedIn()" style="text-decoration: none;">{{ currentUser() }}</a>-->
-                  <a class="w3-bar-item w3-button" ng-show="isLoggedIn()" href="" ng-click="logOut()" style="text-decoration: none;">Log Out</a>
-                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/login" style="text-decoration: none;">Log In</a>
-                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/register" style="text-decoration: none;">Register</a>
-                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/verify" style="text-decoration: none;">Activate Account</a>
+                  <a class="w3-bar-item w3-button" ng-show="isLoggedIn()" href="" ng-click="logOut()">Log Out</a>
+                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/login">Log In</a>
+                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/register">Register</a>
+                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/verify">Activate Account</a>
         </div>
     </div>
 
@@ -78,7 +86,7 @@
     <script type="text/ng-template" id="/home.html">
 
     <div ng-hide="isLoggedIn()">
-	  <span class="post-title">Please <a href="/#/login" style="text-decoration:none;">Log In</a> or <a href="/#/register" style="text-decoration:none;">Register</a> to post.</span><br><br>
+	  <span class="post-title">Please <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> to post.</span><br><br>
 	</div>
 
     <div>
@@ -88,7 +96,7 @@
                     <a class="w3-bar-item w3-button w3-bottombar {{active_h}}" ng-click="tab('happy')"><i class="twa twa-smile"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_s}}" ng-click="tab('sad')"><i class="twa twa-cry"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_a}}" ng-click="tab('angry')"><i class="twa twa-triumph"></i></a>
-                    <a class="w3-bar-item w3-button" ng-click="tab('all')" style="font-size:20.5px; text-decoration: none;">View All</a>
+                    <a class="w3-bar-item w3-button" ng-click="tab('all')" style="font-size:20.5px;">View All</a>
                 </div>
             </div>
             <div class="w3-container w3-rest">
@@ -121,7 +129,7 @@
                 </span><br>
                 <span class="post-body">
                 {{post.body}}
-                </span><br>
+            </span><br><br>
             </div>
             <span>
                 <ul class="post-buttons">
@@ -143,7 +151,7 @@
 
         <!-- Header -->
         <div>
-            <a href="#" style="text-decoration: none;">
+            <a href="#">
                 <div><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
             </a>
             <span class="post-title">{{post.title}}</span><br>
@@ -169,7 +177,7 @@
             </div>
         </form>
         <div class="w3-container" ng-hide="isLoggedIn()">
-	       <span class="post-title">You need to <a href="/#/login" style="text-decoration:none;">Log In</a> or <a href="/#/register" style="text-decoration:none;">Register</a> before you can comment.</span>
+	       <span class="post-title">You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can comment.</span>
 	    </div>
     </script>
 

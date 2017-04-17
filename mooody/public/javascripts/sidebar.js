@@ -14,11 +14,32 @@ function w3_close() {
 // Create and return chart based on socialmood
 function create_chart(socialmood) {
     var chart = new Chartist.Pie('.ct-chart', {
-        series: [socialmood[0].happy, socialmood[0].sad, socialmood[0].angry],
-        labels: ["happy", "angry", "sad"]
+        series: [
+            {meta:'Happy: ', value:socialmood[0]},
+            {meta:'Sad: ', value:socialmood[1]},
+            {meta:'Angry: ', value:socialmood[2]}
+        ],
+        labels: ["happy", "sad", "angry"]
     }, {
         donut: true,
-        showLabel: false
+        donutWidth: 30,
+        showLabel: false,
+        plugins: [
+            // Using fillDonut removes animation from chart
+            // Chartist.plugins.fillDonut({
+            //     items: [
+            //         {
+            //             content: '<span class="post-title">Princeton\'s Mood</span>',
+            //         }
+            //     ]
+            // }),
+            Chartist.plugins.tooltip({
+                class: 'tooltip',
+                transformTooltipTextFnc: function(value) {
+                    return (value * 100) + '%'
+                }
+            })
+        ]
     });
     return chart;
 }
@@ -61,4 +82,8 @@ function draw_chart(data) {
         // See http://gionkunz.github.io/chartist-js/api-documentation.html#chartistsvg-function-animate
         data.element.animate(animationDefinition, false);
     }
+}
+
+function display_info() {
+    console.log("got a");
 }

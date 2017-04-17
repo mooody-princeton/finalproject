@@ -438,8 +438,15 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
             auth.socialmood = data.data;
             $scope.currentSocialMood = auth.socialmood;
 
+            // Get percentages of each mood
+            var sum = auth.socialmood[0].happy + auth.socialmood[0].sad + auth.socialmood[0].angry;
+            var percent = [];
+            percent.push(auth.socialmood[0].happy / sum);
+            percent.push(auth.socialmood[0].sad / sum);
+            percent.push(auth.socialmood[0].angry / sum);
+
             // Create chart
-            var chart = create_chart(auth.socialmood);
+            var chart = create_chart(percent);
 
             // Draw chart
             chart.on('draw', function(data) {
@@ -448,13 +455,21 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
 
             // Dynamically update chart every few seconds with new data
             window.setInterval(function() {
-                chart.update({series:[auth.socialmood[0].happy, auth.socialmood[0].sad, auth.socialmood[0].angry]})
+                chart.update({series:[
+                    {meta:'Happy: ', value:percent[0]},
+                    {meta:'Sad: ', value:percent[1]},
+                    {meta:'Angry: ', value:percent[2]}
+                ]})
             }, 10000);
 
             // Redraw when sidebar is toggled
             var toggle = document.getElementById("toggleOn");
             toggle.addEventListener('click', function() {
-                chart.update({series:[auth.socialmood[0].happy, auth.socialmood[0].sad, auth.socialmood[0].angry]});
+                chart.update({series:[
+                    {meta:'Happy: ', value:percent[0]},
+                    {meta:'Sad: ', value:percent[1]},
+                    {meta:'Angry: ', value:percent[2]}
+                ]});
             });
         });
 
