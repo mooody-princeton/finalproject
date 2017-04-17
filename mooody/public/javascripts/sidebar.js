@@ -84,6 +84,14 @@ function draw_chart(data) {
     }
 }
 
-function display_info() {
-    console.log("got a");
+// Calculate the percent for each mood
+function calculate_mood(socialmood) {
+    var percent = [];
+
+    var sum = socialmood.happy + socialmood.sad + socialmood.angry;
+    percent.push(socialmood.happy / sum);
+    percent.push(socialmood.sad / sum);
+    percent.push(socialmood.angry / sum);
+
+    return percent;
 }

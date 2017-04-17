@@ -439,11 +439,7 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
             $scope.currentSocialMood = auth.socialmood;
 
             // Get percentages of each mood
-            var sum = auth.socialmood[0].happy + auth.socialmood[0].sad + auth.socialmood[0].angry;
-            var percent = [];
-            percent.push(auth.socialmood[0].happy / sum);
-            percent.push(auth.socialmood[0].sad / sum);
-            percent.push(auth.socialmood[0].angry / sum);
+            var percent = calculate_mood(auth.socialmood[0]);
 
             // Create chart
             var chart = create_chart(percent);
@@ -455,6 +451,7 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
 
             // Dynamically update chart every few seconds with new data
             window.setInterval(function() {
+                var percent = calculate_mood(auth.socialmood[0]);
                 chart.update({series:[
                     {meta:'Happy: ', value:percent[0]},
                     {meta:'Sad: ', value:percent[1]},
@@ -465,6 +462,7 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
             // Redraw when sidebar is toggled
             var toggle = document.getElementById("toggleOn");
             toggle.addEventListener('click', function() {
+                var percent = calculate_mood(auth.socialmood[0]);
                 chart.update({series:[
                     {meta:'Happy: ', value:percent[0]},
                     {meta:'Sad: ', value:percent[1]},
