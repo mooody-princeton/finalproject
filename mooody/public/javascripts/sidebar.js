@@ -36,7 +36,7 @@ function create_chart(socialmood) {
             Chartist.plugins.tooltip({
                 class: 'tooltip',
                 transformTooltipTextFnc: function(value) {
-                    return (value * 100) + '%'
+                    return (Math.round(value * 100)) + '%'
                 }
             })
         ]
