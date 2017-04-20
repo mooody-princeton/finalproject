@@ -10,8 +10,11 @@ passport.use(new LocalStrategy(
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
       }
-      if (!user.validPassword(password)) {
+      else if (!user.validPassword(password)) {
         return done(null, false, { message: 'Incorrect password.' });
+      }
+      else if (!user.verified) {
+        return done(null, false, { message: 'Please use the verification code to active your account first.'})
       }
       return done(null, user);
     });

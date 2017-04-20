@@ -66,6 +66,17 @@ app.config(['$stateProvider','$urlRouterProvider',
                 }
             }]
     });
+    $stateProvider.state('verify', {
+        url : '/verify',
+        templateUrl : '/verify.html',
+        controller : 'AuthCtrl',
+        onEnter : ['$state', 'auth',
+            function($state, auth) {
+                if (auth.isLoggedIn()) {
+                    $state.go('home');
+                }
+            }]
+    });
   $urlRouterProvider.otherwise('home');
 }]);
 
@@ -125,6 +136,10 @@ function($http, $window) {
 	auth.logOut = function() {
 		$window.localStorage.removeItem('mooody-token');
 	};
+    // Verify user account for activation
+    auth.verify = function(tokenparam) {
+        return $http.put('/verify', {tokenfield: tokenparam});
+    };
     // Return current user's mood by setting factory variable property
     auth.getUserMood = function(userid) {
         return $http.get('/usermood/' + userid, null, {
@@ -190,6 +205,13 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
             post.upvotes = data.userUpvotes.length;
             });
     };
+    o.upvoted = function(userid, post) {
+        return $http.put('/posts/' + post._id + '/upvoted', {usr: userid}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).success(function(data) {
+            post.upvoted = data;
+            });
+    };
     o.downvote = function(userid, post) {
         return $http.put('/posts/' + post._id + '/downvote', {usr: userid}, {
             headers: { Authorization: 'Bearer ' + auth.getToken()}
@@ -197,6 +219,13 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
             post.flags = data.userFlags.length;
 	        });
 	};
+    o.downvoted = function(userid, post) {
+        return $http.put('/posts/' + post._id + '/downvoted', {usr: userid}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).success(function(data) {
+            post.downvoted = data;
+            });
+    };
     o.get = function(id) {
         return $http.get('/posts/' + id).then(function(res){
                 return res.data;
@@ -265,9 +294,9 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
 
         // Highlight tabs
         $scope.active_h = 'w3-border-yellow';
-        $scope.active_s = '';
-        $scope.active_a = '';
-        $scope.active_hot = '';
+        $scope.active_s = 'w3-border-inactive';
+        $scope.active_a = 'w3-border-inactive';
+        $scope.active_hot = 'w3-border-inactive';
         $scope.active_new = 'w3-border-blue';
 
         // Add post
@@ -288,9 +317,21 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
             posts.upvote(auth.currentUserId(), post);
         };
 
+        // Check if post upvoted
+        $scope.upvoted = function(post) {
+            if (!auth.isLoggedIn()) return false;
+            posts.upvoted(auth.currentUserId(), post); // return
+        };
+
         // Flag post
         $scope.incrementFlags = function(post) {
             posts.downvote(auth.currentUserId(), post);
+        };
+
+        // Check if post flagged
+        $scope.flagged = function(post) {
+            if (!auth.isLoggedIn()) return false;
+            posts.downvoted(auth.currentUserId(), post); // return
         };
 
         // Filter posts by mood
@@ -300,32 +341,32 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.placeholder = 'Why are you happy?'
                 $scope.inFilter = true;
                 $scope.active_h = 'w3-border-yellow';
-                $scope.active_s = '';
-                $scope.active_a = '';
+                $scope.active_s = 'w3-border-inactive';
+                $scope.active_a = 'w3-border-inactive';
             }
             else if (tab === 'sad') {
                 $scope.filters.mood = 'sad';
                 $scope.placeholder = 'Why are you sad?'
                 $scope.inFilter = true;
-                $scope.active_h = '';
+                $scope.active_h = 'w3-border-inactive';
                 $scope.active_s = 'w3-border-blue';
-                $scope.active_a = '';
+                $scope.active_a = 'w3-border-inactive';
             }
             else if (tab === 'angry') {
                 $scope.filters.mood = 'angry';
                 $scope.placeholder = 'Why are you angry?'
                 $scope.inFilter = true;
-                $scope.active_h = '';
-                $scope.active_s = '';
+                $scope.active_h = 'w3-border-inactive';
+                $scope.active_s = 'w3-border-inactive';
                 $scope.active_a = 'w3-border-red';
             }
             else {
                 $scope.filters = {};
                 $scope.placeholder = 'Filter by mood in order to post'
                 $scope.inFilter = false;
-                $scope.active_h = '';
-                $scope.active_s = '';
-                $scope.active_a = '';
+                $scope.active_h = 'w3-border-inactive';
+                $scope.active_s = 'w3-border-inactive';
+                $scope.active_a = 'w3-border-inactive';
             }
             $scope.posts = posts.posts;
         };
@@ -335,11 +376,11 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
             if (order == 'hot') {
                 $scope.orders = '-upvotes';
                 $scope.active_hot = 'w3-border-red';
-                $scope.active_new = '';
+                $scope.active_new = 'w3-border-inactive';
             }
             else {
                 $scope.orders = '-date';
-                $scope.active_hot = '';
+                $scope.active_hot = 'w3-border-inactive';
                 $scope.active_new = 'w3-border-blue';
             }
         };
@@ -383,14 +424,24 @@ app.controller('AuthCtrl', ['$scope', '$state', 'auth',
                 console.log("Error in angularApp.js");
                 $scope.error = error;
             }).then(function() {
-                $state.go('home');
+                auth.logOut();
+                $state.go('verify');
             });
         };
         $scope.logIn = function() {
             auth.logIn($scope.user).error(function(error) {
                 $scope.error = error;
             }).then(function() {
-                $state.go('home');
+                auth.getUserMood(auth.currentUserId()).then(function() {$state.go('home');});
+            });
+        };
+        $scope.verifyNow = function() {
+            auth.verify($scope.code).error(function(error) {
+                $scope.error = error;
+                $scope.success = false;
+            }).success(function(msg){
+                $scope.success = msg;
+                $scope.error = false;
             });
         };
     }]);
@@ -407,88 +458,74 @@ app.controller('NavCtrl', ['$scope', 'auth',
 // Sidebar Controller
 app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
     function($scope, auth, socialinfo, usermoodinfo) {
-        // Wait until we get the social mood info...
+
+        // Wait until we get the social mood info...then render the chart
         socialinfo.then(function(data) {
             auth.socialmood = data.data;
             $scope.currentSocialMood = auth.socialmood;
 
+            // Get percentages of each mood
+            var percent = calculate_mood(auth.socialmood[0]);
+
             // Create chart
-            var chart = new Chartist.Pie('.ct-chart', {
-              series: [auth.socialmood[0].happy, auth.socialmood[0].sad, auth.socialmood[0].angry],
-              labels: ["happy", "angry", "sad"]
-            }, {
-              donut: true,
-              showLabel: false
-            });
+            var chart = create_chart(percent);
 
             // Draw chart
             chart.on('draw', function(data) {
-              if(data.type === 'slice') {
-                // Get the total path length in order to use for dash array animation
-                var pathLength = data.element._node.getTotalLength();
-                // Set a dasharray that matches the path length as prerequisite to animate dashoffset
-                data.element.attr({
-                  'stroke-dasharray': pathLength + 'px ' + pathLength + 'px'
-                });
-                // Create animation definition while also assigning an ID to the animation for later sync usage
-                var animationDefinition = {
-                  'stroke-dashoffset': {
-                    id: 'anim' + data.index,
-                    dur: 1000,
-                    from: -pathLength + 'px',
-                    to:  '0px',
-                    easing: Chartist.Svg.Easing.easeOutQuint,
-                    // We need to use `fill: 'freeze'` otherwise our animation will fall back to initial (not visible)
-                    fill: 'freeze'
-                  }
-                };
-                // If this was not the first slice, we need to time the animation so that it uses the end sync event of the previous animation
-                if(data.index !== 0) {
-                  animationDefinition['stroke-dashoffset'].begin = 'anim' + (data.index - 1) + '.end';
-                }
-                // We need to set an initial value before the animation starts as we are not in guided mode which would do that for us
-                data.element.attr({
-                  'stroke-dashoffset': -pathLength + 'px'
-                });
-                // We can't use guided mode as the animations need to rely on setting begin manually
-                // See http://gionkunz.github.io/chartist-js/api-documentation.html#chartistsvg-function-animate
-                data.element.animate(animationDefinition, false);
-              }
+                draw_chart(data);
             });
 
             // Dynamically update chart every few seconds with new data
-            window.setInterval(function() {chart.update({series:[auth.socialmood[0].happy, auth.socialmood[0].sad, auth.socialmood[0].angry]})}, 10000);
+            window.setInterval(function() {
+                var percent = calculate_mood(auth.socialmood[0]);
+                chart.update({series:[
+                    {meta:'Happy: ', value:percent[0]},
+                    {meta:'Sad: ', value:percent[1]},
+                    {meta:'Angry: ', value:percent[2]}
+                ]})
+            }, 10000);
+
+            // Redraw when sidebar is toggled
+            var toggle = document.getElementById("toggleOn");
+            toggle.addEventListener('click', function() {
+                var percent = calculate_mood(auth.socialmood[0]);
+                chart.update({series:[
+                    {meta:'Happy: ', value:percent[0]},
+                    {meta:'Sad: ', value:percent[1]},
+                    {meta:'Angry: ', value:percent[2]}
+                ]});
+            });
         });
 
-        // END CHART DATA
-
-        // Wait to get user info
+        // Wait to get user info (if logged in upon initial website bootup)
         usermoodinfo.then(function(data) {
             auth.usermood = data.data;
             $scope.currentMood = auth.usermood;
-            if ($scope.currentMood[0].mood === 'happy') {
-                $scope.active_mood_h = 'w3-gray';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = '';
-            } else if ($scope.currentMood[0].mood === 'sad') {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = 'w3-gray';
-                $scope.active_mood_a = '';
-            } else if ($scope.currentMood[0].mood === 'angry') {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = 'w3-gray';
-            } else {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = '';
-            }
         });
 
-        // The following doesn't rely on the socialinfo/usermoodinfo service's promise
+        // The following doesn't rely on service promises
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
+        $scope.currentSocialMood = auth.socialmood;
+        $scope.currentMood = auth.usermood; // In case the usermoodinfo promise fails
+
+        // Check if current mood is equal to the parameter, to help decide which mood button to highlight
+        $scope.checkMood = function(moodString) {
+            if ($scope.currentMood.length === 0) {
+                return false;
+            }
+            else if ("undefined" === typeof $scope.currentMood[0].mood) {
+                return false;
+            }
+            // Button only gets highlighted if current mood is equal to button mood (new users have nothing highlighted)
+            else if ($scope.currentMood[0].mood === moodString) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        };
 
         // Update user mood
         $scope.setMoodTo = function(moodString) {
@@ -511,25 +548,6 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
                 auth.setUserMood($scope.currentUserId(), moodString).then(function(){
                     auth.incrementSocialMood(moodString);
                 });
-            }
-
-            // Highlight buttons
-            if (moodString === 'happy') {
-                $scope.active_mood_h = 'w3-gray';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = '';
-            } else if (moodString === 'sad') {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = 'w3-gray';
-                $scope.active_mood_a = '';
-            } else if (moodString === 'angry'){
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = 'w3-gray';
-            } else {
-                $scope.active_mood_h = '';
-                $scope.active_mood_s = '';
-                $scope.active_mood_a = '';
             }
          };
     }]);

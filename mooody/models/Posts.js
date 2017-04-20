@@ -30,4 +30,20 @@ PostSchema.methods.downvote = function(userid, cb) {
   this.save(cb);
 }
 
+// Check if user has upvoted
+PostSchema.methods.upvoted = function(userid, cb) {
+  upvo = false;
+  if (this.userUpvotes.indexOf(userid) == -1) upvo = true;
+  this.save(cb);
+  return upvo;
+}
+
+// Check if user has downvoted
+PostSchema.methods.downvoted = function(userid, cb) {
+  downvo = false;
+  if (this.userFlags.indexOf(userid) == -1) downvo = true;
+  this.save(cb);
+  return downvo;
+}
+
 mongoose.model('Post', PostSchema);

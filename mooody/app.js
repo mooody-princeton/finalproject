@@ -10,6 +10,11 @@ var app = express();
 
 var mongoose = require('mongoose');
 var passport = require('passport');
+var postmark = require("postmark");
+var uuid = require('node-uuid-v4');
+var randtoken = require('rand-token');
+var ejs = require('ejs');
+var twilio = require('twilio');
 
 mongoose.connect('mongodb://localhost/news'); // NOTE: change the name of the db for a new one
 
@@ -17,6 +22,7 @@ require('./models/Posts');
 require('./models/Comments');
 require('./models/Users');
 require('./models/SocialMood');
+require('./models/Tokens');
 require('./config/passport');
 
 var index = require('./routes/index');

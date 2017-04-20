@@ -2,19 +2,22 @@
 body {
   padding: 20px;
   font: 14px "Roboto", Helvetica, Arial, sans-serif;
+  font-weight:200;
+  background-color: #fafafa !important;
 }
 
 /* Format links */
 a {
-  color: #48b6fc;
+  color: #2196f3;
+  text-decoration: none;
 }
-a:active, a:visited, a:focus {
+a:visited, a:focus {
     text-decoration: none;
-    color: #48b6fc;
+    color: #2196f3;
 }
 a:hover {
     text-decoration: none;
-    color: #7acafd;
+    color: #87ceeb;
 }
 
 /* Format buttons at bottom of each post */
@@ -24,32 +27,142 @@ a:hover {
 .post-buttons li {
     display: inline;
     padding: 5px;
+    color:#ccc;
 }
 
 /* coloring flags and hover over */
-.glyphicon.glyphicon-flag{
-  color: #ccc;
+.glyphicon.glyphicon-flag {
+  color: #ddd;
 }
 .glyphicon.glyphicon-flag:hover{
+   transition: opacity .2s ease-in-out;
+  -moz-transition: opacity .2s ease-in-out;
+  -webkit-transition: opacity .2s ease-in-out;
+  opacity:0.8;
    cursor: pointer;
 }
 
 /* coloring hearts and hover over */
-.glyphicon.glyphicon-heart{
-  color: #cc2b00;
+.glyphicon.glyphicon-heart {
+  color: #f44336;
 }
-.glyphicon.glyphicon-heart:hover{
+.glyphicon.glyphicon-heart:hover {
   transition: opacity .2s ease-in-out;
   -moz-transition: opacity .2s ease-in-out;
   -webkit-transition: opacity .2s ease-in-out;
   opacity:0.8;
   cursor: pointer;
+  color: #fd7b7b;
 }
 
-/* Format sidebar */
-#mood-sidebar {
-
+/* post formatting */
+.post{
+  border-style: solid;
+  border-color: #ddd !important;
+  margin: 0px auto 15px;
+}
+.post:hover{
+  transition-duration: 0.4s;
+  border-color: #79C5FF !important;
 }
 
+.w3-border-inactive {
+  border-color: #ddd !important;
+}
+.w3-button:hover {
+  background-color:#ddd !important;
+}
+.w3-button:focus {
+  background-color:#ddd !important;
+}
+
+/* mood side bar */
+#moodSidebar {
+    width:300px;
+    right:0
+}
+#mainContent {
+    margin-right:300px;
+}
+
+/* chart colors */
+.ct-series-a .ct-bar, .ct-series-a .ct-line, .ct-series-a .ct-point, .ct-series-a .ct-slice-donut {
+    stroke: #ffeb3b;
+}
+.ct-series-b .ct-bar, .ct-series-b .ct-line, .ct-series-b .ct-point, .ct-series-b .ct-slice-donut {
+    stroke: #2196f3;
+}
+.ct-series-c .ct-bar, .ct-series-c .ct-line, .ct-series-c .ct-point, .ct-series-c .ct-slice-donut {
+    stroke: #f44336;
+}
+
+/* chart tooltip */
+.tooltip {
+    position: absolute;
+    display: inline-block;
+    min-width: 5em;
+    padding: 8px 10px;
+    background: #bbbbbb;
+    color: #000000;
+    text-align: center;
+    pointer-events: none;
+    z-index: 100;
+    transition: opacity .2s linear;
+}
+/* chart tooltip arrow */
+.tooltip:before {
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    border: solid transparent;
+    content: ' ';
+    height: 0;
+    width: 0;
+    pointer-events: none;
+    border-color: rgba(251, 249, 228, 0);
+    border-top-color: #bbbbbb;
+    border-width: 7px;
+    margin-left: -8px;
+}
+&.hide {
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* post title and body */
+.post-title {
+    font-size:20px;
+    margin-left:10px;
+    color:#666666;
+}
+.post-body {
+    font-size:15px;
+    margin-left:10px;
+}
+.comment {
+    font-size:20px;
+    margin-left:10px;
+}
 
 /* add custom styling here with comments */
+
+/* to top of page button*/
+#toTop {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    bottom: 10px; /* Place the button at the bottom of the page */
+    left: 10px; /* Place the button 30px from left */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: #777; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 10px; /* Some padding */
+    border-radius: 5px; /* Rounded corners */
+}
+
+#toTop:hover {
+    background-color: #555; /* Add a dark-grey background on hover */
+}
