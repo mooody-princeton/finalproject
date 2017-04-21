@@ -180,9 +180,11 @@
             <a href="#">
                 <div><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
             </a>
-            <span class="post-title">{{post.title}}</span><br>
-            <span class="post-body">{{post.body}}</span>
-        </div><br>
+            <div class="w3-panel w3-white w3-border post w3-padding-16">
+              <span class="post-title">{{post.title}}</span><br>
+              <span class="post-body">{{post.body}}</span>
+            </div>
+        </div>
 
         <!-- Display comments -->
         <div ng-repeat="comment in post.comments | orderBy:'-date'">
@@ -191,7 +193,9 @@
             <span class="glyphicon glyphicon-flag" ng-click="incrementFlags(comment)"></span>
             {{comment.flags}} -->
             <span>
-                <ul class="post-buttons">
+              <div class="w3-panel w3-white w3-border comment w3-padding-small">
+                                    {{comment.body}}<br>
+                <ul class="w3-right post-buttons">
                     <li ng-if="comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="upvoted(comment);incrementUpvotes(comment)"></span>
                     {{comment.upvotes}}</li>
                     <li ng-if="!comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="upvoted(comment);incrementUpvotes(comment)"></span>
@@ -199,16 +203,15 @@
                     <li ng-if="comment.downvoted"><span class="glyphicon glyphicon-flag w3-text-gray" ng-click="downvoted(comment);incrementFlags(comment)"></span>
                     {{comment.flags}}</li>
                     <li ng-if="!comment.downvoted"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="downvoted(comment);incrementFlags(comment)"></span>
-                    {{comment.flags}}</li>
-                    <span class="comment">{{comment.body}}</span><br><br>
-                </ul>
+                    {{comment.flags}}</li></ul>
+              </div>
             </span>
         </div><br>
 
         <!-- Section to add a new comment -->
         <form class="w3-container" ng-hide="!isLoggedIn()" ng-submit="addComment()">
             <div class="w3-twothird">
-                <input type="text" class="w3-input w3-border" placeholder="Add a new comment" ng-model="body"></input>
+                <textarea class="input" rows="3" class="w3-input w3-border" placeholder="Add a new comment" ng-model="body"></textarea>
             </div>
             <div class="w3-third">
                 <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Post</button>
