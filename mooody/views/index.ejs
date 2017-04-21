@@ -204,11 +204,23 @@
 
         <!-- Display comments -->
         <div ng-repeat="comment in post.comments | orderBy:'-date'">
-            <span class="glyphicon glyphicon-heart" ng-click="incrementUpvotes(comment)"></span>
+            <!-- <span class="glyphicon glyphicon-heart" ng-click="incrementUpvotes(comment)"></span>
             {{comment.upvotes}}
             <span class="glyphicon glyphicon-flag" ng-click="incrementFlags(comment)"></span>
-            {{comment.flags}}
-            <span class="comment">{{comment.body}}</span><br><br>
+            {{comment.flags}} -->
+            <span>
+                <ul class="post-buttons">
+                    <li ng-if="comment.upvoted"><span class="glyphicon glyphicon-heart" style="color:red" ng-click="upvoted(comment);incrementUpvotes(comment)"></span>
+                    {{comment.upvotes}}</li>
+                    <li ng-if="!comment.upvoted"><span class="glyphicon glyphicon-heart" style="color:lightgray" ng-click="upvoted(comment);incrementUpvotes(comment)"></span>
+                    {{comment.upvotes}}</li>
+                    <li ng-if="comment.downvoted"><span class="glyphicon glyphicon-flag" style="color:darkgray" ng-click="downvoted(comment);incrementFlags(comment)"></span>
+                    {{comment.flags}}</li>
+                    <li ng-if="!comment.downvoted"><span class="glyphicon glyphicon-flag" style="color:lightgray" ng-click="downvoted(comment);incrementFlags(comment)"></span>
+                    {{comment.flags}}</li>
+                    <span class="comment">{{comment.body}}</span><br><br>
+                </ul>
+            </span>
         </div><br>
 
         <!-- Section to add a new comment -->
