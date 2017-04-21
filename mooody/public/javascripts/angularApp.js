@@ -404,7 +404,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         // Determine whether to disable "Post" button based on filter
         $scope.isInFilter = function() {
             return $scope.inFilter;
-        }
+        };
     }]);
 
 // Posts Controller

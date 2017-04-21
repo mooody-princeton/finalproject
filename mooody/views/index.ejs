@@ -12,6 +12,7 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
     <script src="/javascripts/angularApp.js"></script>
     <script src="/javascripts/sidebar.js"></script>
+    <script src="/javascripts/misc.js"></script>
 
     <!-- Chartist -->
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
@@ -73,26 +74,8 @@
     <div class="w3-row-padding w3-padding-32">
       <!--- Go To Top Button --->
       <button onclick="topFunction()" id="toTop" title="Go to top"><i class="glyphicon glyphicon-chevron-up"></i></button>
-      <script>
-      // wasn't working in index.js? so put here for now
-      // When the user scrolls down 20px from the top of the document, show the button
-      window.onscroll = function() {scrollFunction()};
-      function scrollFunction() {
-          if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-              document.getElementById("toTop").style.display = "block";
-          } else {
-              document.getElementById("toTop").style.display = "none";
-          }
-      }
-      // When the user clicks on the button, scroll to the top of the document
-      function topFunction() {
-          document.body.scrollTop = 0; // For Chrome, Safari and Opera
-          document.documentElement.scrollTop = 0; // For IE and Firefox
-      }
-      </script>
-
         <!-- Sidebar -->
-        <div class="w3-sidebar w3-bar-block w3-center w3-white w3-collapse" ng-controller="SidebarCtrl" id="moodSidebar">
+        <div class="w3-sidebar w3-bar w3-center w3-white w3-collapse" ng-controller="SidebarCtrl" id="moodSidebar">
                 <button class="w3-bar-item w3-button w3-hide-large" onclick="w3_close()">Close &times;</button>
                 <div class="w3-padding-32">
                     <div ng-show="isLoggedIn()">
@@ -103,14 +86,14 @@
                     <div class="ct-chart  ct-minor-second" id="chart"></div>
                     <!-- {{"H: " + currentSocialMood[0].happy}} {{"S: " + currentSocialMood[0].sad}} {{"A: " + currentSocialMood[0].angry}} -->
                     <div ng-show="isLoggedIn()">
-                        <br><span class="post-body">Update your mood: </span>
+                        <br><span class="post-body">Update your mood: </span><br>
                         <div class="w3-bar w3-xlarge">
-                        <a ng-show="checkMood('happy')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
-                        <a ng-hide="checkMood('happy')" class="w3-bar-item w3-button" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
-                        <a ng-show="checkMood('sad')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
-                        <a ng-hide="checkMood('sad')" class="w3-bar-item w3-button" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
-                        <a ng-show="checkMood('angry')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('angry')"><i class="twa twa-triumph"></i></a>
-                        <a ng-hide="checkMood('angry')" class="w3-bar-item w3-button" ng-click="setMoodTo('angry')"><i class="twa twa-triumph"></i></a>
+                            <a ng-show="checkMood('happy')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
+                            <a ng-hide="checkMood('happy')" class="w3-bar-item w3-button" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
+                            <a ng-show="checkMood('sad')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
+                            <a ng-hide="checkMood('sad')" class="w3-bar-item w3-button" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
+                            <a ng-show="checkMood('angry')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('angry')"><i class="twa twa-triumph"></i></a>
+                            <a ng-hide="checkMood('angry')" class="w3-bar-item w3-button" ng-click="setMoodTo('angry')"><i class="twa twa-triumph"></i></a>
                         </div>
                     </div>
                 </div>
@@ -171,21 +154,20 @@
                 {{post.body}}
             </span><br><br>
             </div>
-            <span>
-                <ul class="post-buttons">
-                    <li>{{post.date | date:'MMM dd hh:mm a'}}</li>
-                    <li ng-if="post.upvoted"><span class="glyphicon glyphicon-heart" style="color:red" ng-click="upvoted(post);incrementUpvotes(post)"></span>
+                <ul class="w3-right post-buttons">
+                    <li class="w3-hide-small" style="font-size:15px;">{{post.date | date:'MMM dd hh:mm a'}}</li>
+                    <li class="w3-hide-large w3-hide-medium" style="font-size:15px;">{{post.date | date:'MM/dd hh:mm a'}}<br></li>
+                    <li ng-if="post.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="upvoted(post); incrementUpvotes(post);"></span>
                     {{post.upvotes}}</li>
-                    <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart" style="color:lightgray" ng-click="upvoted(post);incrementUpvotes(post)"></span>
+                    <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="upvoted(post); incrementUpvotes(post);"></span>
                     {{post.upvotes}}</li>
-                    <li ng-if="post.downvoted"><span class="glyphicon glyphicon-flag" style="color:darkgray" ng-click="flagged(post);incrementFlags(post)"></span>
+                    <li ng-if="post.downvoted"><span class="glyphicon glyphicon-flag w3-text-gray" ng-click="flagged(post); incrementFlags(post);"></span>
                     {{post.flags}}</li>
-                    <li ng-if="!post.downvoted"><span class="glyphicon glyphicon-flag" style="color:lightgray" ng-click="flagged(post);incrementFlags(post)"></span>
+                    <li ng-if="!post.downvoted"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="flagged(post); incrementFlags(post);"></span>
                     {{post.flags}}</li>
-                    <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment"></span></a>
+                    <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment w3-text-blue"></span></a>
                         {{post.comments.length}}</li>
                 </ul>
-            </span>
             </div>
       </div>
     </script>
@@ -210,13 +192,13 @@
             {{comment.flags}} -->
             <span>
                 <ul class="post-buttons">
-                    <li ng-if="comment.upvoted"><span class="glyphicon glyphicon-heart" style="color:red" ng-click="upvoted(comment);incrementUpvotes(comment)"></span>
+                    <li ng-if="comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="upvoted(comment);incrementUpvotes(comment)"></span>
                     {{comment.upvotes}}</li>
-                    <li ng-if="!comment.upvoted"><span class="glyphicon glyphicon-heart" style="color:lightgray" ng-click="upvoted(comment);incrementUpvotes(comment)"></span>
+                    <li ng-if="!comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="upvoted(comment);incrementUpvotes(comment)"></span>
                     {{comment.upvotes}}</li>
-                    <li ng-if="comment.downvoted"><span class="glyphicon glyphicon-flag" style="color:darkgray" ng-click="downvoted(comment);incrementFlags(comment)"></span>
+                    <li ng-if="comment.downvoted"><span class="glyphicon glyphicon-flag w3-text-gray" ng-click="downvoted(comment);incrementFlags(comment)"></span>
                     {{comment.flags}}</li>
-                    <li ng-if="!comment.downvoted"><span class="glyphicon glyphicon-flag" style="color:lightgray" ng-click="downvoted(comment);incrementFlags(comment)"></span>
+                    <li ng-if="!comment.downvoted"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="downvoted(comment);incrementFlags(comment)"></span>
                     {{comment.flags}}</li>
                     <span class="comment">{{comment.body}}</span><br><br>
                 </ul>
