@@ -40,12 +40,32 @@
     <div class="w3-top">
         <div class="w3-bar w3-white w3-large" ng-controller="NavCtrl">
                   <a class="w3-bar-item" href="#" style="text-decoration: none;">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-triumph"></i>dy</a>
-                  <a class="w3-bar-item w3-button" href="https://mooody-princeton.github.io/">About</a>
+                  <!--<a class="w3-bar-item w3-button" href="https://mooody-princeton.github.io/">About</a>-->
+                  <a class="w3-bar-item w3-button w3-text-blue" onclick="document.getElementById('about').style.display='block'">About</a>
                   <!--<a class="w3-bar-item w3-button" ng-show="isLoggedIn()" style="text-decoration: none;">{{ currentUser() }}</a>-->
                   <a class="w3-bar-item w3-button" ng-show="isLoggedIn()" href="" ng-click="logOut()">Log Out</a>
                   <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/login">Log In</a>
-                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/register">Register</a>
-                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/verify">Activate Account</a>
+                  <!--<a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/register">Register</a>-->
+                  <!--<a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/verify">Activate Account</a>-->
+        </div>
+    </div>
+
+    <!-- About popup (modal) -->
+    <div id="about" class="w3-modal">
+        <div class="w3-modal-content">
+            <header class="w3-container">
+            <span onclick="document.getElementById('about').style.display='none'"
+            class="w3-button w3-display-topright">&times;</span>
+            </header>
+            <div class="w3-container w3-padding-16">
+                <p class="post-body">Mooody is a COS 333 project by Xiao Yang Yu, Lindy Zeng, Katelyn Neese, and Jesse Chou.
+                    The team is advised by Nick Giannarakis. Visit our project site <a href="https://mooody-princeton.github.io/">here</a>.</p>
+                <br>
+                <p class="post-body"><span class="w3-tag w3-blue">DISCLAIMER</span> This web application is not intended to be used to diagnose
+                    or treat any mental illness or medical condition. For diagnoses or treatment of any such condition, consult a medical
+                    professional. All information on the web application are the responsibility of the individuals who posted it, and do not
+                    necessarily reflect the views of the web application developers.</p>
+            </div>
         </div>
     </div>
 
@@ -70,6 +90,7 @@
           document.documentElement.scrollTop = 0; // For IE and Firefox
       }
       </script>
+
         <!-- Sidebar -->
         <div class="w3-sidebar w3-bar-block w3-center w3-white w3-collapse" ng-controller="SidebarCtrl" id="moodSidebar">
                 <button class="w3-bar-item w3-button w3-hide-large" onclick="w3_close()">Close &times;</button>
@@ -213,46 +234,100 @@
         </div>
 
         <!-- Registration form with validator -->
-        <h3>Register</h3>
-        <br>
-        <form data-toggle="validator" role="form" ng-submit="register()">
-            <div class="form-group">
-                <label for="inputName" class="control-label">Username</label>
-                <input type="text" class="form-control" id="inputName" placeholder="Username" ng-model="user.username" required>
+        <div class="w3-padding-16"><span class="title">Register</span></div>
+       <form data-toggle="validator" role="form" ng-submit="register()">
+           <div class="form-group">
+               <label for="inputName" class="w3-text-blue">Username</label>
+               <input type="text" class="w3-input w3-border" id="inputName" placeholder="Username" ng-model="user.username" required>
+           </div>
+           <!-- For phone verification -->
+           <div class="form-group has-feedback">
+               <label for="inputTwitter" class="w3-text-blue">Phone Number</label>
+               <div class="input-group" id="phoneform">
+                   <span class="input-group-addon">+1</span>
+                   <input type="text" class="w3-input w3-border" placeholder="Phone number" name="phoneNumber" ng-model="user.phonenum" required>
+               </div>
+               <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+           </div>
+           <!-- For email verification (ditched) -->
+           <!-- <div class="form-group has-feedback">
+               <label for="inputTwitter" class="control-label">Princeton Email</label>
+               <div class="input-group">
+                   <input type="text" class="form-control" placeholder="Netid" ng-model="user.netid" required>
+                   <span class="input-group-addon">@</span>
+                   <input type="text" class="form-control" placeholder="Anything in-between (if any)" ng-model="user.optional">
+                   <span class="input-group-addon">princeton.edu</span>
+               </div>
+               <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+           </div> -->
+           <div class="form-group">
+               <label for="inputPassword" class="w3-text-blue">Choose a password</label>
+               <div class="form-inline row">
+                 <div class="form-group col-sm-6">
+                   <input type="password" data-minlength="1" class="w3-input w3-border" id="inputPassword" placeholder="Password" ng-model="user.password" required>
+                   <div class="help-block">Minimum of 1 characters</div>
+                 </div>
+               </div>
+             </div>
+             <div class="form-group">
+                <div class="w3-padding-16">
+                    <span class="post-body" style="margin-left:0px;">By signing up, you agree to our <a onclick="document.getElementById('terms').style.display='block'">Terms and Conditions</a>
+                        and <a onclick="document.getElementById('privacy').style.display='block'">Privacy Policy</a>.</span><br>
+                </div>
+                <button type="submit" class="w3-button w3-blue">Sign me up!</button>
+             </div>
+           </form>
+
+            <!-- Terms and Conditions -->
+            <div id="terms" class="w3-modal">
+                <div class="w3-modal-content">
+                    <header class="w3-container">
+                    <span onclick="document.getElementById('terms').style.display='none'"
+                    class="w3-button w3-display-topright">&times;</span>
+                    </header>
+                    <div class="w3-container w3-padding-16">
+                        <p class="post-title">Terms and Conditions</p>
+                        <p class="post-body">Last updated: April 9, 2017</p>
+                        <p class="post-body">Please read these Terms and Conditions carefully before using the Service operated by Mooody.
+                            Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms and Conditions.
+                            These Terms and Conditions apply to all visitors, users and others who access or use the Service.
+                            By accessing or using the Service you agree to be bound by these Terms and Conditions.
+                            If you disagree with any part of the terms then you may not access the Service.</p>
+                        <br>
+                        <p class="post-body"><span class="w3-tag w3-blue">Content</span> Our Service allows you to post, store, share and
+                            otherwise make available certain information, text, or other material. You are solely responsible for the
+                            content, postings, and conduct made under your account. You accept full, sole risk for your use of these services.
+                            Mooody and its developers shall not be liable to you for any damages whatsoever. You agree to not upload content that:
+                            <ul>
+                                <li>May constitute or contribute to a crime</li>
+                                <li>Contains information or content which is illegal</li>
+                                <li>Is pornographic, harmful or dangerous, encourages acts of violence, hateful content, threats, or reveals other’s personal information</li>
+                            </ul></p>
+                        <p class="post-body"><span class="w3-tag w3-blue">Changes</span> We reserve the right, at our sole discretion, to modify or replace these Terms and Conditionsat any time.
+                            If a revision is material we will try to provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined
+                            at our sole discretion.</p>
+                        <p class="post-body"><span class="w3-tag w3-blue">Termination</span> We may terminate, suspend, or ban accounts and/or access to our Services immediately, without
+                            prior notice or liability to Mooody or its developers, for any reason whatsoever, including breach of Terms and Conditions.</p>
+                        <p class="post-body"><span class="w3-tag w3-blue">Conact Us</span> If you have any questions about these Terms and Conditions, please <a href="mailto:xyyu@princeton.edu">contact</a> us.</p>
+                    </div>
+                </div>
             </div>
-            <!-- For phone verification -->
-            <div class="form-group has-feedback">
-                <label for="inputTwitter" class="control-label">Phone Number</label>
-                <div class="input-group" id="phoneform">
-                    <span class="input-group-addon">+1</span>
-                    <input type="text" class="form-control" placeholder="Phone number" name="phoneNumber" ng-model="user.phonenum" required>
+
+            <!-- Privacy Policy -->
+            <div id="privacy" class="w3-modal">
+                <div class="w3-modal-content">
+                    <header class="w3-container">
+                    <span onclick="document.getElementById('privacy').style.display='none'"
+                    class="w3-button w3-display-topright">&times;</span>
+                    </header>
+                    <div class="w3-container w3-padding-16">
+                        <p class="post-title">Privacy Policy</p>
+                        <p class="post-body">Last updated: April 9, 2017</p>
+                        <p class="post-body">Not added yet</p>
+                        <p class="post-body"><span class="w3-tag w3-blue">Content</span> Not added yet</p>
+                    </div>
                 </div>
-                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
             </div>
-            <!-- For email verification (ditched) -->
-            <!-- <div class="form-group has-feedback">
-                <label for="inputTwitter" class="control-label">Princeton Email</label>
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Netid" ng-model="user.netid" required>
-                    <span class="input-group-addon">@</span>
-                    <input type="text" class="form-control" placeholder="Anything in-between (if any)" ng-model="user.optional">
-                    <span class="input-group-addon">princeton.edu</span>
-                </div>
-                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-            </div> -->
-            <div class="form-group">
-                <label for="inputPassword" class="control-label">Choose a password</label>
-                <div class="form-inline row">
-                  <div class="form-group col-sm-6">
-                    <input type="password" data-minlength="1" class="form-control" id="inputPassword" placeholder="Password" ng-model="user.password" required>
-                    <div class="help-block">Minimum of 1 characters</div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <button type="submit" class="btn btn-primary">Sign me up!</button>
-              </div>
-            </form>
     </script>
 
 <!-- login.html -->
@@ -264,27 +339,27 @@
         </div>
 
         <!-- Login form with validator -->
-        <h3>Log In</h3>
-        <br>
+        <div class="w3-padding-16"><span class="title">Log In</span></div>
         <form data-toggle="validator" role="form" ng-submit="logIn()">
             <div class="form-group">
-                <label for="inputName" class="control-label">Username</label>
-                <input type="text" class="form-control" id="inputName" placeholder="Username" ng-model="user.username">
+                <label for="inputName" class="w3-text-blue">Username</label>
+                <input type="text" class="w3-input w3-border" id="inputName" placeholder="Username" ng-model="user.username">
             </div>
             <div class="form-group">
-                <label for="inputPassword" class="control-label">Password</label>
+                <label for="inputPassword" class="w3-text-blue">Password</label>
                 <div class="form-inline row">
                   <div class="form-group col-sm-6">
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Password" ng-model="user.password" required>
+                    <input type="password" class="w3-input w3-border" id="inputPassword" placeholder="Password" ng-model="user.password" required>
                   </div>
                 </div>
               </div>
               <div class="form-group">
-                <button type="submit" class="btn btn-primary">Log in!</button>
+                <button type="submit" class="w3-button w3-blue">Log In</button>
               </div>
             </form>
 
-        <a class="w3-button" href="/#/verify">Click here if you have the verification code to activate your account.</a>
+        <a class="w3-button" href="/#/register">Don't have an account? Click here to register.</a><br>
+        <a class="w3-button" href="/#/verify">Click here to activate your account.</a>
     </script>
 
 <!-- verify.html -->
@@ -298,18 +373,17 @@
             <span>{{ success.successmessage }}</span>
         </div>
 
-        <h3>Enter your 6-character verification code below.</h3>
-        <br>
+        <div class="w3-padding-16"><span class="title">Enter your 6-character verification code below.</span></div>
         <form data-toggle="validator" role="form" ng-submit="verifyNow()">
             <div class="form-group">
-                <label for="inputName" class="control-label">Code (case sensitive)</label>
-                <input type="text" class="form-control" id="inputName" placeholder="Code" ng-model="code" required>
+                <label for="inputName" class="w3-text-blue">Code (case sensitive)</label>
+                <input type="text" class="w3-input w3-border" id="inputName" placeholder="Code" ng-model="code" required>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Activate your account!</button>
+                <button type="submit" class="w3-button w3-blue">Activate your account!</button>
             </div>
         </form>
-        {{code}}
+        <!--{{code}}-->
     </script>
 </body>
 </html>
