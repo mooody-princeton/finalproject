@@ -243,11 +243,27 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
             comment.upvotes = data.userUpvotes.length;
         });
     };
+    o.upvotedComment = function(userid, post, comment) {
+        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/upvoted', {usr: userid}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken() }
+        }).success(function(data){
+            // console.log(data);
+            comment.upvoted = data;
+        });
+    };
     o.downvoteComment = function(userid, post, comment) {
         return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/downvote', {usr: userid}, {
             headers: { Authorization: 'Bearer ' + auth.getToken() }
         }).success(function(data){
+            // console.log(data);
             comment.flags = data.userFlags.length;
+        });
+    };
+    o.downvotedComment = function(userid, post, comment) {
+        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/downvoted', {usr: userid}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken() }
+        }).success(function(data){
+            comment.downvoted = data;
         });
     };
     return o;
@@ -409,8 +425,20 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
         $scope.incrementUpvotes = function(comment) {
             posts.upvoteComment(auth.currentUserId(), post, comment);
         };
+
+        // Check if comment upvoted
+        $scope.upvoted = function(comment) {
+            if (!auth.isLoggedIn()) return false;
+            posts.upvotedComment(auth.currentUserId(), post, comment); // return
+        };
         $scope.incrementFlags = function(comment) {
             posts.downvoteComment(auth.currentUserId(), post, comment);
+        };
+
+        // Check if comment upvoted
+        $scope.downvoted = function(comment) {
+            if (!auth.isLoggedIn()) return false;
+            posts.downvotedComment(auth.currentUserId(), post, comment); // return
         };
     }]);
 

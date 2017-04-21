@@ -28,4 +28,22 @@ CommentSchema.methods.downvote = function(userid, cb) {
   this.save(cb);
 }
 
+// Check if user has upvoted
+CommentSchema.methods.upvoted = function(userid, cb) {
+  upvo = false;
+  if (this.userUpvotes.indexOf(userid) == -1) upvo = true;
+  this.save(cb);
+  console.log(upvo);
+  return upvo;
+}
+
+// Check if user has downvoted
+CommentSchema.methods.downvoted = function(userid, cb) {
+  downvo = false;
+  if (this.userFlags.indexOf(userid) == -1) downvo = true;
+  this.save(cb);
+  console.log(downvo);
+  return downvo;
+}
+
 mongoose.model('Comment', CommentSchema);
