@@ -313,6 +313,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         $scope.posts = posts.posts;
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.title = '';
+        $scope.imagelink = '';
 
         // Filter by mood and order by date/popularity
         $scope.filters = {};
@@ -333,10 +334,12 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
             if (!$scope.title || $scope.title === '') { return; }
             posts.create({
                 title: $scope.title,
+                imagelink: $scope.imagelink,
                 mood: $scope.filters.mood,
                 date: new Date()
             });
             $scope.title = '';
+            $scope.imagelink = '';
         };
 
         // Set heart button toggle appropriately

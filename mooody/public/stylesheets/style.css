@@ -193,4 +193,10 @@ a:hover {
     resize: none;
 }
 
+/* Images for posts */
+.user-images {
+  max-height:35%;
+  max-width:35%;
+}
+
 /* add more custom styling here with comments */

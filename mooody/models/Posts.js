@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 
 var PostSchema = new mongoose.Schema({
   title: String,
+  imagelink: String,
   upvotes: {type: Number, default: 0},
   flags: {type: Number, default: 0},
   mood: String,
