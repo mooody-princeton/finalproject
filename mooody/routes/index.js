@@ -111,27 +111,11 @@ router.put('/posts/:post/upvote', auth, function(req, res, next) {
   });
 });
 
-router.put('/posts/:post/upvoted', auth, function(req, res, next) {
-  upvo = req.post.upvoted(req.body.usr, function(err, upvoted){
-    if (err) { return next(err); }
-    // console.log(upvo);
-    res.json(upvo);
-  });
-});
-
 router.put('/posts/:post/downvote', auth, function(req, res, next) {
   req.post.downvote(req.body.usr, function(err, post){
     if (err) { return next(err); }
 
     res.json(post);
-  });
-});
-
-router.put('/posts/:post/downvoted', auth, function(req, res, next) {
-  downvo = req.post.downvoted(req.body.usr, function(err, downvoted){
-    if (err) { return next(err); }
-    // console.log(downvo);
-    res.json(downvo);
   });
 });
 
@@ -159,27 +143,11 @@ router.put('/posts/:post/comments/:comment/upvote', auth, function(req, res, nex
   });
 });
 
-router.put('/posts/:post/comments/:comment/upvoted', auth, function(req, res, next) {
-  upvo = req.comment.upvoted(req.body.usr, function(err, upvoted){ 
-    if (err) { return next(err); }
-    // console.log(upvo);
-    res.json(upvo);
-  });
-});
-
 router.put('/posts/:post/comments/:comment/downvote', auth, function(req, res, next) {
   req.comment.downvote(req.body.usr, function(err, comment){
     if (err) { return next(err); }
 
     res.json(comment);
-  });
-});
-
-router.put('/posts/:post/comments/:comment/downvoted', auth, function(req, res, next) {
-  downvo = req.comment.downvoted(req.body.usr, function(err, downvoted){ 
-    if (err) { return next(err); }
-    // console.log(downvo);
-    res.json(downvo);
   });
 });
 

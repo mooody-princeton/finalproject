@@ -45,7 +45,7 @@
                   <a class="w3-bar-item w3-button w3-text-blue" onclick="document.getElementById('about').style.display='block'">About</a>
                   <!--<a class="w3-bar-item w3-button" ng-show="isLoggedIn()" style="text-decoration: none;">{{ currentUser() }}</a>-->
                   <a class="w3-bar-item w3-button" ng-show="isLoggedIn()" href="" ng-click="logOut()">Log Out</a>
-                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/login">Log In</a>
+                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/login">Log In/Register</a>
                   <!--<a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/register">Register</a>-->
                   <!--<a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/verify">Activate Account</a>-->
         </div>
@@ -157,13 +157,13 @@
                 <ul class="w3-right post-buttons">
                     <li class="w3-hide-small" style="font-size:15px;">{{post.date | date:'MMM dd hh:mm a'}}</li>
                     <li class="w3-hide-large w3-hide-medium" style="font-size:15px;">{{post.date | date:'MM/dd hh:mm a'}}<br></li>
-                    <li ng-if="post.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="upvoted(post); incrementUpvotes(post);"></span>
+                    <li ng-if="post.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotes(post)"></span>
                     {{post.upvotes}}</li>
-                    <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="upvoted(post); incrementUpvotes(post);"></span>
+                    <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotes(post)"></span>
                     {{post.upvotes}}</li>
-                    <li ng-if="post.downvoted"><span class="glyphicon glyphicon-flag w3-text-gray" ng-click="flagged(post); incrementFlags(post);"></span>
+                    <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-gray" ng-click="incrementFlags(post)"></span>
                     {{post.flags}}</li>
-                    <li ng-if="!post.downvoted"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="flagged(post); incrementFlags(post);"></span>
+                    <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(post)"></span>
                     {{post.flags}}</li>
                     <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment w3-text-blue"></span></a>
                         {{post.comments.length}}</li>
@@ -196,13 +196,13 @@
               <div class="w3-panel w3-white w3-border comment w3-padding-small">
                                     {{comment.body}}<br>
                 <ul class="w3-right post-buttons">
-                    <li ng-if="comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="upvoted(comment);incrementUpvotes(comment)"></span>
+                    <li ng-if="comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotes(comment)"></span>
                     {{comment.upvotes}}</li>
-                    <li ng-if="!comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="upvoted(comment);incrementUpvotes(comment)"></span>
+                    <li ng-if="!comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotes(comment)"></span>
                     {{comment.upvotes}}</li>
-                    <li ng-if="comment.downvoted"><span class="glyphicon glyphicon-flag w3-text-gray" ng-click="downvoted(comment);incrementFlags(comment)"></span>
+                    <li ng-if="comment.flagged"><span class="glyphicon glyphicon-flag w3-text-gray" ng-click="incrementFlags(comment)"></span>
                     {{comment.flags}}</li>
-                    <li ng-if="!comment.downvoted"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="downvoted(comment);incrementFlags(comment)"></span>
+                    <li ng-if="!comment.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(comment)"></span>
                     {{comment.flags}}</li></ul>
               </div>
             </span>

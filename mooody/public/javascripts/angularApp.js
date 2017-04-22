@@ -189,6 +189,20 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
     o.getAll = function() {
         return $http.get('/posts').success(function(data) {
             angular.copy(data, o.posts);
+            // Take care of heart/flag buttons display
+            var i;
+            for (i = 0; i < o.posts.length; i++) {
+                if (!auth.isLoggedIn()) {
+                    o.posts[i].upvoted = false;
+                    o.posts[i].flagged = false;
+                }
+                else {
+                    if (o.posts[i].userUpvotes.indexOf(auth.currentUserId()) == -1) o.posts[i].upvoted = false;
+                    else o.posts[i].upvoted = true;
+                    if (o.posts[i].userFlags.indexOf(auth.currentUserId()) == -1) o.posts[i].flagged = false;
+                    else o.posts[i].flagged = true;
+                }
+            }
         });
     };
     o.create = function(post) {
@@ -203,13 +217,7 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
             headers: { Authorization: 'Bearer ' + auth.getToken()}
         }).success(function(data) {
             post.upvotes = data.userUpvotes.length;
-            });
-    };
-    o.upvoted = function(userid, post) {
-        return $http.put('/posts/' + post._id + '/upvoted', {usr: userid}, {
-            headers: { Authorization: 'Bearer ' + auth.getToken()}
-        }).success(function(data) {
-            post.upvoted = data;
+            post.userUpvotes = data.userUpvotes;
             });
     };
     o.downvote = function(userid, post) {
@@ -217,17 +225,25 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
             headers: { Authorization: 'Bearer ' + auth.getToken()}
 	    }).success(function(data){
             post.flags = data.userFlags.length;
+            post.userFlags = data.userFlags;
 	        });
 	};
-    o.downvoted = function(userid, post) {
-        return $http.put('/posts/' + post._id + '/downvoted', {usr: userid}, {
-            headers: { Authorization: 'Bearer ' + auth.getToken()}
-        }).success(function(data) {
-            post.downvoted = data;
-            });
-    };
     o.get = function(id) {
         return $http.get('/posts/' + id).then(function(res){
+                // Take care of heart/flag buttons display for the post's comments
+                var i;
+                for (i = 0; i < res.data.comments.length; i++) {
+                    if (!auth.isLoggedIn()) {
+                        res.data.comments[i].upvoted = false;
+                        res.data.comments[i].flagged = false;
+                    }
+                    else {
+                        if (res.data.comments[i].userUpvotes.indexOf(auth.currentUserId()) == -1) res.data.comments[i].upvoted = false;
+                        else res.data.comments[i].upvoted = true;
+                        if (res.data.comments[i].userFlags.indexOf(auth.currentUserId()) == -1) res.data.comments[i].flagged = false;
+                        else res.data.comments[i].flagged = true;
+                    }
+                }
                 return res.data;
             });
     };
@@ -241,14 +257,7 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
             headers: { Authorization: 'Bearer ' + auth.getToken() }
         }).success(function(data){
             comment.upvotes = data.userUpvotes.length;
-        });
-    };
-    o.upvotedComment = function(userid, post, comment) {
-        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/upvoted', {usr: userid}, {
-            headers: { Authorization: 'Bearer ' + auth.getToken() }
-        }).success(function(data){
-            // console.log(data);
-            comment.upvoted = data;
+            comment.userUpvotes = data.userUpvotes;
         });
     };
     o.downvoteComment = function(userid, post, comment) {
@@ -257,13 +266,7 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
         }).success(function(data){
             // console.log(data);
             comment.flags = data.userFlags.length;
-        });
-    };
-    o.downvotedComment = function(userid, post, comment) {
-        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/downvoted', {usr: userid}, {
-            headers: { Authorization: 'Bearer ' + auth.getToken() }
-        }).success(function(data){
-            comment.downvoted = data;
+            comment.userFlags = data.userFlags;
         });
     };
     return o;
@@ -328,26 +331,30 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
             $scope.body = '';
         };
 
-        // Upvote post
-        $scope.incrementUpvotes = function(post) {
-            posts.upvote(auth.currentUserId(), post);
+        // Set heart button toggle appropriately
+        $scope.checkUpvoted = function(post) {
+            if (!auth.isLoggedIn()) $scope.posts.find(x=>x._id == post._id).upvoted = false; // Should never happen
+            else if (post.userUpvotes.indexOf(auth.currentUserId()) == -1) $scope.posts.find(x=>x._id == post._id).upvoted = false;
+            else $scope.posts.find(x=>x._id == post._id).upvoted = true;
+            $scope.$applyAsync(); // Apply changes in view
         };
 
-        // Check if post upvoted
-        $scope.upvoted = function(post) {
-            if (!auth.isLoggedIn()) return false;
-            posts.upvoted(auth.currentUserId(), post); // return
+        // Upvote post
+        $scope.incrementUpvotes = function(post) {
+            posts.upvote(auth.currentUserId(), post).then(function() {$scope.checkUpvoted(post);});
+        };
+
+        // Set flag button toggle appropriately
+        $scope.checkFlagged = function(post) {
+            if (!auth.isLoggedIn()) $scope.posts.find(x=>x._id == post._id).flagged = false; // Should never happen
+            else if (post.userFlags.indexOf(auth.currentUserId()) == -1) $scope.posts.find(x=>x._id == post._id).flagged = false;
+            else $scope.posts.find(x=>x._id == post._id).flagged = true;
+            $scope.$applyAsync(); // Apply changes in view
         };
 
         // Flag post
         $scope.incrementFlags = function(post) {
-            posts.downvote(auth.currentUserId(), post);
-        };
-
-        // Check if post flagged
-        $scope.flagged = function(post) {
-            if (!auth.isLoggedIn()) return false;
-            posts.downvoted(auth.currentUserId(), post); // return
+            posts.downvote(auth.currentUserId(), post).then(function() {$scope.checkFlagged(post);});
         };
 
         // Filter posts by mood
@@ -422,23 +429,29 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
             });
           $scope.body = '';
         };
+
+        // Set heart button toggle appropriately
+        $scope.checkUpvoted = function(comment) {
+            if (!auth.isLoggedIn()) $scope.post.comments.find(x=>x._id == comment._id).upvoted = false; // Should never happen
+            else if (comment.userUpvotes.indexOf(auth.currentUserId()) == -1) $scope.post.comments.find(x=>x._id == comment._id).upvoted = false;
+            else $scope.post.comments.find(x=>x._id == comment._id).upvoted = true;
+            $scope.$applyAsync(); // Apply changes in view
+        };
+
         $scope.incrementUpvotes = function(comment) {
-            posts.upvoteComment(auth.currentUserId(), post, comment);
+            posts.upvoteComment(auth.currentUserId(), post, comment).then(function() {$scope.checkUpvoted(comment);});
         };
 
-        // Check if comment upvoted
-        $scope.upvoted = function(comment) {
-            if (!auth.isLoggedIn()) return false;
-            posts.upvotedComment(auth.currentUserId(), post, comment); // return
+        // Set flag button toggle appropriately
+        $scope.checkFlagged = function(comment) {
+            if (!auth.isLoggedIn()) $scope.post.comments.find(x=>x._id == comment._id).flagged = false; // Should never happen
+            else if (comment.userFlags.indexOf(auth.currentUserId()) == -1) $scope.post.comments.find(x=>x._id == comment._id).flagged = false;
+            else $scope.post.comments.find(x=>x._id == comment._id).flagged = true;
+            $scope.$applyAsync(); // Apply changes in view
         };
+
         $scope.incrementFlags = function(comment) {
-            posts.downvoteComment(auth.currentUserId(), post, comment);
-        };
-
-        // Check if comment upvoted
-        $scope.downvoted = function(comment) {
-            if (!auth.isLoggedIn()) return false;
-            posts.downvotedComment(auth.currentUserId(), post, comment); // return
+            posts.downvoteComment(auth.currentUserId(), post, comment).then(function() {$scope.checkFlagged(comment);});
         };
     }]);
 
@@ -475,12 +488,15 @@ app.controller('AuthCtrl', ['$scope', '$state', 'auth',
     }]);
 
 // Navbar Controller
-app.controller('NavCtrl', ['$scope', 'auth',
-    function($scope, auth) {
+app.controller('NavCtrl', ['$scope', '$state', 'auth',
+    function($scope, $state, auth) {
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
-        $scope.logOut = auth.logOut;
+        $scope.logOut = function() {
+            auth.logOut();
+            $state.reload(); // Reload page so logged out view doesn't contain user info
+        }
     }]);
 
 // Sidebar Controller
