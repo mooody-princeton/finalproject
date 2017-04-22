@@ -160,10 +160,20 @@ router.post('/register', function(req, res, next){
         return res.status(400).json({message: 'Please fill out all fields'});
     }
 
+    // Make sure that username and phone number are unique
+    User.findOne({username: req.body.username}, function(err, alreadyPresent) {
+      if (err) return res.status(400).json({message: 'Registration failed. Please try again later.'});
+      if (alreadyPresent != null) return res.status(400).json({message: 'Username taken. Please try again.'});
+      User.findOne({phonenum: "1" + req.body.phonenum}, function(err, alreadyUsed) {
+        if (err) return res.status(400).json({message: 'Registration failed. Please try again later.'});
+        if (alreadyUsed != null) return res.status(400).json({message: 'This phone number is already registered. Please try again.'});
+
+    // If no error so far, then proceed with user registration
+    // The rest of this code is wrapped inside the second User.findOne()'s callback
     var user = new User();
     user.username = req.body.username;
     user.mood = 'Select one below!';
-    user.phonenum = "+1" + req.body.phonenum;
+    user.phonenum = "1" + req.body.phonenum;
 
     // Disabled email verification
     // var tempString = '';
@@ -207,6 +217,10 @@ router.post('/register', function(req, res, next){
       // Response
       return res.json({token: user.generateJWT()});
       });
+
+      // End of callback
+      });
+    });
 });
 
 router.post('/login', function(req, res, next){
