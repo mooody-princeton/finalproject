@@ -130,7 +130,7 @@
             </div>
         </div>
         <form class="w3-container w3-padding-16" ng-hide="!isLoggedIn() || !isInFilter()" ng-submit="addPost()">
-            <div class="w3-third w3-mobile">
+            <div class="w3-threequarter w3-mobile">
                 <input type="textarea" class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title"></input>
             </div>
             <div class="w3-rest w3-mobile">
@@ -144,9 +144,9 @@
     <div class="w3-container" ng-repeat="post in posts | filter: filters | orderBy: orders">
         <div class="w3-panel w3-white w3-border post">
             <div><br>
-                <span class="post-title">
+                <a href="#/posts/{{post._id}}"><span class="post-title">
                 {{post.title}}
-                </span><br>
+                </span></a><br>
             </div>
                 <ul class="w3-right post-buttons">
                     <li class="w3-hide-small" style="font-size:15px;">{{post.date | date:'MMM dd hh:mm a'}}</li>
@@ -155,7 +155,7 @@
                     {{post.upvotes}}</li>
                     <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotes(post)"></span>
                     {{post.upvotes}}</li>
-                    <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-black" ng-click="incrementFlags(post)"></span>
+                    <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlags(post)"></span>
                     {{post.flags}}</li>
                     <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(post)"></span>
                     {{post.flags}}</li>
@@ -183,7 +183,7 @@
                     {{post.upvotes}}</li>
                     <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotesPost()"></span>
                     {{post.upvotes}}</li>
-                    <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-black" ng-click="incrementFlagsPost()"></span>
+                    <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlagsPost()"></span>
                     {{post.flags}}</li>
                     <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlagsPost()"></span>
                     {{post.flags}}</li>
@@ -207,7 +207,7 @@
                     {{comment.upvotes}}</li>
                     <li ng-if="!comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotes(comment)"></span>
                     {{comment.upvotes}}</li>
-                    <li ng-if="comment.flagged"><span class="glyphicon glyphicon-flag w3-text-black" ng-click="incrementFlags(comment)"></span>
+                    <li ng-if="comment.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlags(comment)"></span>
                     {{comment.flags}}</li>
                     <li ng-if="!comment.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(comment)"></span>
                     {{comment.flags}}</li></ul>
