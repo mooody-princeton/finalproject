@@ -10,7 +10,7 @@ var ejs = require('ejs');
 var twilio = require('twilio');
 var client = twilio("AC81ea8300e37e8108abc992eaaa2728fa",
   "4208d7046ce5b2a5b8a54e7b6b636690");
-var twilionum = '+15105652971';
+var twilionum = '+16092450655';
 
 // Email verification (not working with princeton.edu, so we're using phone verification instead)
 var key = "b8bae4ae-8d3e-449b-aaec-2d822d74eabc";
@@ -183,7 +183,7 @@ router.post('/register', function(req, res, next){
         if (err) return console.log("Couldn't create verification token", err);
         // Send confirmation SMS if successful so far
         client.sendMessage({
-            to: '+14085991276', // Recipient number (either user's, or your own for testing)
+            to: '+16094552701', // Recipient number (either user's, or your own for testing)
             from: twilionum,
             body: 'Hello from Mooody! This is your code: ' + token
         });
