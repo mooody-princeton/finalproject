@@ -244,6 +244,17 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
                         else res.data.comments[i].flagged = true;
                     }
                 }
+                // Take care of heart/flag buttons display for the post itself
+                if (!auth.isLoggedIn()) {
+                    res.data.upvoted = false;
+                    res.data.flagged = false;
+                }
+                else {
+                    if (res.data.userUpvotes.indexOf(auth.currentUserId()) == -1) res.data.upvoted = false;
+                    else res.data.upvoted = true;
+                    if (res.data.userFlags.indexOf(auth.currentUserId()) == -1) res.data.flagged = false;
+                    else res.data.flagged = true;
+                }
                 return res.data;
             });
     };
@@ -302,7 +313,6 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         $scope.posts = posts.posts;
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.title = '';
-        $scope.body = '';
 
         // Filter by mood and order by date/popularity
         $scope.filters = {};
@@ -323,12 +333,10 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
             if (!$scope.title || $scope.title === '') { return; }
             posts.create({
                 title: $scope.title,
-                body: $scope.body,
                 mood: $scope.filters.mood,
                 date: new Date()
             });
             $scope.title = '';
-            $scope.body = '';
         };
 
         // Set heart button toggle appropriately
@@ -430,7 +438,7 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
           $scope.body = '';
         };
 
-        // Set heart button toggle appropriately
+        // Set heart button toggle appropriately for a comment
         $scope.checkUpvoted = function(comment) {
             if (!auth.isLoggedIn()) $scope.post.comments.find(x=>x._id == comment._id).upvoted = false; // Should never happen
             else if (comment.userUpvotes.indexOf(auth.currentUserId()) == -1) $scope.post.comments.find(x=>x._id == comment._id).upvoted = false;
@@ -438,11 +446,12 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
             $scope.$applyAsync(); // Apply changes in view
         };
 
+        // For a comment
         $scope.incrementUpvotes = function(comment) {
             posts.upvoteComment(auth.currentUserId(), post, comment).then(function() {$scope.checkUpvoted(comment);});
         };
 
-        // Set flag button toggle appropriately
+        // Set flag button toggle appropriately for a comment
         $scope.checkFlagged = function(comment) {
             if (!auth.isLoggedIn()) $scope.post.comments.find(x=>x._id == comment._id).flagged = false; // Should never happen
             else if (comment.userFlags.indexOf(auth.currentUserId()) == -1) $scope.post.comments.find(x=>x._id == comment._id).flagged = false;
@@ -450,8 +459,35 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
             $scope.$applyAsync(); // Apply changes in view
         };
 
+        // For a comment
         $scope.incrementFlags = function(comment) {
             posts.downvoteComment(auth.currentUserId(), post, comment).then(function() {$scope.checkFlagged(comment);});
+        };
+
+        // Set heart button toggle appropriately for this post
+        $scope.checkUpvotedPost = function() {
+            if (!auth.isLoggedIn()) $scope.post.upvoted = false; // Should never happen
+            else if ($scope.post.userUpvotes.indexOf(auth.currentUserId()) == -1) $scope.post.upvoted = false;
+            else $scope.post.upvoted = true;
+            $scope.$applyAsync(); // Apply changes in view
+        };
+
+        // For this post
+        $scope.incrementUpvotesPost = function() {
+            posts.upvote(auth.currentUserId(), $scope.post).then(function() {$scope.checkUpvotedPost();});
+        };
+
+        // Set flag button toggle appropriately for this post
+        $scope.checkFlaggedPost = function() {
+            if (!auth.isLoggedIn()) $scope.post.flagged = false; // Should never happen
+            else if ($scope.post.userFlags.indexOf(auth.currentUserId()) == -1) $scope.post.flagged = false;
+            else $scope.post.flagged = true;
+            $scope.$applyAsync(); // Apply changes in view
+        };
+
+        // For this post
+        $scope.incrementFlagsPost = function() {
+            posts.downvote(auth.currentUserId(), $scope.post).then(function() {$scope.checkFlaggedPost();});
         };
     }]);
 

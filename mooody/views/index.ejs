@@ -131,10 +131,7 @@
         </div>
         <form class="w3-container w3-padding-16" ng-hide="!isLoggedIn() || !isInFilter()" ng-submit="addPost()">
             <div class="w3-third w3-mobile">
-                <input type="text" class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title"></input>
-            </div>
-            <div class="w3-half w3-mobile">
-                <input type="text" class="w3-input w3-border" placeholder="If you need to elaborate...(optional)" ng-model="body" id="form-body"></input>
+                <input type="textarea" class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title"></input>
             </div>
             <div class="w3-rest w3-mobile">
                 <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Post</button>
@@ -150,9 +147,6 @@
                 <span class="post-title">
                 {{post.title}}
                 </span><br>
-                <span class="post-body">
-                {{post.body}}
-            </span><br><br>
             </div>
                 <ul class="w3-right post-buttons">
                     <li class="w3-hide-small" style="font-size:15px;">{{post.date | date:'MMM dd hh:mm a'}}</li>
@@ -180,13 +174,26 @@
             <a href="#">
                 <div><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
             </a>
-            <div class="w3-panel w3-white w3-border post w3-padding-16">
-              <span class="post-title">{{post.title}}</span><br>
-              <span class="post-body">{{post.body}}</span>
-            </div>
+            <div class="w3-panel w3-white w3-border post">
+                <div><br><span class="post-title">{{post.title}}</span></div>
+                <ul class="w3-right post-buttons">
+                    <li class="w3-hide-small" style="font-size:15px;">{{post.date | date:'MMM dd hh:mm a'}}</li>
+                    <li class="w3-hide-large w3-hide-medium" style="font-size:15px;">{{post.date | date:'MM/dd hh:mm a'}}<br></li>
+                    <li ng-if="post.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotesPost()"></span>
+                    {{post.upvotes}}</li>
+                    <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotesPost()"></span>
+                    {{post.upvotes}}</li>
+                    <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-gray" ng-click="incrementFlagsPost()"></span>
+                    {{post.flags}}</li>
+                    <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlagsPost()"></span>
+                    {{post.flags}}</li>
+                </ul>
+            </div>             
         </div>
+        <hr>
 
         <!-- Display comments -->
+        <span class="post-body">Comments:</span><br><br>
         <div ng-repeat="comment in post.comments | orderBy:'-date'">
             <!-- <span class="glyphicon glyphicon-heart" ng-click="incrementUpvotes(comment)"></span>
             {{comment.upvotes}}
