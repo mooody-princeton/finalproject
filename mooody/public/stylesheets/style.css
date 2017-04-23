@@ -1,9 +1,11 @@
 /* Format body */
 body {
   padding: 20px;
+  padding-left:0px !important;
   font: 14px "Roboto", Helvetica, Arial, sans-serif;
   font-weight:200;
   background-color: #fafafa !important;
+  margin:0px;
 }
 
 /* Format links */
@@ -197,10 +199,11 @@ a:hover {
 .user-images {
   max-height:35%;
   max-width:35%;
+  cursor:pointer;
 }
 .user-images-expanded {
-    max-height: 90%;
-    max-width: 90%;
+    max-height: 80vh;
+    max-width: 80%;
 }
 
 /* add more custom styling here with comments */
