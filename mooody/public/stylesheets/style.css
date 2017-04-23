@@ -1,7 +1,6 @@
 /* Format body */
 body {
-  padding: 20px;
-  padding-left:0px !important;
+  padding-top: 15px;
   font: 14px "Roboto", Helvetica, Arial, sans-serif;
   font-weight:200;
   background-color: #fafafa !important;
