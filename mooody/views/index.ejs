@@ -143,20 +143,32 @@
         <div class="w3-row-padding">
             <div class="w3-container w3-half">
                 <div class="w3-bar w3-xlarge">
+                    <div style="float:left;clear:both;margin-left:10px;">
                     <a class="w3-bar-item w3-button w3-bottombar {{active_h}}" ng-click="tab('happy')"><i class="twa twa-smile"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_s}}" ng-click="tab('sad')"><i class="twa twa-cry"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_a}}" ng-click="tab('angry')"><i class="twa twa-triumph"></i></a>
-                    <a class="w3-bar-item w3-button" ng-click="tab('all')" style="font-size:20.5px;">View All</a>
+                    <a class="w3-bar-item w3-button w3-bottombar {{active_all}}" ng-click="tab('all')" style="font-size:20.5px;">All</a>
+                    </div>
+                    <div style="float:left;clear:both;margin-bottom:15px;margin-left:10px;">
                     <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_hot}}" ng-click="toggle('hot')"><i class="twa twa-fire"></i></a>
-                    <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_new}}" ng-click="toggle('new')"><i class="twa twa-clock1"></i></a>
+                    <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_new}}" ng-click="toggle('new')"><i class="twa twa-clock1"></i></a>                  
+                    </div>
                 </div>
             </div>
-            <div class="w3-container w3-rest">
-                <div class="w3-bar w3-padding-16">
+            <div class="w3-container w3-rest" style="margin-top:10px;">
+                <div class="w3-bar w3-padding-big">
                     <!--<a class="w3-bar-item w3-button w3-right" onclick=""><i class="twa twa-mag"></i></a>-->
+                    <div>
                     <a class="w3-bar-item w3-button w3-right w3-blue" onclick="document.getElementById('write').style.display='block'" ng-hide="!isLoggedIn() || !isInFilter()"><i class="glyphicon glyphicon-pencil"></i> Write Post</a>
-                </div>
-            </div>
+                    </div>
+                    <div class="input-group" style="z-index:-1;">
+                        <span class="input-group-btn">
+                            <button class="btn btn-secondary" type="button">Search</button>
+                        </span>
+                        <input type="text" class="form-control" placeholder="(NOT YET FUNCTIONAL) Search for...">
+                    </div>
+                </div>             
+            </div>          
         </div>
         <!--<form class="w3-container w3-padding-16" ng-hide="!isLoggedIn() || !isInFilter()" ng-submit="addPost()">
             <div class="w3-threequarter w3-mobile">

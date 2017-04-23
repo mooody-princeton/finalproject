@@ -346,6 +346,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.title = '';
         $scope.imagelink = '';
+        $scope.whitespace = '       ';
 
         // Filter by mood and order by date/popularity
         $scope.filters = {};
@@ -358,6 +359,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         $scope.active_h = 'w3-border-yellow';
         $scope.active_s = 'w3-border-inactive';
         $scope.active_a = 'w3-border-inactive';
+        $scope.active_all = 'w3-border-inactive';
         $scope.active_hot = 'w3-border-inactive';
         $scope.active_new = 'w3-border-blue';
 
@@ -410,6 +412,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.active_h = 'w3-border-yellow';
                 $scope.active_s = 'w3-border-inactive';
                 $scope.active_a = 'w3-border-inactive';
+                $scope.active_all = 'w3-border-inactive';
             }
             else if (tab === 'sad') {
                 $scope.filters.mood = 'sad';
@@ -418,6 +421,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.active_h = 'w3-border-inactive';
                 $scope.active_s = 'w3-border-blue';
                 $scope.active_a = 'w3-border-inactive';
+                $scope.active_all = 'w3-border-inactive';
             }
             else if (tab === 'angry') {
                 $scope.filters.mood = 'angry';
@@ -426,6 +430,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.active_h = 'w3-border-inactive';
                 $scope.active_s = 'w3-border-inactive';
                 $scope.active_a = 'w3-border-red';
+                $scope.active_all = 'w3-border-inactive';
             }
             else {
                 $scope.filters = {};
@@ -434,6 +439,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.active_h = 'w3-border-inactive';
                 $scope.active_s = 'w3-border-inactive';
                 $scope.active_a = 'w3-border-inactive';
+                $scope.active_all = 'w3-border-black';
             }
             $scope.posts = posts.posts;
         };
