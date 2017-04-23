@@ -240,6 +240,7 @@
                 <div><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
             </a>
             <div class="w3-panel w3-white w3-border post">
+                <div align="center" style="margin-top:10px;"><img class="user-images" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
                 <div><br><span class="post-title">{{post.title}}</span></div>
                 <ul class="w3-right post-buttons">
                     <li class="w3-hide-small" style="font-size:15px;">{{post.date | date:'MMM dd hh:mm a'}}</li>
@@ -291,6 +292,22 @@
         </form>
         <div class="w3-container" ng-hide="isLoggedIn()">
            <span class="post-title">You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can comment.</span>
+        </div>
+
+        <!-- Image expand popup -->
+        <div id="imgExpand" class="w3-modal">
+            <div class="w3-modal-content">
+                <header class="w3-container">
+                <span ng-click="unexpandImg()"
+                class="w3-button w3-display-topright">&times;</span>
+                </header>
+                <div align="center" class="w3-container w3-padding-16">
+                    <img class="user-images-expanded" ng-attr-src="{{imagelink}}">
+                </div>
+                <div align="center" class="w3-container w3-padding-small">
+                    <p class="post-body">{{title}}</p>
+                </div>
+            </div>
         </div>
     </script>
 

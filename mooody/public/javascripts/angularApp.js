@@ -507,6 +507,20 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
         $scope.incrementFlagsPost = function() {
             posts.downvote(auth.currentUserId(), $scope.post).then(function() {$scope.checkFlaggedPost();});
         };
+
+        // Expand image on click
+        $scope.expandImg = function(title, imagelink) {
+            document.getElementById('imgExpand').style.display = 'block';
+            $scope.imagelink = imagelink;
+            $scope.title = title;
+        };
+
+        // Unexpand image
+        $scope.unexpandImg = function() {
+            document.getElementById('imgExpand').style.display='none';
+            $scope.imagelink = '';
+            $scope.title = '';
+        };
     }]);
 
 // Auth Controller
