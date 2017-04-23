@@ -37,7 +37,7 @@
 <div id="main-cont">
 <!-- Navbar -->
     <div class="w3-top">
-        <div class="w3-bar w3-white w3-large w3-border w3-card-4" ng-controller="NavCtrl">
+        <div class="w3-bar w3-white w3-large w3-border" ng-controller="NavCtrl">
                   <a class="w3-bar-item" href="#" style="text-decoration: none;">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-triumph"></i>dy</a>
                   <a class="w3-bar-item w3-button w3-text-blue" onclick="document.getElementById('about').style.display='block'">About</a>
                   <a class="w3-bar-item w3-button" ng-show="isLoggedIn()" href="" ng-click="logOut()">Log Out</a>
@@ -69,7 +69,7 @@
       <!--- Go To Top Button --->
       <button onclick="topFunction()" id="toTop" title="Go to top"><i class="glyphicon glyphicon-chevron-up"></i></button>
         <!-- Sidebar -->
-        <div style="overflow:scroll;" class="w3-sidebar w3-border w3-bar w3-center w3-white w3-collapse" ng-controller="SidebarCtrl" id="moodSidebar">
+        <div style="overflow:scroll;" class="w3-sidebar w3-bar w3-center w3-white w3-collapse" ng-controller="SidebarCtrl" id="moodSidebar">
                 <button class="w3-bar-item w3-button w3-hide-large" onclick="w3_close()">Close &times;</button>
                 <div class="w3-padding-32">
                     <div ng-show="isLoggedIn()">
@@ -78,13 +78,13 @@
                     <div ng-show="isLoggedIn()" class="w3-padding-small post-title" align="left">
                         <span class="sidebar-header" align="left">Status:</span>
                         <div ng-if="currentStatusSaved" style="margin-top:10px;" class="input-group">
-                        <input type="text" ng-model="currentStatus" maxlength="150" class="form-control" style="background-color:white;" readonly>
+                        <input type="text" ng-model="currentStatus" maxlength="150" class="form-control w3-white" readonly>
                         <span class="input-group-btn">
-                            <button ng-click="flipStatus()" style="height:34px;font-size:18px;" class="btn btn-default" type="button">Edit</i></button>
+                            <button ng-click="flipStatus()" style="height:34px;font-size:15px;" class="btn btn-default" type="button">Edit</i></button>
                         </span>
                         </div>
                         <div ng-if="!currentStatusSaved" style="margin-top:10px;" class="input-group">
-                        <input type="text" ng-model="copyStatus" maxlength="150" class="form-control" style="background-color:lightyellow;">
+                        <input type="text" ng-model="copyStatus" maxlength="150" class="form-control w3-pale-yellow">
                         <span class="input-group-btn">
                             <button ng-click="saveStatus()" style="height:34px;" class="btn btn-default" type="button">Save</i></button>
                         </span>
@@ -94,7 +94,7 @@
                     <div align="left">
                         <span class="w3-padding-small sidebar-header">Princeton's Mood:</span>
                     </div>
-                    <div class="ct-chart  ct-minor-second" id="chart"></div>
+                    <div class="ct-chart ct-minor-second" id="chart"></div>
                     <div ng-show="isLoggedIn()">
                         <hr>
                         <div class="w3-padding-small sidebar-header" align="left"><span>Update your mood:</span></div>
@@ -151,7 +151,7 @@
                     </div>
                     <div style="float:left;clear:both;margin-bottom:15px;margin-left:10px;">
                     <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_hot}}" ng-click="toggle('hot')"><i class="twa twa-fire"></i></a>
-                    <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_new}}" ng-click="toggle('new')"><i class="twa twa-clock1"></i></a>                  
+                    <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_new}}" ng-click="toggle('new')"><i class="twa twa-clock1"></i></a>
                     </div>
                 </div>
             </div>
@@ -165,10 +165,10 @@
                         <span class="input-group-btn">
                             <button class="btn btn-secondary" type="button">Search</button>
                         </span>
-                        <input type="text" class="form-control" placeholder="(NOT YET FUNCTIONAL) Search for...">
+                        <input type="text" class="w3-input" placeholder="(NOT YET FUNCTIONAL) Search for...">
                     </div>
-                </div>             
-            </div>          
+                </div>
+            </div>
         </div>
         <!--<form class="w3-container w3-padding-16" ng-hide="!isLoggedIn() || !isInFilter()" ng-submit="addPost()">
             <div class="w3-threequarter w3-mobile">

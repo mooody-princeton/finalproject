@@ -182,18 +182,34 @@ a:hover {
     background-color: #555; /* Add a dark-grey background on hover */
 }
 
-/* Remove rounding from +1 in registration phone number add-on */
+/* Remove rounding from +1 in registration phone number add-on  and other inputs */
 .input-group-addon {
     border-radius:0px;
 }
 .input:focus {
     height:33px;
-     resize: none;
+    resize: none;
 }
 .input{
     width:99%;
     height:33px;
     resize: none;
+    border-radius:0px;
+}
+.input-group-btn {
+    border-radius:0px;
+}
+.btn-secondary {
+    border-radius:0px;
+}
+.btn-default {
+    border-radius: 0px;
+}
+.form-control {
+    border-radius: 0px;
+}
+.input-group {
+    border-radius: 0px;
 }
 
 /* Images for posts */
