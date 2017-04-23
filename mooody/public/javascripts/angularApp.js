@@ -87,7 +87,9 @@ app.factory('auth', ['$http', '$window',
 function($http, $window) {
 	var auth = {
         usermood: [],
-        socialmood: []
+        socialmood: [],
+        status: String,
+        statusSaved: Boolean
     };
 	auth.saveToken = function(token) {
 		$window.localStorage['mooody-token'] = token;
@@ -177,6 +179,24 @@ function($http, $window) {
         }).success(function(data) {
             angular.copy(data, auth.socialmood);
         });
+    };
+    // Get user status
+    auth.getUserStatus = function(userid) {
+        return $http.get('/userstatus/' + userid, null, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).success(function(data) {
+            angular.copy(data.status, auth.status);
+            auth.statusSaved = true;
+        });    
+    };
+    // Set user status
+    auth.setUserStatus = function(userid, statusString) {
+        return $http.put('/userstatus/' + userid + '/changestatus', {newstatus: statusString}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).success(function(data) {
+            auth.status = data.status;
+            auth.statusSaved = true;
+        });        
     };
 	return auth;
 }]);
@@ -301,6 +321,18 @@ app.service('usermoodinfo', ['$http', 'auth', function($http, auth) {
     }).success(function(data) {
         var usermoodinfo = data;
         return usermoodinfo;
+    });
+    return promise;
+}]);
+
+// Load user status info upon accessing website, for sidebar
+app.service('userstatusinfo', ['$http', 'auth', function($http, auth) {
+    var promise = $http.get('/userstatus/' + auth.currentUserId(), null, {
+        headers: { Authorization: 'Bearer ' + auth.getToken()}
+    }).success(function(data) {
+        auth.statusSaved = true;
+        var userstatusinfo = data;
+        return userstatusinfo;
     });
     return promise;
 }]);
@@ -524,8 +556,8 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
     }]);
 
 // Auth Controller
-app.controller('AuthCtrl', ['$scope', '$state', 'auth',
-    function($scope, $state, auth) {
+app.controller('AuthCtrl', ['$scope', '$state', '$window', 'auth',
+    function($scope, $state, $window, auth) {
         $scope.user = {};
         $scope.register = function() {
             console.log($scope.user);
@@ -541,7 +573,11 @@ app.controller('AuthCtrl', ['$scope', '$state', 'auth',
             auth.logIn($scope.user).error(function(error) {
                 $scope.error = error;
             }).then(function() {
-                auth.getUserMood(auth.currentUserId()).then(function() {$state.go('home');});
+                auth.getUserMood(auth.currentUserId()).then(function() {
+                    auth.getUserStatus(auth.currentUserId()).then(function() {
+                        $window.location.reload(); // Reload entire page to update Angular variables in sidebar
+                    });
+                });
             });
         };
         $scope.verifyNow = function() {
@@ -563,13 +599,13 @@ app.controller('NavCtrl', ['$scope', '$state', 'auth',
         $scope.currentUserId = auth.currentUserId;
         $scope.logOut = function() {
             auth.logOut();
-            $state.reload(); // Reload page so logged out view doesn't contain user info
+            $state.reload(); // Reload state so logged out view doesn't contain user info
         }
     }]);
 
 // Sidebar Controller
-app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
-    function($scope, auth, socialinfo, usermoodinfo) {
+app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', 'userstatusinfo',
+    function($scope, auth, socialinfo, usermoodinfo, userstatusinfo) {
 
         // Wait until we get the social mood info...then render the chart
         socialinfo.then(function(data) {
@@ -609,10 +645,17 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
             });
         });
 
-        // Wait to get user info (if logged in upon initial website bootup)
+        // Wait to get user mood info (if logged in upon initial website bootup)
         usermoodinfo.then(function(data) {
             auth.usermood = data.data;
             $scope.currentMood = auth.usermood;
+        });
+
+        // Wait to get user status info (if logged in upon initial website bootup)
+        userstatusinfo.then(function(data) {
+            auth.status = data.data.status;
+            $scope.currentStatus = auth.status;
+            $scope.currentStatusSaved = auth.statusSaved;
         });
 
         // The following doesn't rely on service promises
@@ -621,6 +664,9 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
         $scope.currentUserId = auth.currentUserId;
         $scope.currentSocialMood = auth.socialmood;
         $scope.currentMood = auth.usermood; // In case the usermoodinfo promise fails
+        $scope.currentStatus = auth.status; // In case the userstatusinfo promise fails
+        $scope.currentStatusSaved = auth.statusSaved; // In case the userstatusinfo promise fails
+        $scope.copyStatus = '';
 
         // Check if current mood is equal to the parameter, to help decide which mood button to highlight
         $scope.checkMood = function(moodString) {
@@ -661,5 +707,21 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo',
                     auth.incrementSocialMood(moodString);
                 });
             }
+         };
+
+         // Flip status from saved to update
+         $scope.flipStatus = function() {
+            $scope.currentStatusSaved = false;
+            $scope.copyStatus = angular.copy($scope.currentStatus);
+            $scope.$applyAsync(); // Apply changes in view
+         };
+
+         // Save status and flip back to saved mode
+         $scope.saveStatus = function() {
+            auth.setUserStatus($scope.currentUserId(), this.copyStatus).then(function() {
+                $scope.currentStatusSaved = true;
+                $scope.currentStatus = auth.status;
+                $scope.$applyAsync(); // Apply changes in view
+            });
          };
     }]);

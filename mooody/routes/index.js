@@ -173,6 +173,7 @@ router.post('/register', function(req, res, next){
     var user = new User();
     user.username = req.body.username;
     user.mood = 'Select one below!';
+    user.status = 'Loldef';
     user.phonenum = "1" + req.body.phonenum;
 
     // Disabled email verification
@@ -255,7 +256,7 @@ router.put('/verify', function(req, res, next){
   });
 });
 
-// Routing functions for user-related stuff ***************
+// Routing functions for user param and user mood *********
 
 // Set user parameter
 router.param('user', function(req, res, next, id) {
@@ -312,6 +313,21 @@ router.put('/socialmood/increment', function(req, res, next) {
        if (err) { return next(err); }
        res.json([updatedsocmood]);
     });
+  });
+});
+
+// Routing functions for user status **********************
+
+// Get current status of user
+router.get('/userstatus/:user', function(req, res, next) {
+  res.json({status: req.userdocument.status});
+});
+
+// Set new status for user
+router.put('/userstatus/:user/changestatus', function(req, res, next) {
+  req.userdocument.changeStatusTo(req.body.newstatus, function(err, curruser){
+    if (err) { return next(err); }
+    res.json({status: curruser.status});
   });
 });
 

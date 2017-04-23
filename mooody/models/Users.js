@@ -8,6 +8,7 @@ var UserSchema = new mongoose.Schema({
   hash: String,
   salt: String,
   mood: String,
+  status: String,
   phonenum: {type: Number, unique:true, required: true},
   // email: {type: String, lowercase: true, unique: true},
   verified: Boolean
@@ -42,6 +43,12 @@ UserSchema.methods.validPassword = function(password) {
 // Change user's mood
 UserSchema.methods.changeMoodTo = function(mood, cb){
   this.mood = mood;
+  this.save(cb);
+};
+
+// Change user's status
+UserSchema.methods.changeStatusTo = function(status, cb){
+  this.status = String(status);
   this.save(cb);
 };
 

@@ -82,6 +82,8 @@ a:hover {
 
 /* mood side bar */
 #moodSidebar {
+    padding-left:15px;
+    padding-right:15px;
     width:350px;
     right:0
 }
@@ -203,6 +205,13 @@ a:hover {
 .user-images-expanded {
     max-height: 80vh;
     max-width: 80%;
+}
+
+.sidebar-header {
+  font-weight:bold;
+  font-size:15px;
+  color:#666666;
+  margin-bottom:10px;
 }
 
 /* add more custom styling here with comments */

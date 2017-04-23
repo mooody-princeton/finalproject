@@ -29,8 +29,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <link href="/stylesheets/style.css" rel="stylesheet">
-
-
 </head>
 
 <!--****************************************************-->
@@ -67,7 +65,7 @@
     </div>
 
 <!-- Display the rest of the page -->
-    <div class="w3-row-padding w3-padding-32">
+    <div class="ng-cloak w3-row-padding w3-padding-32">
       <!--- Go To Top Button --->
       <button onclick="topFunction()" id="toTop" title="Go to top"><i class="glyphicon glyphicon-chevron-up"></i></button>
         <!-- Sidebar -->
@@ -77,12 +75,29 @@
                     <div ng-show="isLoggedIn()">
                         <span class="post-title">Hi, {{currentUser()}}!</span>
                     </div>
-                    <div class="w3-padding-16"></div>
-                    <span class="w3-padding-16 post-title">Princeton's Mood:</span>
+                    <div ng-show="isLoggedIn()" class="w3-padding-small post-title" align="left">
+                        <span class="sidebar-header" align="left">Status:</span>
+                        <div ng-if="currentStatusSaved" style="margin-top:10px;" class="input-group">
+                        <input type="text" ng-model="currentStatus" maxlength="150" class="form-control" style="background-color:white;" readonly>
+                        <span class="input-group-btn">
+                            <button ng-click="flipStatus()" style="height:34px;font-size:18px;" class="btn btn-default" type="button">Edit</i></button>
+                        </span>
+                        </div>
+                        <div ng-if="!currentStatusSaved" style="margin-top:10px;" class="input-group">
+                        <input type="text" ng-model="copyStatus" maxlength="150" class="form-control" style="background-color:lightyellow;">
+                        <span class="input-group-btn">
+                            <button ng-click="saveStatus()" style="height:34px;" class="btn btn-default" type="button">Save</i></button>
+                        </span>
+                        </div>
+                        <hr>
+                    </div>
+                    <div align="left">
+                        <span class="w3-padding-small sidebar-header">Princeton's Mood:</span>
+                    </div>
                     <div class="ct-chart  ct-minor-second" id="chart"></div>
-                    <!-- {{"H: " + currentSocialMood[0].happy}} {{"S: " + currentSocialMood[0].sad}} {{"A: " + currentSocialMood[0].angry}} -->
                     <div ng-show="isLoggedIn()">
-                        <div class="w3-padding-16"><span class="post-body">Update your mood: </span></div>
+                        <hr>
+                        <div class="w3-padding-small sidebar-header" align="left"><span>Update your mood:</span></div>
                         <div class="w3-bar w3-xlarge">
                             <a ng-show="checkMood('happy')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
                             <a ng-hide="checkMood('happy')" class="w3-bar-item w3-button" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
