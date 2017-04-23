@@ -86,7 +86,7 @@
                     <div class="ct-chart  ct-minor-second" id="chart"></div>
                     <!-- {{"H: " + currentSocialMood[0].happy}} {{"S: " + currentSocialMood[0].sad}} {{"A: " + currentSocialMood[0].angry}} -->
                     <div ng-show="isLoggedIn()">
-                        <br><span class="post-body">Update your mood: </span><br>
+                        <div class="w3-padding-16"><span class="post-body">Update your mood: </span></div>
                         <div class="w3-bar w3-xlarge">
                             <a ng-show="checkMood('happy')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
                             <a ng-hide="checkMood('happy')" class="w3-bar-item w3-button" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
@@ -95,13 +95,29 @@
                             <a ng-show="checkMood('angry')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('angry')"><i class="twa twa-triumph"></i></a>
                             <a ng-hide="checkMood('angry')" class="w3-bar-item w3-button" ng-click="setMoodTo('angry')"><i class="twa twa-triumph"></i></a>
                         </div>
+                        <div class="w3-padding-32">
+                            <button class="w3-button w3-blue" onclick="document.getElementById('messages').style.display='block'"><span class="glyphicon glyphicon-envelope"></span> View Messages</button>
+                        </div>
                     </div>
                 </div>
         </div><br><br>
-        <!-- Postsfeed, login/registration page -->
+        <!-- Postsfeed, login/registration page, etc. -->
         <div class="w3-container w3-main" id="mainContent">
             <button class="w3-button w3-hide-large w3-right w3-text-blue" onclick="w3_open()" id="toggleOn"><i class="glyphicon glyphicon-chevron-left"></i></button>
             <ui-view></ui-view>
+        </div>
+    </div>
+
+    <!-- Message popup -->
+    <div id="messages" class="w3-modal">
+        <div class="w3-modal-content">
+            <header class="w3-container">
+            <span onclick="document.getElementById('messages').style.display='none'"
+            class="w3-button w3-display-topright">&times;</span>
+            </header>
+            <div class="w3-container w3-padding-16">
+                <p>Message stuff here?</p>
+            </div>
         </div>
     </div>
 
@@ -112,7 +128,7 @@
       <span class="post-title">Please <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> to post.</span><br><br>
     </div>
 
-    <div>
+    <div class="w3-padding-16">
         <div class="w3-row-padding">
             <div class="w3-container w3-half">
                 <div class="w3-bar w3-xlarge">
@@ -120,34 +136,63 @@
                     <a class="w3-bar-item w3-button w3-bottombar {{active_s}}" ng-click="tab('sad')"><i class="twa twa-cry"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_a}}" ng-click="tab('angry')"><i class="twa twa-triumph"></i></a>
                     <a class="w3-bar-item w3-button" ng-click="tab('all')" style="font-size:20.5px;">View All</a>
-                </div>
-            </div>
-            <div class="w3-container w3-rest">
-                <div class="w3-bar w3-xlarge">
                     <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_hot}}" ng-click="toggle('hot')"><i class="twa twa-fire"></i></a>
                     <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_new}}" ng-click="toggle('new')"><i class="twa twa-clock1"></i></a>
                 </div>
             </div>
+            <div class="w3-container w3-rest">
+                <div class="w3-bar w3-padding-16">
+                    <!--<a class="w3-bar-item w3-button w3-right" onclick=""><i class="twa twa-mag"></i></a>-->
+                    <a class="w3-bar-item w3-button w3-right w3-blue" onclick="document.getElementById('write').style.display='block'" ng-hide="!isLoggedIn() || !isInFilter()"><i class="glyphicon glyphicon-pencil"></i> Write Post</a>
+                </div>
+            </div>
         </div>
-        <form class="w3-container w3-padding-16" ng-hide="!isLoggedIn() || !isInFilter()" ng-submit="addPost()">
+        <!--<form class="w3-container w3-padding-16" ng-hide="!isLoggedIn() || !isInFilter()" ng-submit="addPost()">
             <div class="w3-threequarter w3-mobile">
                 <input type="textarea" class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title"></input>
             </div>
             <div class="w3-threequarter w3-mobile">
-                <input type="text" class="w3-input w3-border" placeholder="Image link: Must start with http(s)://" ng-model="imagelink"></input>
+                <input type="text" class="w3-input w3-border" placeholder="Image link must start with http(s)://" ng-model="imagelink"></input>
             </div>
             <div class="w3-rest w3-mobile">
                 <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Post</button>
             </div>
-        </form>
-        <div ng-show="!isLoggedIn() || !isInFilter()"><br></div>
+        </form>-->
+        <!--<div ng-show="!isLoggedIn() || !isInFilter()"><br></div>-->
+    </div>
+
+    <!-- Write post popup -->
+    <div id="write" class="w3-modal">
+        <div class="w3-modal-content">
+            <header class="w3-container">
+            <span onclick="document.getElementById('write').style.display='none'"
+            class="w3-button w3-display-topright">&times;</span>
+            </header>
+            <div class="w3-container w3-padding-32">
+                <form class="w3-container w3-padding-16" ng-submit="addPost()">
+                    <div class="w3-mobile">
+                        <textarea class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title" required></textarea>
+                    </div>
+                    <div class="w3-mobile">
+                        <input type="text" id="urlInput" class="w3-input w3-border" placeholder="(Optional) Image link must start with http(s)://" ng-model="imagelink" oninput="readURL(this.value)"></input>
+                    </div>
+                    <div class="w3-mobile">
+                        <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Post</button>
+                    </div>
+                </form>
+                <div style="margin-left:15px;">
+                    <p id="previewImgText"></p>
+                    <img class="user-images" src="" id="previewImg">
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Display posts -->
     <div class="w3-container" ng-repeat="post in posts | filter: filters | orderBy: orders">
         <div class="w3-panel w3-white w3-border post">
             <div><br>
-                <div align="center"><img class="user-images" ng-attr-src="{{post.imagelink}}"><br><hr ng-if="post.imagelink"></div>
+                <div align="center"><img class="user-images" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
                 <a href="#/posts/{{post._id}}"><span class="post-title">
                 {{post.title}}
                 </span></a><br><br>
@@ -166,6 +211,22 @@
                     <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment w3-text-blue"></span></a>
                         {{post.comments.length}}</li>
                 </ul>
+            </div>
+
+            <!-- Image expand popup -->
+            <div id="imgExpand" class="w3-modal">
+                <div class="w3-modal-content">
+                    <header class="w3-container">
+                    <span ng-click="unexpandImg()"
+                    class="w3-button w3-display-topright">&times;</span>
+                    </header>
+                    <div align="center" class="w3-container w3-padding-16">
+                        <img class="user-images-expanded" ng-attr-src="{{imagelink}}">
+                    </div>
+                    <div align="center" class="w3-container w3-padding-small">
+                        <p class="post-body">{{title}}</p>
+                    </div>
+                </div>
             </div>
       </div>
     </script>
@@ -192,7 +253,7 @@
                     <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlagsPost()"></span>
                     {{post.flags}}</li>
                 </ul>
-            </div>             
+            </div>
         </div>
         <hr>
 
@@ -221,10 +282,10 @@
 
         <!-- Section to add a new comment -->
         <form class="w3-container" ng-hide="!isLoggedIn()" ng-submit="addComment()">
-            <div class="w3-twothird">
-                <textarea class="input" rows="3" class="w3-input w3-border" placeholder="Add a new comment" ng-model="body"></textarea>
+            <div class="w3-threequarter">
+                <input class="w3-input w3-border" placeholder="Add a new comment" ng-model="body"></textarea>
             </div>
-            <div class="w3-third">
+            <div class="w3-quarter">
                 <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Post</button>
             </div>
         </form>
@@ -325,7 +386,7 @@
             <div id="privacy" class="w3-modal">
                 <div class="w3-modal-content">
                     <header class="w3-container">
-                    <span onclick="document.getElementById('privacy').style.display='none'"
+                    <span ng-click="document.getElementById('privacy').style.display='none'"
                     class="w3-button w3-display-topright">&times;</span>
                     </header>
                     <div class="w3-container w3-padding-16">

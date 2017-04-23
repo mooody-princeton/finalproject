@@ -198,5 +198,9 @@ a:hover {
   max-height:35%;
   max-width:35%;
 }
+.user-images-expanded {
+    max-height: 90%;
+    max-width: 90%;
+}
 
 /* add more custom styling here with comments */

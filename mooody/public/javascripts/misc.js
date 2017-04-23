@@ -13,10 +13,13 @@ function scrollFunction() {
 
 // When the user clicks on the button, scroll to the top of the document
 function topFunction() {
-    console.log("here");
     //document.body.scrollTop= 0; // For Chrome, Safari and Opera
     //document.documentElement.scrollTop = 0; // For IE and Firefox
      $('html, body').animate({scrollTop:0}, 'slow');
-
-
 };
+
+// Preview URL for image posting
+function readURL(input) {
+    $('#previewImgText').html("Preview Image: ");
+    $('#previewImg').attr('src', input);
+}

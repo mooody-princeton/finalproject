@@ -340,6 +340,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
             });
             $scope.title = '';
             $scope.imagelink = '';
+            document.getElementById('write').style.display='none';
         };
 
         // Set heart button toggle appropriately
@@ -422,6 +423,20 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         // Determine whether to disable "Post" button based on filter
         $scope.isInFilter = function() {
             return $scope.inFilter;
+        };
+
+        // Expand image on click
+        $scope.expandImg = function(title, imagelink) {
+            document.getElementById('imgExpand').style.display = 'block';
+            $scope.imagelink = imagelink;
+            $scope.title = title;
+        };
+
+        // Unexpand image
+        $scope.unexpandImg = function() {
+            document.getElementById('imgExpand').style.display='none';
+            $scope.imagelink = '';
+            $scope.title = '';
         };
     }]);
 
