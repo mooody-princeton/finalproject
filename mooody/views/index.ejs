@@ -69,7 +69,7 @@
       <!--- Go To Top Button --->
       <button onclick="topFunction()" id="toTop" title="Go to top"><i class="glyphicon glyphicon-chevron-up"></i></button>
         <!-- Sidebar -->
-        <div style="overflow:scroll;" class="w3-sidebar w3-bar w3-center w3-white w3-collapse" ng-controller="SidebarCtrl" id="moodSidebar">
+        <div style="overflow:scroll;z-index:2;" class="w3-sidebar w3-bar w3-center w3-white w3-collapse w3-border" ng-controller="SidebarCtrl" id="moodSidebar">
                 <button class="w3-bar-item w3-button w3-hide-large" onclick="w3_close()">Close &times;</button>
                 <div class="w3-padding-32">
                     <div ng-show="isLoggedIn()">
@@ -159,17 +159,18 @@
                 <div class="w3-bar w3-padding-big">
                     <!--<a class="w3-bar-item w3-button w3-right" onclick=""><i class="twa twa-mag"></i></a>-->
                     <div>
-                    <a class="w3-bar-item w3-button w3-right w3-blue" onclick="document.getElementById('write').style.display='block'" ng-hide="!isLoggedIn() || !isInFilter()"><i class="glyphicon glyphicon-pencil"></i> Write Post</a>
+                    <a class="w3-bar-item w3-button w3-right w3-blue" style="height:34px;" onclick="document.getElementById('write').style.display='block'" ng-hide="!isLoggedIn() || !isInFilter()"><i class="glyphicon glyphicon-pencil"></i> Write Post</a>
                     </div>
-                    <div class="input-group" style="z-index:-1;">
+                    <div class="input-group" style="z-index:1;">
                         <span class="input-group-btn">
                             <button class="btn btn-secondary" type="button">Search</button>
                         </span>
-                        <input type="text" class="w3-input" placeholder="(NOT YET FUNCTIONAL) Search for...">
+                        <input type="text" class="form-control" placeholder="(NOT YET FUNCTIONAL) Search for...">
                     </div>
                 </div>
             </div>
         </div>
+
         <!--<form class="w3-container w3-padding-16" ng-hide="!isLoggedIn() || !isInFilter()" ng-submit="addPost()">
             <div class="w3-threequarter w3-mobile">
                 <input type="textarea" class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title"></input>
