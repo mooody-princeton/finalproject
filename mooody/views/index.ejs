@@ -235,6 +235,22 @@
                     <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment w3-text-blue"></span></a>
                         {{post.comments.length}}</li>
                     <li ng-if="post.authorid===currentUserId()"><span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deletePost(post)"></span></li>
+                    <!-- onclick="document.getElementById('delete').style.display='block'" -->
+                    <!-- Delete popup (modal) -->
+                    <div id="delete" class="w3-modal w3-animate-opacity w3-center">
+                        <div class="w3-modal-content">
+                            <header class="w3-container">
+                            <span onclick="document.getElementById('delete').style.display='none'"
+                            class="w3-button w3-display-topright">&times;</span>
+                            </header>
+                            <div class="w3-container w3-padding-16">
+                                <p class="post-body">Delete post?
+                                <li><span class="glyphicon glyphicon-ok-circle w3-text-gray w3-xxlarge" ng-click="deletePost(post)"></span></li>
+                                <li><span class="glyphicon glyphicon-remove-circle w3-text-gray w3-xxlarge" onclick="document.getElementById('delete').style.display='none'"></span></li>
+                            </p>
+                            </div>
+                        </div>
+                    </div>
                 </ul>
             </div>
 
