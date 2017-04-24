@@ -59,6 +59,46 @@ a:hover {
   color: #fd7b7b;
 }
 
+/* coloring flags and hover over */
+.glyphicon.glyphicon-trash {
+  /*color: #bbbbbb !important;*/
+  font-size: 20px;
+}
+.glyphicon.glyphicon-trash:hover{
+   transition: opacity .2s ease-in-out;
+  -moz-transition: opacity .2s ease-in-out;
+  -webkit-transition: opacity .2s ease-in-out;
+  opacity:0.8;
+   cursor: pointer;
+}
+
+/* coloring hearts and hover over */
+.glyphicon.glyphicon-ok-circle {
+  /*color: #bbbbbb !important;*/
+  font-size: 20px;
+}
+.glyphicon.glyphicon-ok-circle:hover {
+  transition: opacity .2s ease-in-out;
+  -moz-transition: opacity .2s ease-in-out;
+  -webkit-transition: opacity .2s ease-in-out;
+  opacity:0.8;
+  cursor: pointer;
+  color: #fd7b7b;
+}
+/* coloring hearts and hover over */
+.glyphicon.glyphicon-remove-circle {
+  /*color: #bbbbbb !important;*/
+  font-size: 20px;
+}
+.glyphicon.glyphicon-remove-circle:hover {
+  transition: opacity .2s ease-in-out;
+  -moz-transition: opacity .2s ease-in-out;
+  -webkit-transition: opacity .2s ease-in-out;
+  opacity:0.8;
+  cursor: pointer;
+  color: #fd7b7b;
+}
+
 /* post formatting */
 .post{
   border-style: solid;

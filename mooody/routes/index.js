@@ -111,6 +111,14 @@ router.put('/posts/:post/upvote', auth, function(req, res, next) {
   });
 });
 
+router.put('/posts/:post/delete', auth, function(req, res, next) {
+  req.post.delete(req.body.usr, function(err, post){
+    if (err) { return next(err); }
+
+    res.json(post);
+  });
+});
+
 router.put('/posts/:post/downvote', auth, function(req, res, next) {
   req.post.downvote(req.body.usr, function(err, post){
     if (err) { return next(err); }
@@ -137,6 +145,14 @@ router.post('/posts/:post/comments', auth, function(req, res, next) {
 
 router.put('/posts/:post/comments/:comment/upvote', auth, function(req, res, next) {
   req.comment.upvote(req.body.usr, function(err, comment) {
+    if (err) { return next(err); }
+
+    res.json(comment);
+  });
+});
+
+router.put('/posts/:post/comments/:comment/delete', auth, function(req, res, next) {
+  req.comment.delete(req.body.usr, function(err, comment) {
     if (err) { return next(err); }
 
     res.json(comment);
@@ -194,7 +210,7 @@ router.post('/register', function(req, res, next){
         if (err) return console.log("Couldn't create verification token", err);
         // Send confirmation SMS if successful so far
         client.sendMessage({
-            to: '+16094552701', // Recipient number (either user's, or your own for testing)
+            to: '+14085991276', // Recipient number (either user's, or your own for testing)
             from: twilionum,
             body: 'Hello from Mooody! This is your code: ' + token
         });

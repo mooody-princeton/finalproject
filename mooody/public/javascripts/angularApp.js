@@ -240,6 +240,13 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
             post.userUpvotes = data.userUpvotes;
             });
     };
+    o.delete = function(userid, post) {
+        return $http.put('/posts/' + post._id + '/delete', {usr: userid}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).success(function(data) {
+            post.deleted = data.deleted;
+            });
+    };
     o.downvote = function(userid, post) {
         return $http.put('/posts/' + post._id + '/downvote', {usr: userid}, {
             headers: { Authorization: 'Bearer ' + auth.getToken()}
@@ -289,6 +296,14 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
         }).success(function(data){
             comment.upvotes = data.userUpvotes.length;
             comment.userUpvotes = data.userUpvotes;
+        });
+    };
+    o.deleteComment = function(userid, post, comment) {
+        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/delete', {usr: userid}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken() }
+        }).success(function(data){
+            console.log(data);
+            comment.deleted = data.deleted;
         });
     };
     o.downvoteComment = function(userid, post, comment) {
@@ -347,6 +362,8 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         $scope.title = '';
         $scope.imagelink = '';
         $scope.whitespace = '       ';
+        $scope.currentUser = auth.currentUser;
+        $scope.currentUserId = auth.currentUserId;
 
         // Filter by mood and order by date/popularity
         $scope.filters = {};
@@ -368,6 +385,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
             if (!$scope.title || $scope.title === '') { return; }
             posts.create({
                 title: $scope.title,
+                authorid: auth.currentUserId(),
                 imagelink: $scope.imagelink,
                 mood: $scope.filters.mood,
                 date: new Date()
@@ -388,6 +406,11 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         // Upvote post
         $scope.incrementUpvotes = function(post) {
             posts.upvote(auth.currentUserId(), post).then(function() {$scope.checkUpvoted(post);});
+        };
+
+        // Delete post
+        $scope.deletePost = function(post) {
+            posts.delete(auth.currentUserId(), post);
         };
 
         // Set flag button toggle appropriately
@@ -483,11 +506,14 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
     function($scope, posts, post, auth) {
         $scope.post = post;
         $scope.isLoggedIn = auth.isLoggedIn;
+        $scope.currentUser = auth.currentUser;
+        $scope.currentUserId = auth.currentUserId;
 
         $scope.addComment = function() {
             if ($scope.body === '') { return; }
             posts.addComment(post._id, {
                 body: $scope.body,
+                authorid: auth.currentUserId(),
             }).success(function(comment) {
                 $scope.post.comments.push(comment);
             });
@@ -505,6 +531,11 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
         // For a comment
         $scope.incrementUpvotes = function(comment) {
             posts.upvoteComment(auth.currentUserId(), post, comment).then(function() {$scope.checkUpvoted(comment);});
+        };
+
+        // Delete a comment
+        $scope.deleteComment = function(comment) {
+            posts.deleteComment(auth.currentUserId(), post, comment);
         };
 
         // Set flag button toggle appropriately for a comment

@@ -214,7 +214,7 @@
 
     <!-- Display posts -->
     <div class="w3-container" ng-repeat="post in posts | filter: filters | orderBy: orders">
-        <div class="w3-panel w3-white w3-border post">
+        <div ng-if="post.deleted==false" class="w3-panel w3-white w3-border post">
             <div><br>
                 <div align="center"><img class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
                 <a href="#/posts/{{post._id}}"><span class="post-title">
@@ -234,6 +234,7 @@
                     {{post.flags}}</li>
                     <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment w3-text-blue"></span></a>
                         {{post.comments.length}}</li>
+                    <li ng-if="post.authorid===currentUserId()"><span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deletePost(post)"></span></li>
                 </ul>
             </div>
 
@@ -290,7 +291,7 @@
             <span class="glyphicon glyphicon-flag" ng-click="incrementFlags(comment)"></span>
             {{comment.flags}} -->
             <span>
-              <div class="w3-panel w3-white w3-border comment w3-padding-small">
+              <div ng-if="comment.deleted==false" class="w3-panel w3-white w3-border comment w3-padding-small">
                                     {{comment.body}}<br>
                 <ul class="w3-right post-buttons">
                     <li ng-if="comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotes(comment)"></span>
@@ -300,7 +301,12 @@
                     <li ng-if="comment.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlags(comment)"></span>
                     {{comment.flags}}</li>
                     <li ng-if="!comment.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(comment)"></span>
-                    {{comment.flags}}</li></ul>
+                    {{comment.flags}}</li>
+                    <li ng-if="comment.authorid===currentUserId()">
+                        <span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteComment(comment)">
+                        </span>
+                    </li>
+                    </ul>
               </div>
             </span>
         </div><br>

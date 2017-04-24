@@ -4,12 +4,13 @@ var mongoose = require('mongoose');
 
 var CommentSchema = new mongoose.Schema({
   body: String,
-  //author: String,
+  authorid: String,
   upvotes: {type: Number, default: 0},
   flags: {type: Number, default: 0},
   post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
   userUpvotes: [ {type: String } ],
-  userFlags: [ {type: String } ]
+  userFlags: [ {type: String } ],
+  deleted: {type: Boolean, default: false}
 });
 
 // Upvote comment
@@ -19,6 +20,13 @@ CommentSchema.methods.upvote = function(userid, cb) {
   this.upvotes = this.userUpvotes.length;
   this.save(cb);
 }
+
+// Upvote post
+CommentSchema.methods.delete = function(userid, cb) {
+  // if (userid == authorid)
+    this.deleted = true;
+  this.save(cb);
+};
 
 // Flag comment
 CommentSchema.methods.downvote = function(userid, cb) {
