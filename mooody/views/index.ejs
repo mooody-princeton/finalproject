@@ -107,7 +107,7 @@
                             <a ng-hide="checkMood('angry')" class="w3-bar-item w3-button" ng-click="setMoodTo('angry')"><i class="twa twa-triumph"></i></a>
                         </div>
                         <div class="w3-padding-32">
-                            <button class="w3-button w3-blue" onclick="document.getElementById('messages').style.display='block'"><span class="glyphicon glyphicon-envelope"></span> View Messages</button>
+                            <button class="w3-button w3-blue" onclick="document.getElementById('messages').style.display='block'"><span class="glyphicon glyphicon-envelope"></span>  View Messages</button>
                         </div>
                     </div>
                 </div>
@@ -159,7 +159,7 @@
                 <div class="w3-bar w3-padding-big">
                     <!--<a class="w3-bar-item w3-button w3-right" onclick=""><i class="twa twa-mag"></i></a>-->
                     <div>
-                    <a class="w3-bar-item w3-button w3-right w3-blue" style="height:34px;" onclick="document.getElementById('write').style.display='block'" ng-hide="!isLoggedIn() || !isInFilter()"><i class="glyphicon glyphicon-pencil"></i> Write Post</a>
+                    <a class="w3-bar-item w3-button w3-right w3-blue" style="height:34px;" onclick="document.getElementById('write').style.display='block'" ng-hide="!isLoggedIn() || !isInFilter()"><i class="glyphicon glyphicon-pencil"></i>  Write Post</a>
                     </div>
                     <div class="input-group" style="z-index:1; padding-right: 20px">
                         <input type="text" class="form-control" placeholder="Search for...">
@@ -235,20 +235,21 @@
                     {{post.flags}}</li>
                     <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment w3-text-blue"></span></a>
                         {{post.comments.length}}</li>
-                    <li ng-if="post.authorid===currentUserId()"><span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deletePost(post)"></span></li>
+                    <li ng-if="post.authorid===currentUserId()"><span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteCheck(post)"></span></li>
                     <!-- onclick="document.getElementById('delete').style.display='block'" -->
                     <!-- Delete popup (modal) -->
-                    <div id="delete" class="w3-modal w3-animate-opacity w3-center">
+                    <div id="delcheck" class="w3-modal w3-animate-opacity">
                         <div class="w3-modal-content">
                             <header class="w3-container">
-                            <span onclick="document.getElementById('delete').style.display='none'"
+                            <span onclick="document.getElementById('delcheck').style.display='none'"
                             class="w3-button w3-display-topright">&times;</span>
                             </header>
-                            <div class="w3-container w3-padding-16">
+                            <div class="w3-container w3-center w3-padding-large">
                                 <p class="post-body">Delete post?
-                                <li><span class="glyphicon glyphicon-ok-circle w3-text-gray w3-xxlarge" ng-click="deletePost(post)"></span></li>
-                                <li><span class="glyphicon glyphicon-remove-circle w3-text-gray w3-xxlarge" onclick="document.getElementById('delete').style.display='none'"></span></li>
-                            </p>
+                                <br>
+                                <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="deletePost(curPost)" onclick="document.getElementById('delcheck').style.display='none'"></span>
+                                <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('delcheck').style.display='none'"></span>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -270,6 +271,8 @@
                     </div>
                 </div>
             </div>
+
+            
       </div>
     </script>
 
@@ -320,9 +323,25 @@
                     <li ng-if="!comment.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(comment)"></span>
                     {{comment.flags}}</li>
                     <li ng-if="comment.authorid===currentUserId()">
-                        <span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteComment(comment)">
+                        <span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteComCheck(comment)">
                         </span>
                     </li>
+                    <!-- Delete popup (modal) -->
+                    <div id="delcomcheck" class="w3-modal w3-animate-opacity">
+                        <div class="w3-modal-content">
+                            <header class="w3-container">
+                            <span onclick="document.getElementById('delcomcheck').style.display='none'"
+                            class="w3-button w3-display-topright">&times;</span>
+                            </header>
+                            <div class="w3-container w3-center w3-padding-large">
+                                <p class="post-body">Delete comment?
+                                <br>
+                                <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="deleteComment(curComment)"" onclick="document.getElementById('delcomcheck').style.display='none'"></span>
+                                <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('delcomcheck').style.display='none'"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     </ul>
               </div>
             </span>
