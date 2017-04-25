@@ -157,7 +157,6 @@
             </div>
             <div class="w3-container w3-rest" style="margin-top:10px;">
                 <div class="w3-bar w3-padding-big">
-                    <!--<a class="w3-bar-item w3-button w3-right" onclick=""><i class="twa twa-mag"></i></a>-->
                     <div>
                     <a class="w3-bar-item w3-button w3-right w3-blue" style="height:34px;" onclick="document.getElementById('write').style.display='block'" ng-hide="!isLoggedIn() || !isInFilter()"><i class="glyphicon glyphicon-pencil"></i>  Write Post</a>
                     </div>
@@ -166,24 +165,10 @@
                         <span class="input-group-btn">
                             <button class="btn btn-secondary" type="button"><i class="glyphicon glyphicon-search w3-text-white"></i></button>
                         </span>
-
                     </div>
                 </div>
             </div>
         </div>
-
-        <!--<form class="w3-container w3-padding-16" ng-hide="!isLoggedIn() || !isInFilter()" ng-submit="addPost()">
-            <div class="w3-threequarter w3-mobile">
-                <input type="textarea" class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title"></input>
-            </div>
-            <div class="w3-threequarter w3-mobile">
-                <input type="text" class="w3-input w3-border" placeholder="Image link must start with http(s)://" ng-model="imagelink"></input>
-            </div>
-            <div class="w3-rest w3-mobile">
-                <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Post</button>
-            </div>
-        </form>-->
-        <!--<div ng-show="!isLoggedIn() || !isInFilter()"><br></div>-->
     </div>
 
     <!-- Write post popup -->
@@ -240,16 +225,11 @@
                     <!-- Delete popup (modal) -->
                     <div id="delcheck" class="w3-modal w3-animate-opacity">
                         <div class="w3-modal-content">
-                            <header class="w3-container">
-                            <span onclick="document.getElementById('delcheck').style.display='none'"
-                            class="w3-button w3-display-topright">&times;</span>
-                            </header>
                             <div class="w3-container w3-center w3-padding-large">
-                                <p class="post-body">Delete post?
+                                <p class="post-body">Are you sure you want to delete your post? </p>
                                 <br>
                                 <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="deletePost(curPost)" onclick="document.getElementById('delcheck').style.display='none'"></span>
                                 <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('delcheck').style.display='none'"></span>
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -264,7 +244,6 @@
                 </div>
             </div>
 
-            
       </div>
     </script>
 
@@ -328,7 +307,7 @@
                             <div class="w3-container w3-center w3-padding-large">
                                 <p class="post-body">Delete comment?
                                 <br>
-                                <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="deleteComment(curComment)"" onclick="document.getElementById('delcomcheck').style.display='none'"></span>
+                                <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="deleteComment(curComment)" onclick="document.getElementById('delcomcheck').style.display='none'"></span>
                                 <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('delcomcheck').style.display='none'"></span>
                                 </p>
                             </div>
@@ -356,7 +335,7 @@
         <div id="imgExpand" class="w3-modal" ng-click="unexpandImg()">
             <div class="w3-container w3-center">
                 <img class="w3-modal-content user-images-expanded" ng-attr-src="{{imagelink}}">
-                <p style="background-color:white;" class="w3-modal-content w3-padding-small post-body">{{title}}</p>
+                <p class="w3-modal-content w3-padding-small post-body">{{title}}</p>
             </div>
         </div>
     </script>

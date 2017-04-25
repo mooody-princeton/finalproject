@@ -273,8 +273,10 @@ a:hover {
   cursor:pointer;
 }
 .user-images-expanded {
-    max-height: 80vh;
-    max-width: 80%;
+    /*max-height: 80vh;
+    max-width: 80%;*/
+    /*width:auto;*/
+    /*height:auto;*/
 }
 
 .sidebar-header {
