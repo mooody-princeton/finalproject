@@ -1,6 +1,6 @@
-angular.module('mooody', ['ui.router'])
+angular.module('mooody', ['ui.router', 'infinite-scroll'])
 
-var app = angular.module('mooody', ['ui.router']);
+var app = angular.module('mooody', ['ui.router', 'infinite-scroll']);
 
 // UI Routing *********************************************
 
@@ -187,7 +187,7 @@ function($http, $window) {
         }).success(function(data) {
             angular.copy(data.status, auth.status);
             auth.statusSaved = true;
-        });    
+        });
     };
     // Set user status
     auth.setUserStatus = function(userid, statusString) {
@@ -196,7 +196,7 @@ function($http, $window) {
         }).success(function(data) {
             auth.status = data.status;
             auth.statusSaved = true;
-        });        
+        });
     };
 	return auth;
 }]);
@@ -225,6 +225,25 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
             }
         });
     };
+    // o.getSubset = function() {
+    //     return $http.get('/posts').success(function(data) {
+    //         angular.copy(data, o.posts);
+    //         // Take care of heart/flag buttons display
+    //         var i;
+    //         for (i = 0; i < o.posts.length; i++) {
+    //             if (!auth.isLoggedIn()) {
+    //                 o.posts[i].upvoted = false;
+    //                 o.posts[i].flagged = false;
+    //             }
+    //             else {
+    //                 if (o.posts[i].userUpvotes.indexOf(auth.currentUserId()) == -1) o.posts[i].upvoted = false;
+    //                 else o.posts[i].upvoted = true;
+    //                 if (o.posts[i].userFlags.indexOf(auth.currentUserId()) == -1) o.posts[i].flagged = false;
+    //                 else o.posts[i].flagged = true;
+    //             }
+    //         }
+    //     });
+    // };
     o.create = function(post) {
         return $http.post('/posts', post, {
             headers: { Authorization: 'Bearer ' + auth.getToken()}
@@ -504,6 +523,12 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         $scope.deleteCheck = function(post) {
             document.getElementById('delcheck').style.display = 'block';
             $scope.curPost = post;
+        };
+
+        // Infinite scroll
+        $scope.loadMore = function() {
+            console.log("here");
+            // $scope.posts = posts.posts.slice(0, $scope.posts.length + 8);
         };
     }]);
 

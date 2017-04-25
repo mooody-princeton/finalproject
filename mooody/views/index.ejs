@@ -8,8 +8,12 @@
     <link href="/stylesheets/twemoji-awesome.css" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <script src="https://code.jquery.com/jquery-2.2.4.js"
+    integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+    crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
+    <script src="/javascripts/ng-infinite-scroll.min.js"></script>
     <script src="/javascripts/angularApp.js"></script>
     <script src="/javascripts/sidebar.js"></script>
     <script src="/javascripts/misc.js"></script>
@@ -22,9 +26,6 @@
     <link rel="stylesheet" href="/stylesheets/chartist-plugin-tooltip.css"></script>
 
     <!-- Bootstrap 3.3.7 -->
-    <script src="https://code.jquery.com/jquery-2.2.4.js"
-    integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
-    crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -199,51 +200,52 @@
     </div>
 
     <!-- Display posts -->
-    <div class="w3-container" ng-repeat="post in posts | filter: filters | orderBy: orders">
-        <div ng-if="post.deleted==false" class="w3-panel w3-white w3-border post">
-            <div><br>
-                <div align="center"><img class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
-                <a href="#/posts/{{post._id}}"><span class="post-title">
-                {{post.title}}
-                </span></a><br><br>
-            </div>
-                <ul class="w3-right post-buttons">
-                    <li class="w3-hide-small" style="font-size:15px;">{{post.date | date:'MMM dd hh:mm a'}}</li>
-                    <li class="w3-hide-large w3-hide-medium" style="font-size:15px;">{{post.date | date:'MM/dd hh:mm a'}}<br></li>
-                    <li ng-if="post.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotes(post)"></span>
-                    {{post.upvotes}}</li>
-                    <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotes(post)"></span>
-                    {{post.upvotes}}</li>
-                    <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlags(post)"></span>
-                    {{post.flags}}</li>
-                    <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(post)"></span>
-                    {{post.flags}}</li>
-                    <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment w3-text-blue"></span></a>
-                        {{post.comments.length}}</li>
-                    <li ng-if="post.authorid===currentUserId()"><span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteCheck(post)"></span></li>
-                    <!-- onclick="document.getElementById('delete').style.display='block'" -->
-                    <!-- Delete popup (modal) -->
-                    <div id="delcheck" class="w3-modal w3-animate-opacity">
-                        <div class="w3-modal-content">
-                            <div class="w3-container w3-center w3-padding-large">
-                                <p class="post-body">Are you sure you want to delete your post? </p>
-                                <br>
-                                <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="deletePost(curPost)" onclick="document.getElementById('delcheck').style.display='none'"></span>
-                                <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('delcheck').style.display='none'"></span>
+    <div infinite-scroll="loadMore()">
+        <div class="w3-container" ng-repeat="post in posts | filter: filters | orderBy: orders">
+            <div ng-if="post.deleted==false" class="w3-panel w3-white w3-border post">
+                <div><br>
+                    <div align="center"><img class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
+                    <a href="#/posts/{{post._id}}"><span class="post-title">
+                    {{post.title}}
+                    </span></a><br><br>
+                </div>
+                    <ul class="w3-right post-buttons">
+                        <li class="w3-hide-small" style="font-size:15px;">{{post.date | date:'MMM dd hh:mm a'}}</li>
+                        <li class="w3-hide-large w3-hide-medium" style="font-size:15px;">{{post.date | date:'MM/dd hh:mm a'}}<br></li>
+                        <li ng-if="post.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotes(post)"></span>
+                        {{post.upvotes}}</li>
+                        <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotes(post)"></span>
+                        {{post.upvotes}}</li>
+                        <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlags(post)"></span>
+                        {{post.flags}}</li>
+                        <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(post)"></span>
+                        {{post.flags}}</li>
+                        <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment w3-text-blue"></span></a>
+                            {{post.comments.length}}</li>
+                        <li ng-if="post.authorid===currentUserId()"><span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteCheck(post)"></span></li>
+                        <!-- onclick="document.getElementById('delete').style.display='block'" -->
+                        <!-- Delete popup (modal) -->
+                        <div id="delcheck" class="w3-modal w3-animate-opacity">
+                            <div class="w3-modal-content">
+                                <div class="w3-container w3-center w3-padding-large">
+                                    <p class="post-body">Are you sure you want to delete your post? </p>
+                                    <br>
+                                    <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="deletePost(curPost)" onclick="document.getElementById('delcheck').style.display='none'"></span>
+                                    <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('delcheck').style.display='none'"></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </ul>
-            </div>
-
-            <!-- Image expand popup -->
-            <div id="imgExpand" class="w3-modal" ng-click="unexpandImg()">
-                <div class="w3-container w3-center">
-                    <img class="w3-modal-content user-images-expanded" ng-attr-src="{{imagelink}}">
-                    <!--<p style="background-color:white;" class="w3-modal-content w3-padding-small post-body">{{title}}</p>-->
+                    </ul>
                 </div>
-            </div>
 
+                <!-- Image expand popup -->
+                <div id="imgExpand" class="w3-modal" ng-click="unexpandImg()">
+                    <div class="w3-container w3-center">
+                        <img class="w3-modal-content user-images-expanded" ng-attr-src="{{imagelink}}">
+                        <!--<p style="background-color:white;" class="w3-modal-content w3-padding-small post-body">{{title}}</p>-->
+                    </div>
+                </div>
+          </div>
       </div>
     </script>
 
