@@ -161,11 +161,12 @@
                     <div>
                     <a class="w3-bar-item w3-button w3-right w3-blue" style="height:34px;" onclick="document.getElementById('write').style.display='block'" ng-hide="!isLoggedIn() || !isInFilter()"><i class="glyphicon glyphicon-pencil"></i> Write Post</a>
                     </div>
-                    <div class="input-group" style="z-index:1;">
+                    <div class="input-group" style="z-index:1; padding-right: 20px">
+                        <input type="text" class="form-control" placeholder="Search for...">
                         <span class="input-group-btn">
-                            <button class="btn btn-secondary" type="button">Search</button>
+                            <button class="btn btn-secondary" type="button"><i class="glyphicon glyphicon-search w3-text-white"></i></button>
                         </span>
-                        <input type="text" class="form-control" placeholder="(NOT YET FUNCTIONAL) Search for...">
+                        
                     </div>
                 </div>
             </div>
