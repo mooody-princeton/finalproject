@@ -499,6 +499,12 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
             $scope.imagelink = '';
             $scope.title = '';
         };
+
+        // Expand delete modal on click
+        $scope.deleteCheck = function(post) {
+            document.getElementById('delcheck').style.display = 'block';
+            $scope.curPost = post;
+        };
     }]);
 
 // Posts Controller
@@ -589,6 +595,12 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
             document.getElementById('imgExpand').style.display='none';
             $scope.imagelink = '';
             $scope.title = '';
+        };
+
+        // Expand delete modal on click
+        $scope.deleteComCheck = function(comment) {
+            document.getElementById('delcomcheck').style.display = 'block';
+            $scope.curComment = comment;
         };
     }]);
 
