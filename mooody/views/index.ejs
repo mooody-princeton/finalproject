@@ -12,12 +12,12 @@
     <script src="https://code.jquery.com/jquery-2.2.4.js"
     integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
     crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
-    <script src="/javascripts/ng-infinite-scroll.min.js"></script>
     <script src="/javascripts/angularApp.js"></script>
     <script src="/javascripts/sidebar.js"></script>
     <script src="/javascripts/misc.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.scrollto/2.1.2/jquery.scrollTo.min.js"></script>
 
     <!-- Chartist -->
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
@@ -309,7 +309,7 @@
 
         <!-- Header -->
         <div>
-            <a href="#">
+            <a ng-click="goBack()">
                 <div><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
             </a>
             <div class="w3-panel w3-white w3-border post">

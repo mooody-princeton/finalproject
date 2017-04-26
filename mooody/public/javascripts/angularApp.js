@@ -1,6 +1,30 @@
 angular.module('mooody', ['ui.router', 'infinite-scroll'])
 
 var app = angular.module('mooody', ['ui.router', 'infinite-scroll']);
+app.run(function($rootScope) {
+    $rootScope.previousState;
+    $rootScope.currentState;
+    $rootScope.scrollPos;
+    $rootScope.tabPos = {};
+    $rootScope.tabPos.mood = 'happy';
+    $rootScope.tabPos.orders = '-date';
+
+    $rootScope.$on('$stateChangeStart', function() {
+        // Store scroll position and current tabs for the view
+        // Only for home state
+        if ($rootScope.currentState === 'home') {
+            $rootScope.scrollPos = $(document).scrollTop();
+        }
+        console.log($rootScope.scrollPos);
+        console.log($rootScope.tabPos);
+    });
+    $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
+        $rootScope.previousState = from.name;
+        $rootScope.currentState = to.name;
+        console.log('Previous state:'+$rootScope.previousState)
+        console.log('Current state:'+$rootScope.currentState)
+    });
+});
 
 // UI Routing *********************************************
 
@@ -105,6 +129,7 @@ app.config(['$stateProvider','$urlRouterProvider',
       }
     });
   $urlRouterProvider.otherwise('home');
+
 }]);
 
 // Factories **********************************************
@@ -408,9 +433,9 @@ app.service('userstatusinfo', ['$http', 'auth', function($http, auth) {
 // Controllers ********************************************
 
 // Main Controller (home page)
-app.controller('MainCtrl', ['$scope', 'posts', 'auth',
-    function($scope, posts, auth) {
-        $scope.pageCount = 1;
+app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
+    function($scope, $rootScope, posts, auth) {
+        // $scope.pageCount = 1;
         $scope.posts = posts.posts;
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.title = '';
@@ -420,19 +445,63 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         $scope.currentUserId = auth.currentUserId;
 
         // Filter by mood and order by date/popularity
+        // $scope.filters = {};
+        // // $scope.filters.mood = 'happy'
+        // // $rootScope.tabPos.mood = 'happy';
+        // // $scope.orders = '-date';
+        // // $rootScope.tabPos.orders = 'new';
+        // $scope.inFilter = true;
         $scope.filters = {};
-        $scope.filters.mood = 'happy'
-        $scope.orders = '-date';
-        $scope.placeholder = 'Why are you happy?'
-        $scope.inFilter = true;
+        $scope.filters.mood = $rootScope.tabPos.mood;
+        $scope.orders = $rootScope.tabPos.orders;
+        $scope.inFilter;
+
+        if ($rootScope.tabPos.mood === 'happy') {
+            $scope.placeholder = 'Why are you happy?'
+            $scope.active_h = 'w3-border-yellow';
+            $scope.active_s = 'w3-border-inactive';
+            $scope.active_a = 'w3-border-inactive';
+            $scope.active_all = 'w3-border-inactive';
+            $scope.inFilter = true;
+        } else if ($rootScope.tabPos.mood === 'sad') {
+            $scope.placeholder = 'Why are you sad?'
+            $scope.active_h = 'w3-border-inactive';
+            $scope.active_s = 'w3-border-blue';
+            $scope.active_a = 'w3-border-inactive';
+            $scope.active_all = 'w3-border-inactive';
+            $scope.inFilter = true;
+        } else if ($rootScope.tabPos.mood === 'angry') {
+            $scope.placeholder = 'Why are you angry?'
+            $scope.active_h = 'w3-border-inactive';
+            $scope.active_s = 'w3-border-inactive';
+            $scope.active_a = 'w3-border-red';
+            $scope.active_all = 'w3-border-inactive';
+            $scope.inFilter = true;
+        } else {
+            $scope.filters = {};
+            $scope.placeholder = 'Filter by mood in order to post'
+            $scope.inFilter = false;
+            $scope.active_h = 'w3-border-inactive';
+            $scope.active_s = 'w3-border-inactive';
+            $scope.active_a = 'w3-border-inactive';
+            $scope.active_all = 'w3-border-black';
+        }
+
+        if ($rootScope.tabPos.orders === '-date') {
+            $scope.active_hot = 'w3-border-inactive';
+            $scope.active_new = 'w3-border-blue';
+        } else {
+            $scope.active_hot = 'w3-border-red';
+            $scope.active_new = 'w3-border-inactive';
+        }
 
         // Highlight tabs
-        $scope.active_h = 'w3-border-yellow';
-        $scope.active_s = 'w3-border-inactive';
-        $scope.active_a = 'w3-border-inactive';
-        $scope.active_all = 'w3-border-inactive';
-        $scope.active_hot = 'w3-border-inactive';
-        $scope.active_new = 'w3-border-blue';
+        // $scope.active_h = 'w3-border-yellow';
+        // $scope.active_s = 'w3-border-inactive';
+        // $scope.active_a = 'w3-border-inactive';
+        // $scope.active_all = 'w3-border-inactive';
+        // $scope.active_hot = 'w3-border-inactive';
+        // $scope.active_new = 'w3-border-blue';
 
         // Add post
         $scope.addPost = function() {
@@ -491,6 +560,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.active_s = 'w3-border-inactive';
                 $scope.active_a = 'w3-border-inactive';
                 $scope.active_all = 'w3-border-inactive';
+                $rootScope.tabPos.mood = 'happy';
             }
             else if (tab === 'sad') {
                 $scope.filters.mood = 'sad';
@@ -500,6 +570,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.active_s = 'w3-border-blue';
                 $scope.active_a = 'w3-border-inactive';
                 $scope.active_all = 'w3-border-inactive';
+                $rootScope.tabPos.mood = 'sad';
             }
             else if (tab === 'angry') {
                 $scope.filters.mood = 'angry';
@@ -509,6 +580,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.active_s = 'w3-border-inactive';
                 $scope.active_a = 'w3-border-red';
                 $scope.active_all = 'w3-border-inactive';
+                $rootScope.tabPos.mood = 'angry';
             }
             else {
                 $scope.filters = {};
@@ -518,6 +590,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.active_s = 'w3-border-inactive';
                 $scope.active_a = 'w3-border-inactive';
                 $scope.active_all = 'w3-border-black';
+                $rootScope.tabPos.mood = 'all';
             }
             $scope.posts = posts.posts;
         };
@@ -528,11 +601,13 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
                 $scope.orders = '-upvotes';
                 $scope.active_hot = 'w3-border-red';
                 $scope.active_new = 'w3-border-inactive';
+                $rootScope.tabPos.orders = '-upvotes';
             }
             else {
                 $scope.orders = '-date';
                 $scope.active_hot = 'w3-border-inactive';
                 $scope.active_new = 'w3-border-blue';
+                $rootScope.tabPos.orders = '-date';
             }
         };
 
@@ -565,14 +640,14 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         $scope.loadMore = function() {
             console.log("here");
             $scope.pageCount += 1;
-            $scope.posts = posts.posts.slice(-15 * $scope.pageCount);
+            $scope.posts = posts.posts;
             console.log($scope.pageCount);
         };
     }]);
 
 // Posts Controller
-app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
-    function($scope, posts, post, auth) {
+app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 'auth',
+    function($scope, $state, $rootScope, posts, post, auth) {
         $scope.post = post;
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.currentUser = auth.currentUser;
@@ -664,6 +739,17 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
         $scope.deleteComCheck = function(comment) {
             document.getElementById('delcomcheck').style.display = 'block';
             $scope.curComment = comment;
+        };
+
+        // State-saving
+        $scope.goBack = function() {
+            if ($rootScope.previousState === '') {
+                $state.go('home');
+            }
+            else {
+                $state.go($rootScope.previousState);
+                $('html, body').animate({scrollTop:$rootScope.scrollPos}, 100);
+            }
         };
     }]);
 

@@ -66,7 +66,7 @@ router.get('/', function(req, res, next) {
 // GET the most recent 2 days of posts
 // NOTE: currently only gets the 10 most recent posts
 router.get('/posts', function(req, res, next) {
-    var query = Post.find({}, null, {limit: 10, sort: {'date': -1}});
+    var query = Post.find({}, null, {limit: 200, sort: {'date': -1}});
     query.exec(function(err, posts) {
     if(err) { return next(err); }
 
