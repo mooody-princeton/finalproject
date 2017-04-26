@@ -169,8 +169,12 @@ router.put('/posts/:post/comments/:comment/delete', auth, function(req, res, nex
   req.comment.delete(req.body.usr, function(err, comment) {
     if (err) { return next(err); }
 
-    res.json(comment);
+    req.post.deleteComment(req.body.commentid, function(err, post) {
+      if (err) { return next(err); }
+      res.json({post:post,comment:comment});
+    });
   });
+  
 });
 
 router.put('/posts/:post/comments/:comment/downvote', auth, function(req, res, next) {
@@ -223,7 +227,7 @@ router.post('/register', function(req, res, next) {
         if (err) return console.log("Couldn't create verification token", err);
         // Send confirmation SMS if successful so far
         client.sendMessage({
-            to: '+16094552701', // Recipient number (either user's, or your own for testing)
+            to: '+14085991276', // Recipient number (either user's, or your own for testing)
             from: twilionum,
             body: 'Hello from Mooody! This is your code: ' + token
         });
