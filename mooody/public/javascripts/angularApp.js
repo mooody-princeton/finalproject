@@ -381,10 +381,10 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
         });
     };
     o.deleteComment = function(userid, post, comment) {
-        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/delete', {usr: userid}, {
+        return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/delete', {usr: userid, commentid: comment._id}, {
             headers: { Authorization: 'Bearer ' + auth.getToken() }
         }).success(function(data){
-            comment.deleted = data.deleted;
+            comment.deleted = data.comment.deleted;
         });
     };
     o.downvoteComment = function(userid, post, comment) {
@@ -459,21 +459,21 @@ app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
         $scope.inFilter;
 
         if ($rootScope.tabPos.mood === 'happy') {
-            $scope.placeholder = 'Why are you happy?'
+            $scope.placeholder = 'What makes you happy?'
             $scope.active_h = 'w3-border-yellow';
             $scope.active_s = 'w3-border-inactive';
             $scope.active_a = 'w3-border-inactive';
             $scope.active_all = 'w3-border-inactive';
             $scope.inFilter = true;
         } else if ($rootScope.tabPos.mood === 'sad') {
-            $scope.placeholder = 'Why are you sad?'
+            $scope.placeholder = 'What makes you sad?'
             $scope.active_h = 'w3-border-inactive';
             $scope.active_s = 'w3-border-blue';
             $scope.active_a = 'w3-border-inactive';
             $scope.active_all = 'w3-border-inactive';
             $scope.inFilter = true;
         } else if ($rootScope.tabPos.mood === 'angry') {
-            $scope.placeholder = 'Why are you angry?'
+            $scope.placeholder = 'What makes you angry?'
             $scope.active_h = 'w3-border-inactive';
             $scope.active_s = 'w3-border-inactive';
             $scope.active_a = 'w3-border-red';
@@ -556,7 +556,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
         $scope.tab = function(tab) {
             if (tab === 'happy') {
                 $scope.filters.mood = 'happy';
-                $scope.placeholder = 'Why are you happy?'
+                $scope.placeholder = 'What makes you happy?'
                 $scope.inFilter = true;
                 $scope.active_h = 'w3-border-yellow';
                 $scope.active_s = 'w3-border-inactive';
@@ -566,7 +566,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
             }
             else if (tab === 'sad') {
                 $scope.filters.mood = 'sad';
-                $scope.placeholder = 'Why are you sad?'
+                $scope.placeholder = 'What makes you sad?'
                 $scope.inFilter = true;
                 $scope.active_h = 'w3-border-inactive';
                 $scope.active_s = 'w3-border-blue';
@@ -576,7 +576,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
             }
             else if (tab === 'angry') {
                 $scope.filters.mood = 'angry';
-                $scope.placeholder = 'Why are you angry?'
+                $scope.placeholder = 'What makes you angry?'
                 $scope.inFilter = true;
                 $scope.active_h = 'w3-border-inactive';
                 $scope.active_s = 'w3-border-inactive';
@@ -682,6 +682,7 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
         // Delete a comment
         $scope.deleteComment = function(comment) {
             posts.deleteComment(auth.currentUserId(), post, comment);
+            $scope.$applyAsync();
         };
 
         // Set flag button toggle appropriately for a comment
