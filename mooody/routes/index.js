@@ -5,6 +5,8 @@ var passport = require('passport');
 var jwt = require('express-jwt');
 var uuid = require('node-uuid-v4');
 var ejs = require('ejs');
+var random = require('mongoose-simple-random');
+mongoose.plugin(random);
 
 // Twilio SMS verification
 var twilio = require('twilio');
@@ -23,6 +25,7 @@ var Comment = mongoose.model('Comment');
 var User = mongoose.model('User');
 var SocialMood = mongoose.model('SocialMood');
 var Token = mongoose.model('Token');
+var Message = mongoose.model('Message');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
@@ -71,7 +74,6 @@ router.post('/posts', function(req, res, next) {
   });
 });
 
-//
 router.param('post', function(req, res, next, id) {
   var query = Post.findById(id);
 
@@ -211,7 +213,7 @@ router.post('/register', function(req, res, next){
         if (err) return console.log("Couldn't create verification token", err);
         // Send confirmation SMS if successful so far
         client.sendMessage({
-            to: '+14085991276', // Recipient number (either user's, or your own for testing)
+            to: '+16094552701', // Recipient number (either user's, or your own for testing)
             from: twilionum,
             body: 'Hello from Mooody! This is your code: ' + token
         });
@@ -345,6 +347,43 @@ router.put('/userstatus/:user/changestatus', function(req, res, next) {
   req.userdocument.changeStatusTo(req.body.newstatus, function(err, curruser){
     if (err) { return next(err); }
     res.json({status: curruser.status});
+  });
+});
+
+// Routing functions for messaging ************************
+
+// Get a random user feeling low and not the current user
+router.put('/randomuser', function(req, res, next) { // Using PUT to prevent URL querying
+  var filters = { _id: { $ne:req.body.curruser }, mood: { $in: ['sad', 'angry'] } };
+  var fields = {};
+  var options = {limit: 1};
+  User.findRandom(filters, fields, options, function(err, results) {
+    if (err) { return next(err); }
+    if (!results) { res.json([{mood:'NA', status:'NA'}]); }
+    else { res.json(results); }
+  });
+});
+
+// Create a new message
+router.post('/messages', function(req, res, next) {
+  var message = new Message(req.body);
+
+  message.save(function(err, post){
+    if(err){ return next(err); }
+
+    res.json(message);
+  });
+});
+
+// Get all notes for a user
+router.get('/allnotes/:user', function(req, res, next) {
+  var filters = { recipient: req.userdocument._id };
+  var fields = {};
+  var options = {};
+  Message.find(filters, fields, options, function(err, notes){
+    if(err) { return next(err); }
+    if (!notes.length) { res.json([{author:'Dummy string', body:'Dummy string'}]); }
+    else {res.json(notes)};
   });
 });
 
