@@ -21,10 +21,10 @@ CommentSchema.methods.upvote = function(userid, cb) {
   this.save(cb);
 }
 
-// Upvote post
+// Delete comment
 CommentSchema.methods.delete = function(userid, cb) {
   // if (userid == authorid)
-    this.deleted = true;
+  this.deleted = true;
   this.save(cb);
 };
 
