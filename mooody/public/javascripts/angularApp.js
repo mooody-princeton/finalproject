@@ -1,6 +1,4 @@
-angular.module('mooody', ['ui.router', 'infinite-scroll'])
-
-var app = angular.module('mooody', ['ui.router', 'infinite-scroll']);
+var app = angular.module('mooody', ['ui.router', 'angular-spinkit']);
 app.run(function($rootScope) {
     $rootScope.previousState;
     $rootScope.currentState;
@@ -15,14 +13,18 @@ app.run(function($rootScope) {
         if ($rootScope.currentState === 'home') {
             $rootScope.scrollPos = $(document).scrollTop();
         }
-        console.log($rootScope.scrollPos);
-        console.log($rootScope.tabPos);
+
+        // Loading spinner
+        $('#main-cont').css('visibility', 'hidden');
+        $rootScope.isStateLoading = true;
     });
     $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
         $rootScope.previousState = from.name;
         $rootScope.currentState = to.name;
-        console.log('Previous state:'+$rootScope.previousState)
-        console.log('Current state:'+$rootScope.currentState)
+
+        // Loading spinner
+        $rootScope.isStateLoading = false;
+        $('#main-cont').css('visibility', '');
     });
 });
 

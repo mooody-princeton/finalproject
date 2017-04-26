@@ -1,4 +1,4 @@
-<!DOCTYPE html> <!-- NOTE: added to resolve infinite-scroll mousing issue -->
+<!--<!DOCTYPE html>--> <!-- NOTE: added to resolve infinite-scroll mousing issue -->
 <html>
 <head>
     <meta charset="utf-8">
@@ -9,36 +9,44 @@
     <link href="/stylesheets/twemoji-awesome.css" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="stylesheet" href="/stylesheets/angular-spinkit.min.css">
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <link rel="stylesheet" href="/stylesheets/chartist-plugin-tooltip.css"></link>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="/stylesheets/style.css" rel="stylesheet">
+
     <script src="https://code.jquery.com/jquery-2.2.4.js"
     integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
     crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"></script>
+    <script src="/javascripts/angular-spinkit.min.js"></script>
     <script src="/javascripts/angularApp.js"></script>
     <script src="/javascripts/sidebar.js"></script>
     <script src="/javascripts/misc.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.scrollto/2.1.2/jquery.scrollTo.min.js"></script>
-
-    <!-- Chartist -->
-    <link rel="stylesheet" href="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <script src="/javascripts/chartist-plugin-fill-donut.js"></script>
     <script src="/javascripts/chartist-plugin-tooltip.js"></script>
-    <link rel="stylesheet" href="/stylesheets/chartist-plugin-tooltip.css"></script>
-
-    <!-- Bootstrap 3.3.7 -->
     <script src="https://code.jquery.com/jquery-2.2.4.js"
     integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
     crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-    <link href="/stylesheets/style.css" rel="stylesheet">
 </head>
 
 <!-- Body start ************************************************************-->
 
 <body ng-app="mooody">
+
+    <!-- Loading transition -->
+    <div ng-show="isStateLoading" class="w3-container loading-indicator">
+        <div class="loading-indicator-body w3-display-middle">
+            <!--<p class="post-title w3-center">Loading...</p>-->
+            <div class="spinner w3-display-middle"><double-bounce-spinner></double-bounce-spinner></div>
+        </div>
+    </div>
+
 <div id="main-cont">
 
 <!-- Navbar and sidebar ****************************************************-->
@@ -200,7 +208,7 @@
                     <a class="w3-bar-item w3-button w3-bottombar {{active_h}}" ng-click="tab('happy')"><i class="twa twa-smile"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_s}}" ng-click="tab('sad')"><i class="twa twa-cry"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_a}}" ng-click="tab('angry')"><i class="twa twa-triumph"></i></a>
-                    <a class="w3-bar-item w3-button w3-bottombar {{active_all}}" ng-click="tab('all')" style="font-size:24px;">All</a>
+                    <a class="w3-bar-item w3-button w3-bottombar {{active_all}}" ng-click="tab('all')" style="font-size:21px;">All</a>
                     </div>
                     <div style="float:left;clear:both;margin-bottom:15px;margin-left:10px;">
                     <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_hot}}" ng-click="toggle('hot')"><i class="twa twa-fire"></i></a>
@@ -253,7 +261,8 @@
 
     <!-- Display posts -->
     <!-- NOTE: still scrolling too much? http://stackoverflow.com/questions/23666712/nginfinitescroll-loadmore-method-gets-called-on-every-mouse-scroll -->
-    <div infinite-scroll="loadMore()" infinite-scroll-use-document-bottom=true>
+    <!--<div infinite-scroll="loadMore()" infinite-scroll-use-document-bottom=true>-->
+    <div>
         <div class="w3-container" ng-repeat="post in posts | filter: filters | orderBy: orders">
             <div ng-if="post.deleted==false" class="w3-panel w3-white w3-border post">
                 <div><br>
@@ -292,7 +301,7 @@
                 </div>
 
                 <!-- Image expand popup -->
-                <div id="imgExpand" class="w3-modal" ng-click="unexpandImg()">
+                <div id="imgExpand" class="w3-modal w3-animate-opacity" ng-click="unexpandImg()">
                     <div class="w3-container w3-center">
                         <img class="w3-modal-content user-images-expanded" ng-attr-src="{{imagelink}}">
                         <!--<p style="background-color:white;" class="w3-modal-content w3-padding-small post-body">{{title}}</p>-->
@@ -385,7 +394,7 @@
         </div>
 
         <!-- Image expand popup -->
-        <div id="imgExpand" class="w3-modal" ng-click="unexpandImg()">
+        <div id="imgExpand" class="w3-modal w3-animate-opacity" ng-click="unexpandImg()">
             <div class="w3-container w3-center">
                 <img class="w3-modal-content user-images-expanded" ng-attr-src="{{imagelink}}">
                 <!--<p class="w3-modal-content w3-padding-small post-body">{{title}}</p>-->

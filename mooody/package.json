@@ -6,6 +6,8 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "angular-spinkit": "^0.3.4",
+    "angular-ui-router-anim-in-out": "^1.0.2",
     "body-parser": "~1.16.0",
     "chartist-plugin-fill-donut": "^0.1.4",
     "chartist-plugin-tooltips": "0.0.17",
