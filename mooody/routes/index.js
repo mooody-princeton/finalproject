@@ -55,8 +55,19 @@ router.get('/', function(req, res, next) {
 });
 
 // GET posts
+// router.get('/posts', function(req, res, next) {
+//   Post.find(function(err, posts) {
+//     if(err) { return next(err); }
+//
+//     res.json(posts);
+//   });
+// });
+
+// GET the most recent 2 days of posts
+// NOTE: currently only gets the 10 most recent posts
 router.get('/posts', function(req, res, next) {
-  Post.find(function(err, posts){
+    var query = Post.find({}, null, {limit: 10, sort: {'date': -1}});
+    query.exec(function(err, posts) {
     if(err) { return next(err); }
 
     res.json(posts);
@@ -172,8 +183,7 @@ router.put('/posts/:post/comments/:comment/downvote', auth, function(req, res, n
 
 // Routing functions for login/registration/verification ***************
 
-router.post('/register', function(req, res, next){
-    console.log("In index.js");
+router.post('/register', function(req, res, next) {
     if(!req.body.username || !req.body.password){
         console.log("Error1 in index.js");
         return res.status(400).json({message: 'Please fill out all fields'});

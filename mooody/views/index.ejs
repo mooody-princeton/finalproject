@@ -1,3 +1,4 @@
+<!DOCTYPE html> <!-- NOTE: added to resolve infinite-scroll mousing issue -->
 <html>
 <head>
     <meta charset="utf-8">
@@ -251,7 +252,8 @@
     </div>
 
     <!-- Display posts -->
-    <div infinite-scroll="loadMore()">
+    <!-- NOTE: still scrolling too much? http://stackoverflow.com/questions/23666712/nginfinitescroll-loadmore-method-gets-called-on-every-mouse-scroll -->
+    <div infinite-scroll="loadMore()" infinite-scroll-use-document-bottom=true>
         <div class="w3-container" ng-repeat="post in posts | filter: filters | orderBy: orders">
             <div ng-if="post.deleted==false" class="w3-panel w3-white w3-border post">
                 <div><br>
@@ -274,7 +276,7 @@
                         <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment w3-text-blue"></span></a>
                             {{post.comments.length}}</li>
                         <li ng-if="post.authorid===currentUserId()"><span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteCheck(post)"></span></li>
-                        <!-- onclick="document.getElementById('delete').style.display='block'" -->
+
                         <!-- Delete popup (modal) -->
                         <div id="delcheck" class="w3-modal w3-animate-opacity">
                             <div class="w3-modal-content">
@@ -298,7 +300,7 @@
                 </div>
           </div>
       </div>
-    </script>
+  </script>
 
 <!-- 'posts' template ******************************************************-->
 
@@ -332,10 +334,6 @@
         <!-- Display comments -->
         <span class="post-body">Comments:</span><br><br>
         <div ng-repeat="comment in post.comments | orderBy:'-date'">
-            <!-- <span class="glyphicon glyphicon-heart" ng-click="incrementUpvotes(comment)"></span>
-            {{comment.upvotes}}
-            <span class="glyphicon glyphicon-flag" ng-click="incrementFlags(comment)"></span>
-            {{comment.flags}} -->
             <span>
               <div ng-if="comment.deleted==false" class="w3-panel w3-white w3-border comment w3-padding-small">
                                     {{comment.body}}<br>
@@ -561,7 +559,7 @@
         </form>
         <!--{{code}}-->
     </script>
-    
+
 <!-- 'mymessages' template *************************************************-->
 
 <!-- mymessages.html -->

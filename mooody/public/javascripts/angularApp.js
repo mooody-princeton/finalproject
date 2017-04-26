@@ -280,25 +280,6 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
             }
         });
     };
-    // o.getSubset = function() {
-    //     return $http.get('/posts').success(function(data) {
-    //         angular.copy(data, o.posts);
-    //         // Take care of heart/flag buttons display
-    //         var i;
-    //         for (i = 0; i < o.posts.length; i++) {
-    //             if (!auth.isLoggedIn()) {
-    //                 o.posts[i].upvoted = false;
-    //                 o.posts[i].flagged = false;
-    //             }
-    //             else {
-    //                 if (o.posts[i].userUpvotes.indexOf(auth.currentUserId()) == -1) o.posts[i].upvoted = false;
-    //                 else o.posts[i].upvoted = true;
-    //                 if (o.posts[i].userFlags.indexOf(auth.currentUserId()) == -1) o.posts[i].flagged = false;
-    //                 else o.posts[i].flagged = true;
-    //             }
-    //         }
-    //     });
-    // };
     o.create = function(post) {
         return $http.post('/posts', post, {
             headers: { Authorization: 'Bearer ' + auth.getToken()}
@@ -330,7 +311,7 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
 	        });
 	};
     o.get = function(id) {
-        return $http.get('/posts/' + id).then(function(res){
+        return $http.get('/posts/' + id).then(function(res) {
                 // Take care of heart/flag buttons display for the post's comments
                 var i;
                 for (i = 0; i < res.data.comments.length; i++) {
@@ -376,7 +357,6 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
         return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/delete', {usr: userid}, {
             headers: { Authorization: 'Bearer ' + auth.getToken() }
         }).success(function(data){
-            console.log(data);
             comment.deleted = data.deleted;
         });
     };
@@ -384,7 +364,6 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
         return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/downvote', {usr: userid}, {
             headers: { Authorization: 'Bearer ' + auth.getToken() }
         }).success(function(data){
-            // console.log(data);
             comment.flags = data.userFlags.length;
             comment.userFlags = data.userFlags;
         });
@@ -431,6 +410,7 @@ app.service('userstatusinfo', ['$http', 'auth', function($http, auth) {
 // Main Controller (home page)
 app.controller('MainCtrl', ['$scope', 'posts', 'auth',
     function($scope, posts, auth) {
+        $scope.pageCount = 1;
         $scope.posts = posts.posts;
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.title = '';
@@ -467,6 +447,7 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
             $scope.title = '';
             $scope.imagelink = '';
             document.getElementById('write').style.display='none';
+            $scope.posts = posts.posts;
         };
 
         // Set heart button toggle appropriately
@@ -583,7 +564,9 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
         // Infinite scroll
         $scope.loadMore = function() {
             console.log("here");
-            // $scope.posts = posts.posts.slice(0, $scope.posts.length + 8);
+            $scope.pageCount += 1;
+            $scope.posts = posts.posts.slice(-15 * $scope.pageCount);
+            console.log($scope.pageCount);
         };
     }]);
 
@@ -791,14 +774,14 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
-	    
+
         $scope.currentSocialMood = auth.socialmood;
         $scope.currentMood = auth.usermood; // In case the usermoodinfo promise fails
-	    
+
         $scope.currentStatus = auth.status; // In case the userstatusinfo promise fails
         $scope.currentStatusSaved = auth.statusSaved; // In case the userstatusinfo promise fails
         $scope.copyStatus = '';
-	    
+
         $scope.selectRandomUser = auth.selectRandomUser;
         $scope.selectedMood = 'Please wait';
         $scope.selectedStatus = 'Please wait';
@@ -910,9 +893,8 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
     }]);
 
 // Notes inbox controller
-app.controller('MsgCtrl', ['$scope', 'auth', 
+app.controller('MsgCtrl', ['$scope', 'auth',
     function($scope, auth) {
         $scope.notes = auth.notes;
         $scope.notesEmpty = auth.notesEmpty;
     }]);
- 
