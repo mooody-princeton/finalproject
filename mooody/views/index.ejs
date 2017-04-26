@@ -52,7 +52,7 @@
     </div>
 
     <!-- About popup (modal) -->
-    <div id="about" class="w3-modal">
+    <div id="about" class="w3-modal" onclick="this.style.display='none'">
         <div class="w3-modal-content">
             <header class="w3-container">
             <span onclick="document.getElementById('about').style.display='none'"
@@ -449,7 +449,7 @@
            </form>
 
             <!-- Terms and Conditions -->
-            <div id="terms" class="w3-modal">
+            <div id="terms" class="w3-modal" onclick="this.style.display='none'">
                 <div class="w3-modal-content">
                     <header class="w3-container">
                     <span onclick="document.getElementById('terms').style.display='none'"
@@ -484,10 +484,10 @@
             </div>
 
             <!-- Privacy Policy -->
-            <div id="privacy" class="w3-modal">
+            <div id="privacy" class="w3-modal" onclick="this.style.display='none'">
                 <div class="w3-modal-content">
                     <header class="w3-container">
-                    <span ng-click="document.getElementById('privacy').style.display='none'"
+                    <span onclick="document.getElementById('privacy').style.display='none'"
                     class="w3-button w3-display-topright">&times;</span>
                     </header>
                     <div class="w3-container w3-padding-16">
@@ -564,6 +564,10 @@
 
 <!-- mymessages.html -->
     <script type="text/ng-template" id="/mymessages.html">
+        <a href="#">
+            <div><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
+        </a>
+
         Your Messages<br><hr>
 
         <!-- Display notes -->
