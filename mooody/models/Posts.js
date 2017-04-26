@@ -24,10 +24,16 @@ PostSchema.methods.upvote = function(userid, cb) {
   this.save(cb);
 };
 
-// Upvote post
+// Delete post
 PostSchema.methods.delete = function(userid, cb) {
   // if (userid == authorid)
-    this.deleted = true;
+  this.deleted = true;
+  this.save(cb);
+};
+
+// Delete comment
+PostSchema.methods.deleteComment = function(commentid, cb) {
+  this.comments.splice(this.comments.indexOf(commentid),1);
   this.save(cb);
 };
 
