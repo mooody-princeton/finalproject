@@ -1,7 +1,10 @@
+// MongoDB Users schema
+
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
-
+var random = require('mongoose-simple-random');
+mongoose.plugin(random);
 
 var UserSchema = new mongoose.Schema({
   username: {type: String, lowercase: true, unique: true, required: true},
