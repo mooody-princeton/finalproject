@@ -206,7 +206,7 @@ router.post('/register', function(req, res, next) {
     var user = new User();
     user.username = req.body.username;
     user.mood = 'Select one below!';
-    user.status = 'Loldef';
+    user.status = 'Click \'Edit\' to set status!';
     user.phonenum = "1" + req.body.phonenum;
 
     // Disabled email verification
