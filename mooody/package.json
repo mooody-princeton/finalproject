@@ -16,6 +16,7 @@
     "express-jwt": "^5.1.0",
     "jsonwebtoken": "^7.3.0",
     "mongoose": "^4.9.0",
+    "mongoose-simple-random": "^0.4.1",
     "morgan": "~1.7.0",
     "node-uuid-v4": "^1.0.0",
     "passport": "^0.3.2",
