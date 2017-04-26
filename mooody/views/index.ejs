@@ -236,7 +236,7 @@
                         <textarea class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title" required></textarea>
                     </div>
                     <div class="w3-mobile">
-                        <input type="text" id="urlInput" class="w3-input w3-border" placeholder="(Optional) Image link must start with http(s)://" ng-model="imagelink" oninput="readURL(this.value)"></input>
+                        <input type="text" id="urlInput" class="w3-input w3-border" placeholder="(Optional) Image link must start with http(s)://" ng-model="imagelink" oninput="readURL(this.value)">
                     </div>
                     <div class="w3-mobile">
                         <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Post</button>
@@ -299,6 +299,8 @@
           </div>
       </div>
     </script>
+
+<!-- 'posts' template ******************************************************-->
 
 <!-- posts.html -->
     <script type="text/ng-template" id="/posts.html">
@@ -392,6 +394,8 @@
             </div>
         </div>
     </script>
+
+<!-- 'register' template ***************************************************-->
 
 <!-- register.html -->
     <script type="text/ng-template" id="/register.html">
@@ -498,6 +502,8 @@
             </div>
     </script>
 
+<!-- 'login' template ******************************************************-->
+
 <!-- login.html -->
     <script type="text/ng-template" id="/login.html">
 
@@ -530,6 +536,8 @@
         <a class="w3-button" href="/#/verify">Click here to activate your account.</a>
     </script>
 
+<!-- 'verify' template *****************************************************-->
+
 <!-- verify.html -->
     <script type="text/ng-template" id="/verify.html">
 
@@ -553,7 +561,28 @@
         </form>
         <!--{{code}}-->
     </script>
+    
+<!-- 'mymessages' template *************************************************-->
+
+<!-- mymessages.html -->
+    <script type="text/ng-template" id="/mymessages.html">
+        Your Messages<br><hr>
+
+        <!-- Display notes -->
+        <div ng-show="!notesEmpty">
+            <div class="w3-container" ng-repeat="note in notes | orderBy: 'created_at':true">
+                <div class="w3-panel w3-white w3-border post">
+                    {{note.body}}
+                </div>
+            </div>
+        </div>
+        <div ng-show="notesEmpty">
+            Nothing to show here.
+        </div>
+    </script>
 </div>
+
+<!-- Body end **************************************************************-->
 </body>
 </html>
 
