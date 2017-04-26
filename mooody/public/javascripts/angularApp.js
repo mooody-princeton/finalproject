@@ -77,19 +77,48 @@ app.config(['$stateProvider','$urlRouterProvider',
                 }
             }]
     });
+    $stateProvider.state('mymessages', {
+      url: '/mymessages/{id}',
+      templateUrl: '/mymessages.html',
+      controller: 'MsgCtrl',
+      onEnter : ['$state', '$stateParams', 'auth',
+            function($state, $stateParams, auth) {
+                if (!auth.isLoggedIn()) {
+                    $state.go('home');
+                }
+                else if (auth.currentUserId() != $stateParams.id) {
+                    $state.go('home');
+                }
+            }],
+      resolve: {
+          notes: ['$stateParams', 'auth', function($stateParams, auth) {
+              return auth.getNotes($stateParams.id);
+          }],
+          moodPromise: ['auth', function(auth) {
+                if (auth.isLoggedIn()) {
+                    return auth.getUserMood(auth.currentUserId());
+                }
+          }],
+          socialmoodPromise: ['auth', function(auth) {
+                return auth.getSocialMood();
+          }]
+      }
+    });
   $urlRouterProvider.otherwise('home');
 }]);
 
 // Factories **********************************************
 
-// Authorization factory, simultaneously takes care of mood tracking
+// Authorization factory, simultaneously takes care of mood tracking and other user functionalities
 app.factory('auth', ['$http', '$window',
 function($http, $window) {
 	var auth = {
         usermood: [],
         socialmood: [],
         status: String,
-        statusSaved: Boolean
+        statusSaved: Boolean,
+        notes: [],
+        notesEmpty: Boolean
     };
 	auth.saveToken = function(token) {
 		$window.localStorage['mooody-token'] = token;
@@ -198,7 +227,33 @@ function($http, $window) {
             auth.statusSaved = true;
         });
     };
-	return auth;
+    // Return random user who's feeling low and who's not the current user
+    auth.selectRandomUser = function(userid) {
+        return $http.put('/randomuser', {curruser: userid}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+            }).then(function(res) {
+                return res.data;
+        });
+    };
+    // Create a note
+    auth.createMessage = function(msg) {
+        return $http.post('/messages', msg, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        });
+    };
+    // Get all notes for a user
+    auth.getNotes = function(userid) {
+        return $http.get('/allnotes/' + userid).then(function(res) {
+            angular.copy(res.data, auth.notes);
+            if (res.data[0].author == "Dummy string" && res.data[0].body == "Dummy string") {
+                auth.notesEmpty = true;
+            }
+            else {
+                auth.notesEmpty = false;
+            }
+        });
+    };
+    return auth;
 }]);
 
 // Posts factory
@@ -507,9 +562,9 @@ app.controller('MainCtrl', ['$scope', 'posts', 'auth',
 
         // Expand image on click
         $scope.expandImg = function(title, imagelink) {
-            document.getElementById('imgExpand').style.display = 'block';
             $scope.imagelink = imagelink;
             $scope.title = title;
+	    document.getElementById('imgExpand').style.display = 'block';
         };
 
         // Unexpand image
@@ -617,9 +672,9 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
 
         // Unexpand image
         $scope.unexpandImg = function() {
-            document.getElementById('imgExpand').style.display='none';
             $scope.imagelink = '';
             $scope.title = '';
+	    document.getElementById('imgExpand').style.display='none';
         };
 
         // Expand delete modal on click
@@ -736,11 +791,20 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
+	    
         $scope.currentSocialMood = auth.socialmood;
         $scope.currentMood = auth.usermood; // In case the usermoodinfo promise fails
+	    
         $scope.currentStatus = auth.status; // In case the userstatusinfo promise fails
         $scope.currentStatusSaved = auth.statusSaved; // In case the userstatusinfo promise fails
         $scope.copyStatus = '';
+	    
+        $scope.selectRandomUser = auth.selectRandomUser;
+        $scope.selectedMood = 'Please wait';
+        $scope.selectedStatus = 'Please wait';
+        $scope.selectedUserId = '';
+        $scope.note = '';
+        $scope.showbox = false;
 
         // Check if current mood is equal to the parameter, to help decide which mood button to highlight
         $scope.checkMood = function(moodString) {
@@ -790,7 +854,7 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
             $scope.$applyAsync(); // Apply changes in view
          };
 
-         // Save status and flip back to saved mode
+          // Save status and flip back to saved mode
          $scope.saveStatus = function() {
             auth.setUserStatus($scope.currentUserId(), this.copyStatus).then(function() {
                 $scope.currentStatusSaved = true;
@@ -798,4 +862,57 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
                 $scope.$applyAsync(); // Apply changes in view
             });
          };
+
+         // Select a random user who's feeling low
+         $scope.helpRandomUser = function() {
+            $scope.selectedMood = 'Please wait';
+            $scope.selectedStatus = 'Please wait';
+            $scope.selectedUserId = '';
+            $scope.note = '';
+            $scope.showbox = false;
+            document.getElementById('helpsomeone').style.display = 'block';
+            auth.selectRandomUser($scope.currentUserId()).then(function(data) {
+                console.log(data[0]);
+                if (data[0].mood == 'NA' && data[0].status == 'NA') {
+                    $scope.selectedMood = 'N/A';
+                    $scope.selectedStatus = 'N/A';
+                    $scope.selectedUserId = 'Dummy string';
+                    $scope.showbox = false;
+                    $scope.$applyAsync();
+                }
+                else {
+                    $scope.selectedMood = data[0].mood;
+                    if (data[0].status == '') {
+                        $scope.selectedStatus = 'The user has not provided a status';
+                    }
+                    else {
+                        $scope.selectedStatus = data[0].status;
+                    }
+                    $scope.selectedUserId = data[0]._id;
+                    $scope.showbox = true;
+                    $scope.$applyAsync();
+                }
+            });
+         };
+
+         // Send note
+         $scope.sendNote = function(recipientId) {
+            if (!$scope.note || $scope.note === '') { return; }
+            auth.createMessage({
+                author: $scope.currentUserId(),
+                recipient: recipientId,
+                body: $scope.note,
+                date: new Date()
+            });
+            document.getElementById('helpsomeone').style.display='none';
+            document.getElementById('thankyou').style.display='block';
+         };
     }]);
+
+// Notes inbox controller
+app.controller('MsgCtrl', ['$scope', 'auth', 
+    function($scope, auth) {
+        $scope.notes = auth.notes;
+        $scope.notesEmpty = auth.notesEmpty;
+    }]);
+ 
