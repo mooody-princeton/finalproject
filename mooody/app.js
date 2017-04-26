@@ -18,8 +18,12 @@ var twilio = require('twilio');
 
 mongoose.connect('mongodb://localhost/news'); // NOTE: change the name of the db for a new one
 
+var random = require('mongoose-simple-random');
+mongoose.plugin(random);
+
 require('./models/Posts');
 require('./models/Comments');
+require('./models/Messages');
 require('./models/Users');
 require('./models/SocialMood');
 require('./models/Tokens');
