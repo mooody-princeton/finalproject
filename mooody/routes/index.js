@@ -283,7 +283,7 @@ router.put('/verify', function(req, res, next){
       user.verified = true;
       user.save(function(err) {
         if (err) return res.status(400).json({failmessage: 'Verification failed. Try again?'});
-        else return res.json({successmessage: 'Verification successful! You can now proceed to log in.'});
+        else return res.json({successmessage: 'Verification successful! Click the Log In button above to log in!'});
       });
     });
   });

@@ -56,7 +56,7 @@
                   <a class="w3-bar-item" href="#" style="text-decoration: none;">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-triumph"></i>dy</a>
                   <a class="w3-bar-item w3-button w3-text-blue" onclick="document.getElementById('about').style.display='block'">About</a>
                   <a class="w3-bar-item w3-button" ng-show="isLoggedIn()" href="" ng-click="logOut()">Log Out</a>
-                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/login">Log In/Register</a>
+                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/login">Log In ⋅ Register</a>
         </div>
     </div>
 
@@ -87,16 +87,16 @@
 
         <!-- Sidebar -->
         <div style="overflow:scroll;z-index:2;" class="w3-sidebar w3-bar w3-center w3-white w3-collapse w3-border" ng-controller="SidebarCtrl" id="moodSidebar">
-                <button class="w3-bar-item w3-button w3-hide-large" onclick="w3_close()">Close &times;</button>
+                <button class="w3-bar-item w3-button w3-hide-large" onclick="w3_close()">&times; Close</button>
                 <div class="w3-padding-32">
                     <!-- Greetings -->
                     <div ng-show="isLoggedIn()">
                         <span class="post-title">Hi, {{currentUser()}}!</span>
                     </div>
                     <!-- Status -->
-                    <div ng-show="isLoggedIn()" class="w3-padding-small post-title" align="left">
+                    <div ng-show="isLoggedIn()" class="w3-padding-small post-title" align="center">
 
-                        <span class="sidebar-header" align="left">Status (max 150 char.):</span>
+                        <!-- <span class="sidebar-header" align="left">Status</span> -->
                         <div ng-if="currentStatusSaved" style="margin-top:10px;" class="input-group">
                         <input type="text" ng-model="currentStatus" maxlength="150" class="form-control w3-white" readonly>
                         <span class="input-group-btn">
@@ -114,14 +114,14 @@
                         <hr>
                     </div>
                     <!-- Social mood -->
-                    <div align="left">
-                        <span class="w3-padding-small sidebar-header">Princeton's Mood:</span>
+                    <div align="center">
+                        <span class="w3-padding-small sidebar-header">Princeton's Mood</span>
                     </div>
                     <div class="ct-chart ct-minor-second" id="chart"></div>
                     <!-- User mood -->
                     <div ng-show="isLoggedIn()">
                         <hr>
-                        <div class="w3-padding-small sidebar-header" align="left"><span>Update your mood:</span></div>
+                        <div class="w3-padding-small sidebar-header" align="center"><span>Update your mood</span></div>
                         <div class="w3-bar w3-xlarge">
                             <a ng-show="checkMood('happy')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
                             <a ng-hide="checkMood('happy')" class="w3-bar-item w3-button" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
@@ -391,7 +391,7 @@
             </div>
         </form>
         <div class="w3-container" ng-hide="isLoggedIn()">
-           <span class="post-title">You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can comment.</span>
+           <span class="post-title">Please <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> to comment.</span>
         </div>
 
         <!-- Image expand popup -->

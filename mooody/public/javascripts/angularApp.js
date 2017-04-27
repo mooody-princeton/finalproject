@@ -486,7 +486,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
             $scope.active_h = 'w3-border-inactive';
             $scope.active_s = 'w3-border-inactive';
             $scope.active_a = 'w3-border-inactive';
-            $scope.active_all = 'w3-border-black';
+            $scope.active_all = 'w3-border-dark-gray';
         }
 
         if ($rootScope.tabPos.orders === '-date') {
@@ -591,7 +591,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
                 $scope.active_h = 'w3-border-inactive';
                 $scope.active_s = 'w3-border-inactive';
                 $scope.active_a = 'w3-border-inactive';
-                $scope.active_all = 'w3-border-black';
+                $scope.active_all = 'w3-border-dark-gray';
                 $rootScope.tabPos.mood = 'all';
             }
             $scope.posts = posts.posts;
