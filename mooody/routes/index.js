@@ -63,10 +63,9 @@ router.get('/', function(req, res, next) {
 //   });
 // });
 
-// GET the most recent 2 days of posts
-// NOTE: currently only gets the 10 most recent posts
+// GET the N most recent 
 router.get('/posts', function(req, res, next) {
-    var query = Post.find({}, null, {limit: 200, sort: {'date': -1}});
+    var query = Post.find({ deleted: false, flags: {$lt: 5} }, null, {limit: 200, sort: {'date': -1}});
     query.exec(function(err, posts) {
     if(err) { return next(err); }
 
@@ -227,7 +226,7 @@ router.post('/register', function(req, res, next) {
         if (err) return console.log("Couldn't create verification token", err);
         // Send confirmation SMS if successful so far
         client.sendMessage({
-            to: '+14085991276', // Recipient number (either user's, or your own for testing)
+            to: '+16094552701', // Recipient number (either user's, or your own for testing)
             from: twilionum,
             body: 'Hello from Mooody! This is your code: ' + token
         });

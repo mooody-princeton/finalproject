@@ -771,6 +771,7 @@ app.controller('AuthCtrl', ['$scope', '$state', '$window', 'auth',
             });
         };
         $scope.logIn = function() {
+            JSON.stringify($scope.user.username);
             auth.logIn($scope.user).error(function(error) {
                 $scope.error = error;
             }).then(function() {

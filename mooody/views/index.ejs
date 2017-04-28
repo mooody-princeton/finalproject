@@ -53,7 +53,7 @@
 <!-- Navbar and sidebar ****************************************************-->
     <div class="w3-top" style="z-index:3;">
         <div class="w3-bar w3-white w3-large w3-border" ng-controller="NavCtrl">
-                  <a class="w3-bar-item" href="#" style="text-decoration: none;">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-triumph"></i>dy</a>
+                  <a class="w3-bar-item" href="#" style="text-decoration: none;">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-angry"></i>dy</a>
                   <a class="w3-bar-item w3-button w3-text-blue" onclick="document.getElementById('about').style.display='block'">About</a>
                   <a class="w3-bar-item w3-button" ng-show="isLoggedIn()" href="" ng-click="logOut()">Log Out</a>
                   <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/login">Log In ⋅ Register</a>
@@ -127,8 +127,8 @@
                             <a ng-hide="checkMood('happy')" class="w3-bar-item w3-button" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
                             <a ng-show="checkMood('sad')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
                             <a ng-hide="checkMood('sad')" class="w3-bar-item w3-button" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
-                            <a ng-show="checkMood('angry')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('angry')"><i class="twa twa-triumph"></i></a>
-                            <a ng-hide="checkMood('angry')" class="w3-bar-item w3-button" ng-click="setMoodTo('angry')"><i class="twa twa-triumph"></i></a>
+                            <a ng-show="checkMood('angry')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('angry')"><i class="twa twa-angry"></i></a>
+                            <a ng-hide="checkMood('angry')" class="w3-bar-item w3-button" ng-click="setMoodTo('angry')"><i class="twa twa-angry"></i></a>
                         </div>
                         <div class="w3-padding-32" style="padding-top:20px !important;padding-bottom:5px !important;">
                             <button class="w3-button w3-blue" ng-click="helpRandomUser()"><span style="font-size:15px;" text-align="center" class="glyphicon glyphicon-heart"></span> Help someone feel better</button>
@@ -208,7 +208,7 @@
                     <div style="float:left;clear:both;margin-left:10px;">
                     <a class="w3-bar-item w3-button w3-bottombar {{active_h}}" ng-click="tab('happy')"><i class="twa twa-smile"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_s}}" ng-click="tab('sad')"><i class="twa twa-cry"></i></a>
-                    <a class="w3-bar-item w3-button w3-bottombar {{active_a}}" ng-click="tab('angry')"><i class="twa twa-triumph"></i></a>
+                    <a class="w3-bar-item w3-button w3-bottombar {{active_a}}" ng-click="tab('angry')"><i class="twa twa-angry"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_all}}" ng-click="tab('all')" style="font-size:21px;">All</a>
                     </div>
                     <div style="float:left;clear:both;margin-bottom:15px;margin-left:10px;">
@@ -243,11 +243,15 @@
             <div class="w3-container w3-padding-32">
                 <form class="w3-container w3-padding-16" ng-submit="addPost()">
                     <div class="w3-mobile">
-                        <textarea class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title" required></textarea>
+                        Post body:<br>
+                        <textarea style="resize:vertical;" class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title" required></textarea>
                     </div>
+                    <br><br>
                     <div class="w3-mobile">
-                        <input type="text" id="urlInput" class="w3-input w3-border" placeholder="(Optional) Image link must start with http(s)://" ng-model="imagelink" oninput="readURL(this.value)">
+                        Image link (optional):<br>
+                        <input type="text" id="urlInput" class="w3-input w3-border" placeholder="Only JPG, PNG and GIF allowed. Must start with http" ng-model="imagelink" oninput="readURL(this.value)">
                     </div>
+                    <br><br>
                     <div class="w3-mobile">
                         <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Post</button>
                     </div>
@@ -265,7 +269,7 @@
     <!--<div infinite-scroll="loadMore()" infinite-scroll-use-document-bottom=true>-->
     <div>
         <div class="w3-container" ng-repeat="post in posts | filter: filters | orderBy: orders">
-            <div ng-if="post.deleted==false" class="w3-panel w3-white w3-border post">
+            <div ng-if="post.deleted==false && post.flags < 5" class="w3-panel w3-white w3-border post">
                 <div><br>
                     <div align="center"><img class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
                     <a href="#/posts/{{post._id}}"><span class="post-title">
@@ -345,7 +349,7 @@
         <span class="post-body">Comments:</span><br><br>
         <div ng-repeat="comment in post.comments | orderBy:'-date'">
             <span>
-              <div ng-if="comment.deleted==false" class="w3-panel w3-white w3-border comment w3-padding-small">
+              <div ng-if="comment.deleted==false && comment.flags < 5" class="w3-panel w3-white w3-border comment w3-padding-small">
                                     {{comment.body}}<br>
                 <ul class="w3-right post-buttons">
                     <li ng-if="comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotes(comment)"></span>
