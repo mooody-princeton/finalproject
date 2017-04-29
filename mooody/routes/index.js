@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
 var express = require('express');
 var router = express.Router();
+var mongoose = require('mongoose');
 var passport = require('passport');
 var jwt = require('express-jwt');
 var uuid = require('node-uuid-v4');
@@ -8,17 +8,38 @@ var ejs = require('ejs');
 var random = require('mongoose-simple-random');
 mongoose.plugin(random);
 
-// Twilio SMS verification
-var twilio = require('twilio');
-var client = twilio("AC81ea8300e37e8108abc992eaaa2728fa",
-  "4208d7046ce5b2a5b8a54e7b6b636690");
-var twilionum = '+16092450655';
+// Account verification *******************************************************
 
-// Email verification (not working with princeton.edu, so we're using phone verification instead)
-var key = "b8bae4ae-8d3e-449b-aaec-2d822d74eabc";
-var postmark = require("postmark")(key);
+// Twilio SMS verification (obsolete; actual implementation uses email verification)
+// var twilio = require('twilio');
+// var client = twilio(process.env.TWI_KEY_1,
+//   process.env.TWI_KEY_2);
+// var twilionum = process.env.TWI_NUM;
 
-// Mongo Schemas ******************************************
+// Postmark email verification (ditched; doesn't work with princeton.edu due to spam filter)
+// var postmark = require("postmark")(process.env.POSTMARK_KEY);
+// function sendVerificationEmail(options, done) {
+//     var deliver = function (textBody) {
+//         postmark.send({
+//             "From": "xyyu@princeton.edu",
+//             "To": 'xyyu@princeton.edu',
+//             "Subject": "Verify your Mooody account",
+//             "TextBody": 'Please work *cries*'
+//         }, done);
+//     };
+//     ejs.renderFile("views/email-text.ejs", options, function (err, textBody) {
+//         if (err) return done(err);
+//         deliver(textBody)
+//     });
+// }
+
+// SendGrid email verification
+var helper = require('sendgrid').mail;
+var fromEmail = new helper.Email('mooodyapp@gmail.com');
+var subject = 'Verify your Mooody account';
+var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
+
+// Mongo Schemas **************************************************************
 
 var Post = mongoose.model('Post');
 var Comment = mongoose.model('Comment');
@@ -29,41 +50,14 @@ var Message = mongoose.model('Message');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
-// Functions **********************************************
-
-// Email verification (not working with princeton.edu, so we're using phone verification instead)
-// function sendVerificationEmail(options, done) {
-//     var deliver = function (textBody) {
-//         postmark.send({
-//             "From": "xyyu@princeton.edu",
-//             "To": 'lindyzeng.lz@gmail.com', //options.email,
-//             "Subject": "Verify your Mooody account",
-//             "TextBody": 'lol' //textBody
-//         }, done);
-//     };
-//     ejs.renderFile("views/email-text.ejs", options, function (err, textBody) {
-//         if (err) return done(err);
-//         deliver(textBody)
-//     });
-// }
-
-// Routing functions for posts/comments *******************
+// Routing functions for posts/comments ***************************************
 
 // GET home page
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-// GET posts
-// router.get('/posts', function(req, res, next) {
-//   Post.find(function(err, posts) {
-//     if(err) { return next(err); }
-//
-//     res.json(posts);
-//   });
-// });
-
-// GET the N most recent 
+// GET the N most recent posts
 router.get('/posts', function(req, res, next) {
     var query = Post.find({ deleted: false, flags: {$lt: 5} }, null, {limit: 200, sort: {'date': -1}});
     query.exec(function(err, posts) {
@@ -84,6 +78,7 @@ router.post('/posts', function(req, res, next) {
   });
 });
 
+// Post parameter
 router.param('post', function(req, res, next, id) {
   var query = Post.findById(id);
 
@@ -96,6 +91,7 @@ router.param('post', function(req, res, next, id) {
   });
 });
 
+// Comment parameter
 router.param('comment', function(req, res, next, id) {
   var query = Comment.findById(id);
 
@@ -108,6 +104,7 @@ router.param('comment', function(req, res, next, id) {
   });
 });
 
+// GET comments of a post
 router.get('/posts/:post', function(req, res) {
     req.post.populate('comments', function(err, post) {
         if (err) { return next(err); }
@@ -116,6 +113,7 @@ router.get('/posts/:post', function(req, res) {
     });
 });
 
+// PUT upvote for a post
 router.put('/posts/:post/upvote', auth, function(req, res, next) {
   req.post.upvote(req.body.usr, function(err, post){
     if (err) { return next(err); }
@@ -124,6 +122,7 @@ router.put('/posts/:post/upvote', auth, function(req, res, next) {
   });
 });
 
+// PUT delete to true for a post (no actual deletion from database)
 router.put('/posts/:post/delete', auth, function(req, res, next) {
   req.post.delete(req.body.usr, function(err, post){
     if (err) { return next(err); }
@@ -132,6 +131,7 @@ router.put('/posts/:post/delete', auth, function(req, res, next) {
   });
 });
 
+// PUT flag for a post
 router.put('/posts/:post/downvote', auth, function(req, res, next) {
   req.post.downvote(req.body.usr, function(err, post){
     if (err) { return next(err); }
@@ -140,6 +140,7 @@ router.put('/posts/:post/downvote', auth, function(req, res, next) {
   });
 });
 
+// POST a comment to a post
 router.post('/posts/:post/comments', auth, function(req, res, next) {
   var comment = new Comment(req.body);
   comment.post = req.post;
@@ -156,6 +157,7 @@ router.post('/posts/:post/comments', auth, function(req, res, next) {
   });
 });
 
+// PUT upvote for a comment
 router.put('/posts/:post/comments/:comment/upvote', auth, function(req, res, next) {
   req.comment.upvote(req.body.usr, function(err, comment) {
     if (err) { return next(err); }
@@ -164,6 +166,7 @@ router.put('/posts/:post/comments/:comment/upvote', auth, function(req, res, nex
   });
 });
 
+// PUT delete to true for a comment (no actual deletion from database)
 router.put('/posts/:post/comments/:comment/delete', auth, function(req, res, next) {
   req.comment.delete(req.body.usr, function(err, comment) {
     if (err) { return next(err); }
@@ -176,6 +179,7 @@ router.put('/posts/:post/comments/:comment/delete', auth, function(req, res, nex
   
 });
 
+// PUT flag for a comment
 router.put('/posts/:post/comments/:comment/downvote', auth, function(req, res, next) {
   req.comment.downvote(req.body.usr, function(err, comment){
     if (err) { return next(err); }
@@ -184,70 +188,89 @@ router.put('/posts/:post/comments/:comment/downvote', auth, function(req, res, n
   });
 });
 
-// Routing functions for login/registration/verification ***************
+// Routing functions for login/registration/verification **********************
 
+// POST a user
 router.post('/register', function(req, res, next) {
-    if(!req.body.username || !req.body.password){
+    if(!req.body.username || !req.body.netid || !req.body.password){
         console.log("Error1 in index.js");
-        return res.status(400).json({message: 'Please fill out all fields'});
+        return res.status(400).json({message: 'Please fill out all required fields'});
     }
 
-    // Make sure that username and phone number are unique
+    // Process email string
+    var tempString = '';
+    if (req.body.hasOwnProperty('optional') && "undefined" !== typeof req.body.optional) {
+      tempString = req.body.optional;
+    }
+    tempString = req.body.netid + "@" + tempString + "princeton.edu";
+
+    // Make sure that username and email are unique
     User.findOne({username: req.body.username}, function(err, alreadyPresent) {
       if (err) return res.status(400).json({message: 'Registration failed. Please try again later.'});
       if (alreadyPresent != null) return res.status(400).json({message: 'Username taken. Please try again.'});
-      User.findOne({phonenum: "1" + req.body.phonenum}, function(err, alreadyUsed) {
+      User.findOne({email: tempString}, function(err, alreadyUsed) {
         if (err) return res.status(400).json({message: 'Registration failed. Please try again later.'});
-        if (alreadyUsed != null) return res.status(400).json({message: 'This phone number is already registered. Please try again.'});
+        if (alreadyUsed != null) return res.status(400).json({message: 'This email is already registered. Please try again.'});
 
     // If no error so far, then proceed with user registration
     // The rest of this code is wrapped inside the second User.findOne()'s callback
     var user = new User();
     user.username = req.body.username;
     user.mood = 'Select one below!';
-    user.status = 'Click \'Edit\' to set status!';
-    user.phonenum = "1" + req.body.phonenum;
-
-    // Disabled email verification
-    // var tempString = '';
-    // if (req.body.hasOwnProperty('optional') && "undefined" !== typeof req.body.optional) {
-    //   tempString = req.body.optional;
-    // }
-    // user.email = req.body.netid + "@" + tempString + "princeton.edu";
-
+    user.status = '';
+    user.email = tempString;
     user.verified = false;
-    user.setPassword(req.body.password)
+    user.setPassword(req.body.password);
+    
     // Save new user
     user.save(function(err, user) {
-      if(err) { return next(err); }
+      if(err) { console.log(err); return next(err); }
+      
       // Create new token for newly registered user
       var newtoken = new Token({_userid: user._id});
       newtoken.createToken(function(err, token) {
         if (err) return console.log("Couldn't create verification token", err);
-        // Send confirmation SMS if successful so far
-        client.sendMessage({
-            to: '+16094552701', // Recipient number (either user's, or your own for testing)
-            from: twilionum,
-            body: 'Hello from Mooody! This is your code: ' + token
+        // Send verification email if successful so far
+        var toEmail = new helper.Email(user.email);
+        var content = new helper.Content('text/plain', 'Hello from Mooody! Here is your verification code: ' + token);
+        var mail = new helper.Mail(fromEmail, subject, toEmail, content);
+        var request = sg.emptyRequest({
+          method: 'POST',
+          path: '/v3/mail/send',
+          body: mail.toJSON()
         });
-        console.log("Twilio SMS sent");
+        sg.API(request, function (error, response) {
+          if (error) {
+            console.log('Error response received');
+          }
+          console.log(response.statusCode);
+          console.log(response.body);
+          console.log(response.headers);
+        });
+
+        // Twilio SMS verification (obsolete; actual implementation uses email verification)
+        // client.sendMessage({
+        //     to: user.phonenum,
+        //     from: twilionum,
+        //     body: 'Hello from Mooody! This is your code: ' + token
+        // });
+        // console.log("Twilio SMS sent");
+
+        // Postmark email verification (ditched; doesn't work with princeton.edu due to spam filter)
+        // var message = {
+        //   email: user.email,
+        //   name: user.username,
+        //   verifyURL: token
+        // };
+        // sendVerificationEmail(message, function (error, success) {
+        //   if (error) {
+        //       console.error("Unable to send via postmark: " + error.message);
+        //       return;
+        //   }
+        //   console.info("Sent to postmark for delivery");
+        // });
       });
 
-      // Send confirmation email (disabled)
-      // var message = {
-      //   email: user.email,
-      //   name: user.username,
-      //   verifyURL: 'lol'
-      // };
-      // sendVerificationEmail(message, function (error, success) {
-      //   if (error) {
-      //       console.error("Unable to send via postmark: " + error.message);
-      //       return;
-      //   }
-      //   console.info("Sent to postmark for delivery");
-      // });
-
-      // Response
       return res.json({token: user.generateJWT()});
       });
 
@@ -256,6 +279,7 @@ router.post('/register', function(req, res, next) {
     });
 });
 
+// POST a login
 router.post('/login', function(req, res, next){
     if(!req.body.username || !req.body.password){
         return res.status(400).json({message: 'Please fill out all fields'});
@@ -274,6 +298,7 @@ router.post('/login', function(req, res, next){
     })(req, res, next);
 });
 
+// PUT a verification code
 router.put('/verify', function(req, res, next){
   Token.findOne({token: req.body.tokenfield}, function(err, doc) {
     if (err || doc == null) return res.status(400).json({failmessage: 'Verification failed. Try again?'});
@@ -288,9 +313,9 @@ router.put('/verify', function(req, res, next){
   });
 });
 
-// Routing functions for user param and user mood *********
+// Routing functions for user param and user mood *****************************
 
-// Set user parameter
+// User parameter
 router.param('user', function(req, res, next, id) {
   var query = User.findById(id);
 
@@ -303,12 +328,12 @@ router.param('user', function(req, res, next, id) {
   });
 });
 
-// Get current mood of user
+// GET current mood of user
 router.get('/usermood/:user', function(req, res, next) {
   res.json([{mood: req.userdocument.mood}]);
 });
 
-// Set new mood for user
+// PUT new mood for user
 router.put('/usermood/:user/changemood', function(req, res, next) {
   req.userdocument.changeMoodTo(req.body.newmood, function(err, curruser){
     if (err) { return next(err); }
@@ -316,9 +341,9 @@ router.put('/usermood/:user/changemood', function(req, res, next) {
   });
 });
 
-// Routing functions for social mood **********************
+// Routing functions for social mood ******************************************
 
-// Return single social mood document
+// GET social mood counts (a single document)
 router.get('/socialmood', function(req, res, next) {
   SocialMood.find(function(err, socmood){
     if(err) { return next(err); }
@@ -326,7 +351,7 @@ router.get('/socialmood', function(req, res, next) {
   });
 });
 
-// Decrement social mood count
+// PUT a count decrement for a social mood
 router.put('/socialmood/decrement', function(req, res, next) {
   SocialMood.find(function(err, socmood){
     if(err) { return next(err); }
@@ -337,7 +362,7 @@ router.put('/socialmood/decrement', function(req, res, next) {
   });
 });
 
-// Increment social mood count
+// PUT a count increment for a social mood
 router.put('/socialmood/increment', function(req, res, next) {
   SocialMood.find(function(err, socmood){
     if(err) { return next(err); }
@@ -348,14 +373,14 @@ router.put('/socialmood/increment', function(req, res, next) {
   });
 });
 
-// Routing functions for user status **********************
+// Routing functions for user status ******************************************
 
-// Get current status of user
+// GET current status of user
 router.get('/userstatus/:user', function(req, res, next) {
   res.json({status: req.userdocument.status});
 });
 
-// Set new status for user
+// PUT new status for user
 router.put('/userstatus/:user/changestatus', function(req, res, next) {
   req.userdocument.changeStatusTo(req.body.newstatus, function(err, curruser){
     if (err) { return next(err); }
@@ -363,10 +388,11 @@ router.put('/userstatus/:user/changestatus', function(req, res, next) {
   });
 });
 
-// Routing functions for messaging ************************
+// Routing functions for messaging ********************************************
 
-// Get a random user feeling low and not the current user
-router.put('/randomuser', function(req, res, next) { // Using PUT to prevent URL querying
+// Use PUT to get a random user feeling low 
+// (Using PUT instead of GET to prevent URL querying; not sure if this is an actual worry? Works for now anyway.)
+router.put('/randomuser', function(req, res, next) {
   var filters = { _id: { $ne:req.body.curruser }, mood: { $in: ['sad', 'angry'] } };
   var fields = {};
   var options = {limit: 1};
@@ -377,7 +403,7 @@ router.put('/randomuser', function(req, res, next) { // Using PUT to prevent URL
   });
 });
 
-// Create a new message
+// POST a new message/note
 router.post('/messages', function(req, res, next) {
   var message = new Message(req.body);
 
@@ -388,7 +414,7 @@ router.post('/messages', function(req, res, next) {
   });
 });
 
-// Get all notes for a user
+// GET all notes for a user
 router.get('/allnotes/:user', function(req, res, next) {
   var filters = { recipient: req.userdocument._id };
   var fields = {};

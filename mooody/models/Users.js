@@ -12,10 +12,11 @@ var UserSchema = new mongoose.Schema({
   salt: String,
   mood: String,
   status: String,
-  phonenum: {type: Number, unique:true, required: true},
-  // email: {type: String, lowercase: true, unique: true},
+  //phonenum: {type: Number, unique:true, required: true},
+  email: {type: String, lowercase: true, unique: true},
   verified: Boolean
 });
+// Username removed to reinforce the idea of anonymity
 
 UserSchema.methods.generateJWT = function() {
 

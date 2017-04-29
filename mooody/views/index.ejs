@@ -1,4 +1,4 @@
-<!--<!DOCTYPE html>--> <!-- NOTE: added to resolve infinite-scroll mousing issue -->
+<!--<!DOCTYPE html>-->
 <html>
 <head>
     <meta charset="utf-8">
@@ -420,30 +420,32 @@
         <!-- Registration form with validator -->
         <div class="w3-padding-16"><span class="title">Register</span></div>
        <form data-toggle="validator" role="form" ng-submit="register()">
+           <!-- Username -->
            <div class="form-group">
                <label for="inputName" class="w3-text-blue">Username</label>
                <input type="text" class="w3-input w3-border" id="inputName" placeholder="Username" ng-model="user.username" required>
            </div>
-           <!-- For phone verification -->
-           <div class="form-group has-feedback">
+           <!-- For phone verification (ditched for email verification) -->
+           <!-- <div class="form-group has-feedback">
                <label for="inputTwitter" class="w3-text-blue">Phone Number</label>
                <div class="input-group" id="phoneform">
                    <span class="input-group-addon">+1</span>
                    <input type="text" class="w3-input w3-border" placeholder="Phone number" name="phoneNumber" ng-model="user.phonenum" required>
                </div>
                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-           </div>
-           <!-- For email verification (ditched) -->
-           <!-- <div class="form-group has-feedback">
-               <label for="inputTwitter" class="control-label">Princeton Email</label>
+           </div> -->
+           <!-- For email verification -->
+           <div class="form-group has-feedback">
+               <label for="inputTwitter" class="w3-text-blue">Princeton Email</label>
                <div class="input-group">
-                   <input type="text" class="form-control" placeholder="Netid" ng-model="user.netid" required>
+                   <input type="text" class="form-control" placeholder="NetID" ng-model="user.netid" required>
                    <span class="input-group-addon">@</span>
                    <input type="text" class="form-control" placeholder="Anything in-between (if any)" ng-model="user.optional">
                    <span class="input-group-addon">princeton.edu</span>
                </div>
                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-           </div> -->
+           </div>
+           <!-- Password -->
            <div class="form-group">
                <label for="inputPassword" class="w3-text-blue">Choose a password</label>
                <div class="form-inline row">

@@ -11,6 +11,7 @@ var app = express();
 var mongoose = require('mongoose');
 var passport = require('passport');
 var postmark = require("postmark");
+var sendgrid = require("sendgrid");
 var uuid = require('node-uuid-v4');
 var randtoken = require('rand-token');
 var ejs = require('ejs');

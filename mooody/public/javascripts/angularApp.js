@@ -761,6 +761,11 @@ app.controller('AuthCtrl', ['$scope', '$state', '$window', 'auth',
     function($scope, $state, $window, auth) {
         $scope.user = {};
         $scope.register = function() {
+            if (!$scope.user.username || !$scope.user.password || !$scope.user.netid) return;
+            if (typeof($scope.user.username) != "string" || typeof($scope.user.password) != "string" || typeof($scope.user.netid) != "string") return;
+            if ((!$scope.user.optional) == false) {
+                if (typeof($scope.user.optional) != "string") return;
+            }
             console.log($scope.user);
             auth.register($scope.user).error(function(error) {
                 console.log("Error in angularApp.js");
@@ -771,7 +776,8 @@ app.controller('AuthCtrl', ['$scope', '$state', '$window', 'auth',
             });
         };
         $scope.logIn = function() {
-            JSON.stringify($scope.user.username);
+            if (!$scope.user.username || !$scope.user.password) return;
+            if (typeof($scope.user.username) != "string" || typeof($scope.user.password) != "string") return;
             auth.logIn($scope.user).error(function(error) {
                 $scope.error = error;
             }).then(function() {
