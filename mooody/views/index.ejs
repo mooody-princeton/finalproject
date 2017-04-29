@@ -117,27 +117,27 @@
                     <div align="center">
                         <span class="w3-padding-small sidebar-header">Princeton's Mood</span>
                     </div>
-                    <div style="padding-top:10px;"><div class="ct-chart ct-minor-second" id="chart"></div></div>
+                    <div style="padding-top:10px;"><div class="ct-chart ct-perfect-fourth" id="chart"></div></div>
                     <!-- User mood -->
                     <div ng-show="isLoggedIn()">
                         <hr>
                         <div class="w3-padding-small sidebar-header" align="center"><span>Update your mood</span></div>
                         <div class="w3-bar w3-xlarge">
-                            <!-- Happy -->
-                            <a ng-show="checkMood('happy')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
-                            <a ng-hide="checkMood('happy')" class="w3-bar-item w3-button" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
                             <!-- Relaxed -->
                             <a ng-show="checkMood('relaxed')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('relaxed')"><i class="twa twa-satisfied"></i></a>
                             <a ng-hide="checkMood('relaxed')" class="w3-bar-item w3-button" ng-click="setMoodTo('relaxed')"><i class="twa twa-satisfied"></i></a>
+                            <!-- Happy -->
+                            <a ng-show="checkMood('happy')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
+                            <a ng-hide="checkMood('happy')" class="w3-bar-item w3-button" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
                             <!-- Could Be Better -->
                             <a ng-show="checkMood('couldbebetter')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('couldbebetter')"><i class="twa twa-confused"></i></a>
                             <a ng-hide="checkMood('couldbebetter')" class="w3-bar-item w3-button" ng-click="setMoodTo('couldbebetter')"><i class="twa twa-confused"></i></a>
-                            <!-- Stressed -->
-                            <a ng-show="checkMood('stressed')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('stressed')"><i class="twa twa-persevere"></i></a>
-                            <a ng-hide="checkMood('stressed')" class="w3-bar-item w3-button" ng-click="setMoodTo('stressed')"><i class="twa twa-persevere"></i></a>
                             <!-- Sad -->
                             <a ng-show="checkMood('sad')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
                             <a ng-hide="checkMood('sad')" class="w3-bar-item w3-button" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
+                            <!-- Stressed -->
+                            <a ng-show="checkMood('stressed')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('stressed')"><i class="twa twa-persevere"></i></a>
+                            <a ng-hide="checkMood('stressed')" class="w3-bar-item w3-button" ng-click="setMoodTo('stressed')"><i class="twa twa-persevere"></i></a>
                             <!-- Angry -->
                             <a ng-show="checkMood('angry')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('angry')"><i class="twa twa-angry"></i></a>
                             <a ng-hide="checkMood('angry')" class="w3-bar-item w3-button" ng-click="setMoodTo('angry')"><i class="twa twa-angry"></i></a>

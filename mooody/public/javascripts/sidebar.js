@@ -13,13 +13,17 @@ function w3_close() {
 
 // Create and return chart based on socialmood
 function create_chart(socialmood) {
+    console.log(socialmood);
     var chart = new Chartist.Pie('.ct-chart', {
         series: [
-            {meta:'Happy: ', value:socialmood[0]},
-            {meta:'Sad: ', value:socialmood[1]},
-            {meta:'Angry: ', value:socialmood[2]}
+            {meta:'Relaxed: ', value:socialmood[0]},
+            {meta:'Happy: ', value:socialmood[1]},
+            {meta:'Could be Better: ', value:socialmood[2]},
+            {meta:'Sad: ', value:socialmood[3]},
+            {meta:'Stressed: ', value:socialmood[4]},
+            {meta:'Angry: ', value:socialmood[5]}
         ],
-        labels: ["happy", "sad", "angry"]
+        labels: ["relaxed", "happy", "could be better", "sad", "stressed", "angry"]
     }, {
         donut: true,
         donutWidth: 30,
@@ -86,11 +90,15 @@ function draw_chart(data) {
 
 // Calculate the percent for each mood
 function calculate_mood(socialmood) {
+    console.log(socialmood);
     var percent = [];
 
-    var sum = socialmood.happy + socialmood.sad + socialmood.angry;
+    var sum = socialmood.relaxed + socialmood.happy + socialmood.couldbebetter + socialmood.sad + socialmood.stressed + socialmood.angry;
+    percent.push(socialmood.relaxed / sum);
     percent.push(socialmood.happy / sum);
+    percent.push(socialmood.couldbebetter / sum);
     percent.push(socialmood.sad / sum);
+    percent.push(socialmood.stressed / sum);
     percent.push(socialmood.angry / sum);
 
     return percent;
