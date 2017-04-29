@@ -138,11 +138,11 @@ a:hover {
 #moodSidebar {
     padding-left:15px;
     padding-right:15px;
-    width:400px;
+    width:410px;
     right:0;
 }
 #mainContent {
-    margin-right:400px;
+    margin-right:410px;
 }
 
 /* chart colors */
@@ -306,6 +306,25 @@ a:hover {
   font-size:15px;
   color:#666666;
   margin-bottom:10px;
+}
+
+.relaxedButton:hover {
+  background-color:#fff7b1 !important;
+}
+.happyButton:hover {
+  background-color:#ffeb3b !important;
+}
+.couldbebetterButton:hover {
+  background-color:#87ceeb !important;
+}
+.sadButton:hover {
+  background-color:#2196f3 !important;
+}
+.stressedButton:hover {
+  background-color:#f98d85 !important;
+}
+.angryButton:hover {
+  background-color:#f44336 !important;
 }
 
 /* add more custom styling here with comments */

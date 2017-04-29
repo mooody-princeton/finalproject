@@ -856,7 +856,7 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
                 chart.update({series:[
                     {meta:'Relaxed: ', value:percent[0]},
                     {meta:'Happy: ', value:percent[1]},
-                    {meta:'Could be Better: ', value:percent[2]},
+                    {meta:'Could Be Better: ', value:percent[2]},
                     {meta:'Sad: ', value:percent[3]},
                     {meta:'Stressed: ', value:percent[4]},
                     {meta:'Angry: ', value:percent[5]}
@@ -870,7 +870,7 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
                 chart.update({series:[
                     {meta:'Relaxed: ', value:percent[0]},
                     {meta:'Happy: ', value:percent[1]},
-                    {meta:'Could be Better: ', value:percent[2]},
+                    {meta:'Could Be Better: ', value:percent[2]},
                     {meta:'Sad: ', value:percent[3]},
                     {meta:'Stressed: ', value:percent[4]},
                     {meta:'Angry: ', value:percent[5]}

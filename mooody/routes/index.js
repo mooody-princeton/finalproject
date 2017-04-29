@@ -401,7 +401,7 @@ router.put('/userstatus/:user/changestatus', function(req, res, next) {
 // Use PUT to get a random user feeling low 
 // (Using PUT instead of GET to prevent URL querying; not sure if this is an actual worry? Works for now anyway.)
 router.put('/randomuser', function(req, res, next) {
-  var filters = { _id: { $ne:req.body.curruser }, mood: { $in: ['sad', 'angry'] } };
+  var filters = { _id: { $ne:req.body.curruser }, mood: { $in: ['couldbebetter','sad', 'stressed', 'angry'] } };
   var fields = {};
   var options = {limit: 1};
   User.findRandom(filters, fields, options, function(err, results) {
