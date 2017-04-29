@@ -91,7 +91,7 @@
                 <div class="w3-padding-32">
                     <!-- Greetings -->
                     <div ng-show="isLoggedIn()">
-                        <span class="post-title">Hi, {{currentUser()}}!</span>
+                        <span class="post-title">Hey there!</span>
                     </div>
                     <!-- Status -->
                     <div ng-show="isLoggedIn()" class="w3-padding-small post-title" align="center">
@@ -421,10 +421,10 @@
         <div class="w3-padding-16"><span class="title">Register</span></div>
        <form data-toggle="validator" role="form" ng-submit="register()">
            <!-- Username -->
-           <div class="form-group">
+           <!-- <div class="form-group">
                <label for="inputName" class="w3-text-blue">Username</label>
                <input type="text" class="w3-input w3-border" id="inputName" placeholder="Username" ng-model="user.username" required>
-           </div>
+           </div> -->
            <!-- For phone verification (ditched for email verification) -->
            <!-- <div class="form-group has-feedback">
                <label for="inputTwitter" class="w3-text-blue">Phone Number</label>
@@ -434,7 +434,7 @@
                </div>
                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
            </div> -->
-           <!-- For email verification -->
+           <!-- Email -->
            <div class="form-group has-feedback">
                <label for="inputTwitter" class="w3-text-blue">Princeton Email</label>
                <div class="input-group">
@@ -529,10 +529,27 @@
         <!-- Login form with validator -->
         <div class="w3-padding-16"><span class="title">Log In</span></div>
         <form data-toggle="validator" role="form" ng-submit="logIn()">
-            <div class="form-group">
+            <!-- Username -->
+            <!--<div class="form-group">
                 <label for="inputName" class="w3-text-blue">Username</label>
-                <input type="text" class="w3-input w3-border" id="inputName" placeholder="Username" ng-model="user.username">
-            </div>
+                <input type="text" class="w3-input w3-border" id="inputName" placeholder="Username" ng-model="user.username" required>
+            </div> -->
+           <!-- Email -->
+           <div class="form-group has-feedback">
+               <label for="inputName" class="w3-text-blue">Princeton Email</label>
+               <div class="input-group">
+                   <input type="text" class="form-control" placeholder="NetID" ng-model="user.netid" required>
+                   <span class="input-group-addon">@</span>
+                   <input type="text" class="form-control" placeholder="Anything in-between (if any)" ng-model="user.optional">
+                   <span class="input-group-addon">princeton.edu</span>
+               </div>
+               <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+           </div>
+            <!-- <div class="form-group">
+                <label for="inputName" class="w3-text-blue">Email</label>
+                <input type="text" class="w3-input w3-border" id="inputName" placeholder="Email" ng-model="user.email" required>
+            </div> -->
+            <!-- Password -->
             <div class="form-group">
                 <label for="inputPassword" class="w3-text-blue">Password</label>
                 <div class="form-inline row">

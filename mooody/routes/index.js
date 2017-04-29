@@ -192,7 +192,7 @@ router.put('/posts/:post/comments/:comment/downvote', auth, function(req, res, n
 
 // POST a user
 router.post('/register', function(req, res, next) {
-    if(!req.body.username || !req.body.netid || !req.body.password){
+    if(!req.body.netid || !req.body.password){
         console.log("Error1 in index.js");
         return res.status(400).json({message: 'Please fill out all required fields'});
     }
@@ -200,22 +200,25 @@ router.post('/register', function(req, res, next) {
     // Process email string
     var tempString = '';
     if (req.body.hasOwnProperty('optional') && "undefined" !== typeof req.body.optional) {
-      tempString = req.body.optional;
+      if (typeof(req.body.optional) == 'string') tempString = req.body.optional;
     }
     tempString = req.body.netid + "@" + tempString + "princeton.edu";
 
-    // Make sure that username and email are unique
-    User.findOne({username: req.body.username}, function(err, alreadyPresent) {
+    // Make sure that username is unique (username has since been removed)
+    // User.findOne({username: req.body.username}, function(err, alreadyPresent) {
+    //   if (err) return res.status(400).json({message: 'Registration failed. Please try again later.'});
+    //   if (alreadyPresent != null) return res.status(400).json({message: 'Username taken. Please try again.'});
+    // });
+
+    // Make sure that email is unique
+    User.findOne({email: tempString}, function(err, alreadyUsed) {
       if (err) return res.status(400).json({message: 'Registration failed. Please try again later.'});
-      if (alreadyPresent != null) return res.status(400).json({message: 'Username taken. Please try again.'});
-      User.findOne({email: tempString}, function(err, alreadyUsed) {
-        if (err) return res.status(400).json({message: 'Registration failed. Please try again later.'});
-        if (alreadyUsed != null) return res.status(400).json({message: 'This email is already registered. Please try again.'});
+      if (alreadyUsed != null) return res.status(400).json({message: 'This email is already registered. Please try again.'});
 
     // If no error so far, then proceed with user registration
-    // The rest of this code is wrapped inside the second User.findOne()'s callback
+    // The rest of this code is wrapped inside findOne()'s callback
     var user = new User();
-    user.username = req.body.username;
+    //user.username = req.body.username;
     user.mood = 'Select one below!';
     user.status = '';
     user.email = tempString;
@@ -231,7 +234,8 @@ router.post('/register', function(req, res, next) {
       newtoken.createToken(function(err, token) {
         if (err) return console.log("Couldn't create verification token", err);
         // Send verification email if successful so far
-        var toEmail = new helper.Email(user.email);
+        //var toEmail = new helper.Email(user.email);
+        var toEmail = new helper.Email('xyyu@princeton.edu');
         var content = new helper.Content('text/plain', 'Hello from Mooody! Here is your verification code: ' + token);
         var mail = new helper.Mail(fromEmail, subject, toEmail, content);
         var request = sg.emptyRequest({
@@ -274,14 +278,13 @@ router.post('/register', function(req, res, next) {
       return res.json({token: user.generateJWT()});
       });
 
-      // End of callback
-      });
+      // End of findOne()'s callback
     });
 });
 
 // POST a login
 router.post('/login', function(req, res, next){
-    if(!req.body.username || !req.body.password){
+    if(!req.body.email || !req.body.password){
         return res.status(400).json({message: 'Please fill out all fields'});
     }
 

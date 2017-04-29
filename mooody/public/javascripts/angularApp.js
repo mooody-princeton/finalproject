@@ -164,14 +164,14 @@ function($http, $window) {
 			return false;
 		}
 	};
-	auth.currentUser = function() {
-		if (auth.isLoggedIn()) {
-			var token = auth.getToken();
-			var payload = JSON.parse($window.atob(token.split('.')[1]));
+	// auth.currentUser = function() {
+	// 	if (auth.isLoggedIn()) {
+	// 		var token = auth.getToken();
+	// 		var payload = JSON.parse($window.atob(token.split('.')[1]));
 
-			return payload.username;
-		}
-	};
+	// 		return payload.username;
+	// 	}
+	// };
     // Return current user's id
     auth.currentUserId = function() {
         if (auth.isLoggedIn()) {
@@ -443,7 +443,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
         $scope.title = '';
         $scope.imagelink = '';
         $scope.whitespace = '       ';
-        $scope.currentUser = auth.currentUser;
+        //$scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
 
         // Filter by mood and order by date/popularity
@@ -652,7 +652,7 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
     function($scope, $state, $rootScope, posts, post, auth) {
         $scope.post = post;
         $scope.isLoggedIn = auth.isLoggedIn;
-        $scope.currentUser = auth.currentUser;
+        //$scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
 
         $scope.addComment = function() {
@@ -760,34 +760,50 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
 app.controller('AuthCtrl', ['$scope', '$state', '$window', 'auth',
     function($scope, $state, $window, auth) {
         $scope.user = {};
+        $scope.user.email = '';
+
         $scope.register = function() {
-            if (!$scope.user.username || !$scope.user.password || !$scope.user.netid) return;
-            if (typeof($scope.user.username) != "string" || typeof($scope.user.password) != "string" || typeof($scope.user.netid) != "string") return;
+            if (!$scope.user.password || !$scope.user.netid) return;
+            if (typeof($scope.user.password) != "string" || typeof($scope.user.netid) != "string") return;
             if ((!$scope.user.optional) == false) {
                 if (typeof($scope.user.optional) != "string") return;
             }
+
             console.log($scope.user);
             auth.register($scope.user).error(function(error) {
                 console.log("Error in angularApp.js");
                 $scope.error = error;
             }).then(function() {
-                auth.logOut();
+                auth.logOut(); // Must verify first before being able to log in
                 $state.go('verify');
             });
         };
+
         $scope.logIn = function() {
-            if (!$scope.user.username || !$scope.user.password) return;
-            if (typeof($scope.user.username) != "string" || typeof($scope.user.password) != "string") return;
+            if (!$scope.user.netid || !$scope.user.password) return;
+            if (typeof($scope.user.netid) != "string" || typeof($scope.user.password) != "string") return;
+            if ((!$scope.user.optional) == false) {
+                if (typeof($scope.user.optional) != "string") return;
+            }
+
+            var tempString = '';
+            if ($scope.user.hasOwnProperty('optional') && "undefined" !== typeof $scope.user.optional) {
+              tempString = $scope.user.optional;
+            }
+            $scope.user.email = $scope.user.netid + "@" + tempString + "princeton.edu";
+
             auth.logIn($scope.user).error(function(error) {
                 $scope.error = error;
             }).then(function() {
                 auth.getUserMood(auth.currentUserId()).then(function() {
                     auth.getUserStatus(auth.currentUserId()).then(function() {
+                        $scope.user.email = '';
                         $window.location.reload(); // Reload entire page to update Angular variables in sidebar
                     });
                 });
             });
         };
+
         $scope.verifyNow = function() {
             auth.verify($scope.code).error(function(error) {
                 $scope.error = error;
@@ -803,7 +819,7 @@ app.controller('AuthCtrl', ['$scope', '$state', '$window', 'auth',
 app.controller('NavCtrl', ['$scope', '$state', 'auth',
     function($scope, $state, auth) {
         $scope.isLoggedIn = auth.isLoggedIn;
-        $scope.currentUser = auth.currentUser;
+        //$scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
         $scope.logOut = function() {
             auth.logOut();
@@ -868,7 +884,7 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
 
         // The following doesn't rely on service promises
         $scope.isLoggedIn = auth.isLoggedIn;
-        $scope.currentUser = auth.currentUser;
+        //$scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
 
         $scope.currentSocialMood = auth.socialmood;

@@ -7,13 +7,13 @@ var random = require('mongoose-simple-random');
 mongoose.plugin(random);
 
 var UserSchema = new mongoose.Schema({
-  username: {type: String, lowercase: true, unique: true, required: true},
+  //username: {type: String, lowercase: true, unique: true, required: true},
   hash: String,
   salt: String,
   mood: String,
   status: String,
   //phonenum: {type: Number, unique:true, required: true},
-  email: {type: String, lowercase: true, unique: true},
+  email: {type: String, lowercase: true, unique: true, required: true},
   verified: Boolean
 });
 // Username removed to reinforce the idea of anonymity
@@ -27,7 +27,7 @@ UserSchema.methods.generateJWT = function() {
 
   return jwt.sign({
     _id: this._id,
-    username: this.username,
+    //username: this.username,
     exp: parseInt(exp.getTime() / 1000),
   }, 'SECRET');
 };
