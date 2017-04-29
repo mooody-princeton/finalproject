@@ -98,16 +98,14 @@
 
                         <span class="sidebar-header">Status</span>
                         <div ng-if="currentStatusSaved" style="margin-top:10px;" class="input-group">
-                        <input type="text" ng-model="currentStatus" maxlength="150" class="form-control w3-white" readonly>
+                        <input ng-click="showStatus(currentStatus)" style="cursor:pointer;" type="text" ng-model="currentStatus" maxlength="150" class="form-control w3-white" placeholder="Write a status (max 150 char.)" readonly>
                         <span class="input-group-btn">
-
                             <button ng-click="flipStatus()" style="height:34px;font-size:15px;" class="btn btn-default" type="button">Edit</button>
                         </span>
                         </div>
                         <div ng-if="!currentStatusSaved" style="margin-top:10px;" class="input-group">
                         <input type="text" ng-model="copyStatus" maxlength="150" class="form-control w3-pale-yellow">
                         <span class="input-group-btn">
-
                             <button ng-click="saveStatus()" style="height:34px;" class="btn btn-default" type="button">Save</button>
                         </span>
                         </div>
@@ -147,6 +145,18 @@
                         </div>
                         <div class="w3-padding-32" style="padding-top:5px !important;">
                             <a href="/#/mymessages/{{currentUserId()}}"><button class="w3-button w3-blue"><span class="glyphicon glyphicon-envelope"></span> View Messages</button></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Status popup -->
+                <div id="fullstatus" class="w3-modal" onclick="this.style.display='none'">
+                    <div class="w3-modal-content">
+                        <header class="w3-container">
+                            <span onclick="document.getElementById('helpsomeone').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        </header>
+                        <div class="w3-container w3-padding-16">
+                            Your status:<br><br>
+                            {{fullstat}}
                         </div>
                     </div>
                 </div>
@@ -400,7 +410,7 @@
         <!-- Section to add a new comment -->
         <form class="w3-container" ng-hide="!isLoggedIn()" ng-submit="addComment()">
             <div class="w3-threequarter">
-                <input class="w3-input w3-border" placeholder="Add a new comment" ng-model="body"></textarea>
+                <input class="w3-input w3-border" placeholder="Add a new comment" ng-model="body" required></textarea>
             </div>
             <div class="w3-quarter">
                 <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Post</button>

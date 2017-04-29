@@ -508,6 +508,8 @@ app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
         // Add post
         $scope.addPost = function() {
             if (!$scope.title || $scope.title === '') { return; }
+            if (typeof($scope.title) != 'string') return;
+
             posts.create({
                 title: $scope.title,
                 authorid: auth.currentUserId(),
@@ -622,7 +624,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
         $scope.expandImg = function(title, imagelink) {
             $scope.imagelink = imagelink;
             $scope.title = title;
-	    document.getElementById('imgExpand').style.display = 'block';
+	        document.getElementById('imgExpand').style.display = 'block';
         };
 
         // Unexpand image
@@ -656,7 +658,9 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
         $scope.currentUserId = auth.currentUserId;
 
         $scope.addComment = function() {
-            if ($scope.body === '') { return; }
+            if (!$scope.body || $scope.body === '') { return; }
+            if (typeof($scope.body) != 'string') return;
+
             posts.addComment(post._id, {
                 body: $scope.body,
                 authorid: auth.currentUserId(),
@@ -960,6 +964,8 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
 
           // Save status and flip back to saved mode
          $scope.saveStatus = function() {
+            if (typeof(this.copyStatus) != 'string') return;
+
             auth.setUserStatus($scope.currentUserId(), this.copyStatus).then(function() {
                 $scope.currentStatusSaved = true;
                 $scope.currentStatus = auth.status;
@@ -1002,6 +1008,8 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
          // Send note
          $scope.sendNote = function(recipientId) {
             if (!$scope.note || $scope.note === '') { return; }
+            if (typeof($scope.note) != 'string') return;
+
             auth.createMessage({
                 author: $scope.currentUserId(),
                 recipient: recipientId,
@@ -1010,6 +1018,13 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
             });
             document.getElementById('helpsomeone').style.display='none';
             document.getElementById('thankyou').style.display='block';
+         };
+
+         // Show user's whole status in a popup
+         $scope.showStatus = function(status) {
+            $scope.fullstat = status;
+            if ($scope.fullstat == '') $scope.fullstat = 'Your status is currently empty.'
+            document.getElementById('fullstatus').style.display = 'block';
          };
     }]);
 
