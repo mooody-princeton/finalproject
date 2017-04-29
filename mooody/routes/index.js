@@ -37,12 +37,6 @@ mongoose.plugin(random);
 var helper = require('sendgrid').mail;
 var fromEmail = new helper.Email('mooodyapp@gmail.com');
 var subject = 'Verify your Mooody account';
-
-// !!! WARNING WARNING: THIS ENV VARIABLE IS DEFINED HERE TO MAKE YALL'S LIVES EASIER DURING TESTING.
-// !!! WE GOTTA REMOVE IT AFTER DEPLOYMENT (PUBLICLY VIEWABLE ENV VAR = BAD SECURITY)
-process.env.SENDGRID_API_KEY = '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';
-// !!! END OF WARNING BACK TO YOUR POSTS
-
 var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
 
 // Mongo Schemas **************************************************************
