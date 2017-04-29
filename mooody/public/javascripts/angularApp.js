@@ -805,6 +805,9 @@ app.controller('AuthCtrl', ['$scope', '$state', '$window', 'auth',
         };
 
         $scope.verifyNow = function() {
+            if (!$scope.code) return;
+            if (typeof($scope.code) != "string") return;
+            
             auth.verify($scope.code).error(function(error) {
                 $scope.error = error;
                 $scope.success = false;

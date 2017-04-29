@@ -37,6 +37,12 @@ mongoose.plugin(random);
 var helper = require('sendgrid').mail;
 var fromEmail = new helper.Email('mooodyapp@gmail.com');
 var subject = 'Verify your Mooody account';
+
+// !!! WARNING WARNING: THIS ENV VARIABLE IS DEFINED HERE TO MAKE YALL'S LIVES EASIER DURING TESTING.
+// !!! WE GOTTA REMOVE IT AFTER DEPLOYMENT (PUBLICLY VIEWABLE ENV VAR = BAD SECURITY)
+process.env.SENDGRID_API_KEY = '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';
+// !!! END OF WARNING BACK TO YOUR POSTS
+
 var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
 
 // Mongo Schemas **************************************************************
@@ -213,7 +219,7 @@ router.post('/register', function(req, res, next) {
     // Make sure that email is unique
     User.findOne({email: tempString}, function(err, alreadyUsed) {
       if (err) return res.status(400).json({message: 'Registration failed. Please try again later.'});
-      if (alreadyUsed != null) return res.status(400).json({message: 'This email is already registered. Please try again.'});
+      if (alreadyUsed != null) return res.status(400).json({message: 'This email is already registered.'});
 
     // If no error so far, then proceed with user registration
     // The rest of this code is wrapped inside findOne()'s callback
@@ -235,6 +241,7 @@ router.post('/register', function(req, res, next) {
         if (err) return console.log("Couldn't create verification token", err);
         // Send verification email if successful so far
         //var toEmail = new helper.Email(user.email);
+        console.log(process.env.SENDGRID_API_KEY);
         var toEmail = new helper.Email('xyyu@princeton.edu');
         var content = new helper.Content('text/plain', 'Hello from Mooody! Here is your verification code: ' + token);
         var mail = new helper.Mail(fromEmail, subject, toEmail, content);
@@ -303,6 +310,10 @@ router.post('/login', function(req, res, next){
 
 // PUT a verification code
 router.put('/verify', function(req, res, next){
+  if (!req.body.tokenfield) {
+      return res.status(400).json({failmessage: 'Please fill out the field'});
+  }
+
   Token.findOne({token: req.body.tokenfield}, function(err, doc) {
     if (err || doc == null) return res.status(400).json({failmessage: 'Verification failed. Try again?'});
     User.findOne({_id: doc._userid}, function(err, user) {
