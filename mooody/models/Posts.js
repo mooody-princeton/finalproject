@@ -11,6 +11,8 @@ var PostSchema = new mongoose.Schema({
   mood: String,
   date: Date,
   comments: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' } ],
+  commenters: {type: Array, default: []},
+  commenterNumber: {type: Number, default: 1},
   userUpvotes: [ { type: String } ],
   userFlags: [ { type: String } ],
   deleted: {type: Boolean, default: false}

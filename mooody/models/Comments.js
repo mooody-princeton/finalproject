@@ -8,6 +8,7 @@ var CommentSchema = new mongoose.Schema({
   upvotes: {type: Number, default: 0},
   flags: {type: Number, default: 0},
   post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
+  commentTracker: {type: String},
   userUpvotes: [ {type: String } ],
   userFlags: [ {type: String } ],
   deleted: {type: Boolean, default: false}

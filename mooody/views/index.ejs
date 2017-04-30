@@ -62,7 +62,7 @@
     </div>
 
     <!-- About popup (modal) -->
-    <div id="about" class="w3-modal" onclick="this.style.display='none'">
+    <div id="about" class="w3-modal" style="z-index:4;" onclick="this.style.display='none'">
         <div class="w3-modal-content">
             <header class="w3-container">
             <span onclick="document.getElementById('about').style.display='none'"
@@ -368,7 +368,8 @@
         <div ng-repeat="comment in post.comments | orderBy:'-date'">
             <span>
               <div ng-if="comment.deleted==false && comment.flags < 5" class="w3-panel w3-white w3-border comment w3-padding-small">
-                                    {{comment.body}}<br>
+                {{comment.commentTracker}}:<hr>
+                {{comment.body}}<br>
                 <ul class="w3-right post-buttons">
                     <li ng-if="comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotes(comment)"></span>
                     {{comment.upvotes}}</li>

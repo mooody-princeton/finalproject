@@ -145,10 +145,43 @@ router.post('/posts/:post/comments', auth, function(req, res, next) {
   var comment = new Comment(req.body);
   comment.post = req.post;
 
+  // Set tracking string for this comment within its post
+  var newcommenter = true;
+  // Search post's commenters array to see if this is a new commenter
+  var results = req.post.commenters.filter(function(obj) {
+    return obj.commenterid == req.body.authorid;
+  });
+  // If no results...
+  if (!results.length) {
+    // Could mean that commenter is OP
+    if (comment.authorid == comment.post.authorid) {
+      newcommenter = false;
+      comment.commentTracker = "OP";
+    }
+    // Else, it's actually a new commenter
+    else {
+      newcommenter = true;
+      comment.commentTracker = "Anon. " + req.post.commenterNumber;
+    }
+  }
+  // If not a new commenter (who's not OP)...
+  else {
+    newcommenter = false;
+    comment.commentTracker = "Anon. " + results[0].commenternum;
+  }
+
+  // Save new comment
   comment.save(function(err, comment){
     if(err) { return next(err); }
 
+    // If successful, update the comment's post as well
     req.post.comments.push(comment);
+    // Special things must be done if this is a new commenter
+    if (newcommenter) {
+      req.post.commenters.push({commenterid: comment.authorid, commenternum: req.post.commenterNumber});
+      req.post.commenterNumber = req.post.commenterNumber + 1;
+    }
+    // Finally, save (update) the comment's post as well
     req.post.save(function(err, post) {
       if(err){ return next(err); }
 

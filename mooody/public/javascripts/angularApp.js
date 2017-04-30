@@ -743,6 +743,9 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
                 authorid: auth.currentUserId(),
             }).success(function(comment) {
                 $scope.post.comments.push(comment);
+                $scope.post.commenters = comment.post.commenters;
+                $scope.post.commenterNumber = comment.post.commenterNumber;
+                $scope.$applyAsync();
             });
           $scope.body = '';
         };
