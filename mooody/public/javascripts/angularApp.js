@@ -262,6 +262,14 @@ function($http, $window) {
                 return res.data;
         });
     };
+    // Return another random user who's feeling low and who's not the current user
+    auth.selectAnotherUser = function(userid, providedid) {
+        return $http.put('/randomusernext', {curruser: userid, provuser: providedid}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+            }).then(function(res) {
+                return res.data;
+        });
+    };
     // Create a note
     auth.createMessage = function(msg) {
         return $http.post('/messages', msg, {
@@ -912,6 +920,7 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
         $scope.selectedStatus = 'Please wait';
         $scope.selectedUserId = '';
         $scope.note = '';
+        $scope.donemessage = '';
         $scope.showbox = false;
 
         // Check if current mood is equal to the parameter, to help decide which mood button to highlight
@@ -973,12 +982,13 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
             });
          };
 
-         // Select a random user who's feeling low
+         // Select a random user who's feeling low, who's not the current user
          $scope.helpRandomUser = function() {
             $scope.selectedMood = 'Please wait';
             $scope.selectedStatus = 'Please wait';
             $scope.selectedUserId = '';
             $scope.note = '';
+            $scope.donemessage = '';
             $scope.showbox = false;
             document.getElementById('helpsomeone').style.display = 'block';
             auth.selectRandomUser($scope.currentUserId()).then(function(data) {
@@ -987,6 +997,41 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
                     $scope.selectedMood = 'N/A';
                     $scope.selectedStatus = 'N/A';
                     $scope.selectedUserId = 'Dummy string';
+                    $scope.donemessage = 'Everyone\'s feeling fine for now!';
+                    $scope.showbox = false;
+                    $scope.$applyAsync();
+                }
+                else {
+                    $scope.selectedMood = data[0].mood;
+                    if (data[0].status == '') {
+                        $scope.selectedStatus = 'The user has not provided a status';
+                    }
+                    else {
+                        $scope.selectedStatus = data[0].status;
+                    }
+                    $scope.selectedUserId = data[0]._id;
+                    $scope.showbox = true;
+                    $scope.$applyAsync();
+                }
+            });
+         };
+
+         // Select a random user who's feeling low, who's not the current user and not the provided user
+         $scope.helpAnotherUser = function(provideduserId) {
+            $scope.selectedMood = 'Please wait';
+            $scope.selectedStatus = 'Please wait';
+            $scope.selectedUserId = '';
+            $scope.note = '';
+            $scope.donemessage = '';
+            $scope.showbox = false;
+            document.getElementById('helpsomeone').style.display = 'block';
+            auth.selectAnotherUser($scope.currentUserId(), provideduserId).then(function(data) {
+                console.log(data[0]);
+                if (data[0].mood == 'NA' && data[0].status == 'NA') {
+                    $scope.selectedMood = 'N/A';
+                    $scope.selectedStatus = 'N/A';
+                    $scope.selectedUserId = 'Dummy string';
+                    $scope.donemessage = 'Everyone else is feeling fine for now!';
                     $scope.showbox = false;
                     $scope.$applyAsync();
                 }

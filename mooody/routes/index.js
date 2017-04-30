@@ -398,10 +398,23 @@ router.put('/userstatus/:user/changestatus', function(req, res, next) {
 
 // Routing functions for messaging ********************************************
 
-// Use PUT to get a random user feeling low 
+// Use PUT to get a random user feeling low who's not the current user
 // (Using PUT instead of GET to prevent URL querying; not sure if this is an actual worry? Works for now anyway.)
 router.put('/randomuser', function(req, res, next) {
   var filters = { _id: { $ne:req.body.curruser }, mood: { $in: ['couldbebetter','sad', 'stressed', 'angry'] } };
+  var fields = {};
+  var options = {limit: 1};
+  User.findRandom(filters, fields, options, function(err, results) {
+    if (err) { return next(err); }
+    if (!results) { res.json([{mood:'NA', status:'NA'}]); }
+    else { res.json(results); }
+  });
+});
+
+// Use PUT to get another random user feeling low who's not the current user nor the provided user
+// (Using PUT instead of GET to prevent URL querying; not sure if this is an actual worry? Works for now anyway.)
+router.put('/randomusernext', function(req, res, next) {
+  var filters = { _id: { $nin: [req.body.curruser, req.body.provuser] }, mood: { $in: ['couldbebetter','sad', 'stressed', 'angry'] } };
   var fields = {};
   var options = {limit: 1};
   User.findRandom(filters, fields, options, function(err, results) {
