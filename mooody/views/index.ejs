@@ -272,7 +272,7 @@
                     <br><br>
                     <div class="w3-mobile">
                         Image link (optional):<br>
-                        <input type="text" class="w3-input w3-border" placeholder="Only JPG, PNG and GIF allowed. Must start with http" ng-model="imagelink">
+                        <input type="text" class="w3-input w3-border" placeholder="Only JPG, PNG and GIF allowed. Must start with http" ng-model="imagelink" oninput="readURL('lol')">
                     </div>
                     <br><br>
                     <div class="w3-mobile">
@@ -327,8 +327,7 @@
                 <!-- Image expand popup -->
                 <div id="imgExpand" class="w3-modal w3-animate-opacity" ng-click="unexpandImg()">
                     <div class="w3-container w3-center">
-                        <img class="w3-modal-content user-images-expanded" ng-attr-src="{{imagelink}}">
-                        <!--<p style="background-color:white;" class="w3-modal-content w3-padding-small post-body">{{title}}</p>-->
+                        <img class="w3-modal-content user-images-expanded" ng-attr-src="{{popupImg}}">
                     </div>
                 </div>
           </div>
@@ -420,8 +419,7 @@
         <!-- Image expand popup -->
         <div id="imgExpand" class="w3-modal w3-animate-opacity" ng-click="unexpandImg()">
             <div class="w3-container w3-center">
-                <img class="w3-modal-content user-images-expanded" ng-attr-src="{{imagelink}}">
-                <!--<p class="w3-modal-content w3-padding-small post-body">{{title}}</p>-->
+                <img class="w3-modal-content user-images-expanded" ng-attr-src="{{popupImg}}">
             </div>
         </div>
     </script>

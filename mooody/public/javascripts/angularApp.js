@@ -453,7 +453,8 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
         $scope.imagelink = '';
         //$scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
-        $scope.imageNA = 'https://cdn2.iconfinder.com/data/icons/stickerweather/256/na.png';
+        $scope.popupImg = 'https://www.jainsusa.com/images/store/landscape/not-available.jpg';
+        $scope.imageNA = 'https://www.jainsusa.com/images/store/landscape/not-available.jpg';
 
         // Filter by mood and order by date/popularity
         // $scope.filters = {};
@@ -706,7 +707,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
 
         // Expand image on click
         $scope.expandImg = function(title, imagelink) {
-            $scope.imagelink = imagelink;
+            $scope.popupImg = imagelink;
             $scope.title = title;
 	        document.getElementById('imgExpand').style.display = 'block';
         };
@@ -714,7 +715,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
         // Unexpand image
         $scope.unexpandImg = function() {
             document.getElementById('imgExpand').style.display='none';
-            $scope.imagelink = '';
+            $scope.popupImg = 'https://www.jainsusa.com/images/store/landscape/not-available.jpg';
             $scope.title = '';
         };
 
@@ -732,6 +733,7 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
         $scope.isLoggedIn = auth.isLoggedIn;
         //$scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
+        $scope.popupImg = 'https://www.jainsusa.com/images/store/landscape/not-available.jpg';
 
         $scope.addComment = function() {
             if (!$scope.body || $scope.body === '') { return; }
@@ -806,16 +808,16 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
 
         // Expand image on click
         $scope.expandImg = function(title, imagelink) {
-            document.getElementById('imgExpand').style.display = 'block';
-            $scope.imagelink = imagelink;
+            $scope.popupImg = imagelink;
             $scope.title = title;
+            document.getElementById('imgExpand').style.display = 'block';
         };
 
         // Unexpand image
         $scope.unexpandImg = function() {
-            $scope.imagelink = '';
+            document.getElementById('imgExpand').style.display='none';
+            $scope.popupImg = 'https://www.jainsusa.com/images/store/landscape/not-available.jpg';
             $scope.title = '';
-	    document.getElementById('imgExpand').style.display='none';
         };
 
         // Expand delete modal on click
