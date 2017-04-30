@@ -20,6 +20,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"></script>
+    <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
     <script src="/javascripts/angular-spinkit.min.js"></script>
     <script src="/javascripts/angularApp.js"></script>
     <script src="/javascripts/sidebar.js"></script>
@@ -271,17 +272,13 @@
                     <br><br>
                     <div class="w3-mobile">
                         Image link (optional):<br>
-                        <input type="text" id="urlInput" class="w3-input w3-border" placeholder="Only JPG, PNG and GIF allowed. Must start with http" ng-model="imagelink" oninput="readURL(this.value)">
+                        <input type="text" class="w3-input w3-border" placeholder="Only JPG, PNG and GIF allowed. Must start with http" ng-model="imagelink">
                     </div>
                     <br><br>
                     <div class="w3-mobile">
                         <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Post</button>
                     </div>
                 </form>
-                <div style="margin-left:15px;">
-                    <p id="previewImgText"></p>
-                    <img class="user-images" src="" id="previewImg">
-                </div>
             </div>
         </div>
     </div>

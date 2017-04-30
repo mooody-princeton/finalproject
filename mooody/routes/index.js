@@ -5,6 +5,7 @@ var passport = require('passport');
 var jwt = require('express-jwt');
 var uuid = require('node-uuid-v4');
 var ejs = require('ejs');
+var request = require("request-promise");
 var random = require('mongoose-simple-random');
 mongoose.plugin(random);
 
@@ -187,7 +188,7 @@ router.put('/posts/:post/comments/:comment/downvote', auth, function(req, res, n
     res.json(comment);
   });
 });
-
+  
 // Routing functions for login/registration/verification **********************
 
 // POST a user

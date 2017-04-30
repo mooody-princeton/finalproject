@@ -1,4 +1,2 @@
 sendgrid.env
-npm-debug.log
-.DS_Store
-/*.env
+safebrowse.env

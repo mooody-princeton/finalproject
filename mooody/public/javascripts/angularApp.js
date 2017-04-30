@@ -1,4 +1,5 @@
 var app = angular.module('mooody', ['ui.router', 'angular-spinkit']);
+
 app.run(function($rootScope) {
     $rootScope.previousState;
     $rootScope.currentState;
@@ -443,16 +444,16 @@ app.service('userstatusinfo', ['$http', 'auth', function($http, auth) {
 // Controllers ********************************************
 
 // Main Controller (home page)
-app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
-    function($scope, $rootScope, posts, auth) {
+app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
+    function($scope, $rootScope, $http, posts, auth) {
         // $scope.pageCount = 1;
         $scope.posts = posts.posts;
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.title = '';
         $scope.imagelink = '';
-        $scope.whitespace = '       ';
         //$scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
+        $scope.imageNA = 'https://cdn2.iconfinder.com/data/icons/stickerweather/256/na.png';
 
         // Filter by mood and order by date/popularity
         // $scope.filters = {};
@@ -513,11 +514,8 @@ app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
         // $scope.active_hot = 'w3-border-inactive';
         // $scope.active_new = 'w3-border-blue';
 
-        // Add post
-        $scope.addPost = function() {
-            if (!$scope.title || $scope.title === '') { return; }
-            if (typeof($scope.title) != 'string') return;
-
+        // Create a post
+        $scope.createPost = function() {
             posts.create({
                 title: $scope.title,
                 authorid: auth.currentUserId(),
@@ -529,6 +527,84 @@ app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
             $scope.imagelink = '';
             document.getElementById('write').style.display='none';
             $scope.posts = posts.posts;
+        };
+
+        // Validate an image URL, creating a post afterwards if createAfter is true
+        $scope.validateImgLink = function(stringURL, createAfter) {
+            // Is it a string?
+            if (typeof(stringURL) != 'string') {
+                $scope.imagelink = $scope.imageNA;
+                if (createAfter) $scope.createPost();
+            }
+            // Is it a URL?
+            else if (!stringURL.startsWith('http://') && !stringURL.startsWith('https://')) {
+                $scope.imagelink = $scope.imageNA;
+                if (createAfter) $scope.createPost();
+            }
+            // Does it end with the allowed extensions?
+            else if (!stringURL.endsWith('.jpg') && !stringURL.endsWith('.jpeg') && !stringURL.endsWith('.png') && !stringURL.endsWith('.gif')) {
+                $scope.imagelink = $scope.imageNA;
+                if (createAfter) $scope.createPost();
+            }
+            else {
+                // Is the URL safe (using Google's Safe Browsing API)?
+                var body = {
+                    "client": {
+                        "clientId": "mooodyapp",
+                        "clientVersion": "1.0"
+                    },
+                    "threatInfo": {
+                        "threatTypes": ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE"],
+                        "platformTypes": ["ANY_PLATFORM"],
+                        "threatEntryTypes": ["URL", "EXECUTABLE"],
+                        "threatEntries": [
+                        {"url": stringURL}
+                      ]
+                    }
+                };
+                $http({
+                    method:'POST',
+                    url: "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=AIzaSyDGjERzAHkvx-iGMxVzNwP9imGNocU1IIQ",
+                    data: body,
+                    headers: {
+                      "Content-Type": "application/json"
+                    }
+                  }).error(function(error) {
+                        console.log(error);
+                        $scope.imagelink = $scope.imageNA;
+                        if (createAfter) $scope.createPost();
+                    }).success(function(data) {
+                        console.log(data);
+                        console.log(!_.isEmpty(data));
+                        if (!_.isEmpty(data)) {
+                            $scope.imagelink = $scope.imageNA;
+                            if (createAfter) $scope.createPost();
+                        }
+                        else {
+                            if (createAfter) $scope.createPost();
+                        }
+                });
+            }
+        };
+
+        // Add post
+        $scope.addPost = function() {
+            if (!$scope.title || $scope.title === '') return;
+            if (typeof($scope.title) != 'string') return;
+            
+            // Take care of image
+            if ((!$scope.imagelink) == false) {
+                if (typeof($scope.imagelink) != "string") return;
+                // Validate image URL
+                else {
+                    // Will post after checking
+                    $scope.validateImgLink($scope.imagelink, true);
+                }
+            }
+            // If no image, just post right away
+            else {
+                $scope.createPost();
+            }
         };
 
         // Set heart button toggle appropriately
@@ -646,14 +722,6 @@ app.controller('MainCtrl', ['$scope', '$rootScope', 'posts', 'auth',
         $scope.deleteCheck = function(post) {
             document.getElementById('delcheck').style.display = 'block';
             $scope.curPost = post;
-        };
-
-        // Infinite scroll
-        $scope.loadMore = function() {
-            console.log("here");
-            $scope.pageCount += 1;
-            $scope.posts = posts.posts;
-            console.log($scope.pageCount);
         };
     }]);
 
