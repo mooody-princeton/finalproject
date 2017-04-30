@@ -446,7 +446,6 @@ app.service('userstatusinfo', ['$http', 'auth', function($http, auth) {
 // Main Controller (home page)
 app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
     function($scope, $rootScope, $http, posts, auth) {
-        // $scope.pageCount = 1;
         $scope.posts = posts.posts;
         $scope.isLoggedIn = auth.isLoggedIn;
         $scope.title = '';
