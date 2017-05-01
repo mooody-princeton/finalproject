@@ -71,7 +71,7 @@
             </header>
             <div class="w3-container w3-padding-24">
               <center><h3>Welcome to Mooody!</h3>
-                <p class="post-body w3-margin-left w3-margin-right">M<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-angry"></i>dy is a COS 333 project by Xiao Yang Yu, Lindy Zeng, Katelyn Neese, and Jesse Chou.
+                <p class="post-body w3-margin-left w3-margin-right">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-angry"></i>dy is a COS 333 project by Xiao Yang Yu, Lindy Zeng, Katelyn Neese, and Jesse Chou.
                     The team is advised by Nick Giannarakis. Visit our project site <a href="https://mooody-princeton.github.io/">here</a>.</p>
                 <br>
                 <p class="post-body w3-margin-left w3-margin-right"><span class="w3-tag w3-blue">Disclaimer</span> This web application is not intended to be used to diagnose
@@ -97,7 +97,7 @@
                         <span class="post-title">Hey there!</span>
                     </div> -->
                     <!-- Status -->
-                    <div ng-show="isLoggedIn()" class="w3-padding-small post-title" align="center">
+                    <div ng-show="isLoggedIn()" class="w3-padding-small" align="center" style="font-size:20px;color:#666666;">
 
                         <span class="sidebar-header">Status</span>
                         <div ng-if="currentStatusSaved" style="margin-top:10px;" class="input-group">
@@ -145,7 +145,7 @@
                         </div>
                         <div class="w3-padding-32" style="padding-top:20px !important;padding-bottom:5px !important;">
                             <button class="w3-button w3-blue" ng-click="helpRandomUser()" title="Help someone feel better!"><span style="font-size:15px;" text-align="center" class="glyphicon glyphicon-heart"></span> Help someone feel better!</button><br><br>
-                            <a href="/#/mymessages/{{currentUserId()}}"><button class="w3-button w3-blue" title = "View Messages"><span style="font-size:15px;" class="glyphicon glyphicon-envelope"></span> View Messages</button></a>
+                            <a href="/#/mymessages/{{currentUserId()}}"><button class="w3-button w3-blue" title = "View Messages"><span style="font-size:15px;" class="glyphicon glyphicon-envelope"></span> View Messages</button></a><br><br>
                         </div>
                     </div>
                 </div>
@@ -297,20 +297,20 @@
                 <div><br>
                     <div align="center"><img class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
                     <a href="#/posts/{{post._id}}"><span class="post-title">
-                    {{post.title}}
+                    <div style="word-wrap: break-word;">{{post.title}}</div>
                     </span></a><br><br>
                 </div>
                     <ul class="w3-right post-buttons">
                         <li class="w3-hide-small" style="font-size:15px;">{{post.date | date:'MMM dd hh:mm a'}}</li>
                         <li class="w3-hide-large w3-hide-medium" style="font-size:15px;">{{post.date | date:'MM/dd hh:mm a'}}<br></li>
                         <li ng-if="post.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotes(post)"></span>
-                        <!---{{post.upvotes}}---></li>
+                        {{post.upvotes}}</li>
                         <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotes(post)"></span>
-                        <!---{{post.upvotes}}---></li>
+                        {{post.upvotes}}</li>
                         <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlags(post)"></span>
-                        <!---{{post.flags}}---></li>
+                        {{post.flags}}</li>
                         <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(post)"></span>
-                        <!---{{post.flags}}---></li>
+                        {{post.flags}}</li>
                         <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment w3-text-blue"></span></a>
                             {{post.comments.length}}</li>
                         <li ng-if="post.authorid===currentUserId()"><span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteCheck(post)"></span></li>
@@ -351,39 +351,39 @@
             </a>
             <div class="w3-panel w3-white w3-border post">
                 <div align="center" style="margin-top:10px;"><img class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
-                <div><br><span class="post-title">{{post.title}}</span></div>
+                <div style="word-wrap: break-word;"><br><span class="post-title">{{post.title}}</span></div>
                 <ul class="w3-right post-buttons">
                     <li class="w3-hide-small" style="font-size:15px;">{{post.date | date:'MMM dd hh:mm a'}}</li>
                     <li class="w3-hide-large w3-hide-medium" style="font-size:15px;">{{post.date | date:'MM/dd hh:mm a'}}<br></li>
                     <li ng-if="post.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotesPost()"></span>
-                    <!---{{post.upvotes}}---></li>
+                    {{post.upvotes}}</li>
                     <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotesPost()"></span>
-                    <!---{{post.upvotes}}---></li>
+                    {{post.upvotes}}</li>
                     <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlagsPost()"></span>
-                    <!---{{post.flags}}---></li>
+                    {{post.flags}}</li>
                     <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlagsPost()"></span>
-                    <!---{{post.flags}}---></li>
+                    {{post.flags}}</li>
                 </ul>
             </div>
         </div>
         <hr>
 
-        <!-- Display comments -->
-        <span class="post-body"><!---Comments:---></span><br><br>
+        <!-- Display comments 
+        <span class="post-body"><!--Comments:--></span><br><br>
         <div ng-repeat="comment in post.comments | orderBy:'-date'">
             <span>
               <div ng-if="comment.deleted==false && comment.flags < 5" class="w3-panel w3-white w3-border comment w3-padding-small">
                 {{comment.commentTracker}}:<hr>
-                {{comment.body}}<br>
+                <div style="word-wrap: break-word;">{{comment.body}}</div><br>
                 <ul class="w3-right post-buttons">
                     <li ng-if="comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotes(comment)"></span>
-                    <!---{{comment.upvotes}}---></li>
+                    {{comment.upvotes}}</li>
                     <li ng-if="!comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotes(comment)"></span>
-                    <!---{{comment.upvotes}}---></li>
+                    {{comment.upvotes}}</li>
                     <li ng-if="comment.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlags(comment)"></span>
-                    <!---{{comment.flags}}---></li>
+                    {{comment.flags}}</li>
                     <li ng-if="!comment.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(comment)"></span>
-                    <!---{{comment.flags}}---></li>
+                    {{comment.flags}}</li>
                     <li ng-if="comment.authorid===currentUserId()">
                         <span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteComCheck(comment)">
                         </span>
