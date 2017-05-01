@@ -20,6 +20,9 @@ a:hover {
     text-decoration: none;
     color: #87ceeb;
 }
+h3 {
+  color:#2196f3;
+}
 
 /* Format buttons at bottom of each post */
 .post-buttons ul {
@@ -118,6 +121,7 @@ a:hover {
   border-style: solid;
   border-color: #ddd !important;
   margin: 0px auto 15px;
+  text-align:justify;
 }
 .post:hover{
   transition-duration: 0.4s;
@@ -215,11 +219,15 @@ a:hover {
 /* post title */
 .post-title {
     font-size:20px;
+    text-align: justify;
+
     /*margin-left:10px;*/
     color:#666666;
 }
 .post-body {
     font-size:15px;
+    text-align: justify;
+
     /*margin-left:10px;*/
 }
 
@@ -233,10 +241,13 @@ a:hover {
 }
 .comment-body{
   color: #666666 !important;
+  text-align: justify;
+
 }
 
 .title {
     font-size:25px;
+    text-align: justify;
 }
 
 /* to top of page button*/
@@ -266,9 +277,9 @@ a:hover {
     height:33px;
     resize: none;
 }
-.input{
-    width:99%;
-    height:33px;
+.w3-input{
+    width:100%;
+    /*height:33px;*/
     resize: none;
     border-radius:0px;
 }
@@ -327,4 +338,21 @@ a:hover {
   background-color:#f44336 !important;
 }
 
+
+/* Message formatting*/
+.message{
+  border-style: solid;
+  border-color: #ddd !important;
+  margin: 0px auto 15px;
+  font-size:18px;
+  border-left-color: #2196f3 !important;
+  border-left-width: 15px !important;
+  text-align: justify;
+}
+.message-body{
+  color: #666666 !important;
+  text-align: justify;
+  padding-top:100px;
+
+}
 /* add more custom styling here with comments */

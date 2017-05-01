@@ -56,6 +56,7 @@
         <div class="w3-bar w3-white w3-large w3-border" ng-controller="NavCtrl">
                   <a class="w3-bar-item" href="#" style="text-decoration: none;">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-angry"></i>dy</a>
                   <a class="w3-bar-item w3-button w3-text-blue" onclick="document.getElementById('about').style.display='block'">About</a>
+                  <!---<a class="w3-bar-item w3-button w3-text-blue" ng-show="isLoggedIn()" href="/#/mymessages/{{currentUserId()}}">Messages</a>--->
                   <a class="w3-bar-item w3-button" ng-show="isLoggedIn()" href="" ng-click="logOut()">Log Out</a>
                   <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/login">Log In ⋅ Register</a>
         </div>
@@ -68,14 +69,15 @@
             <span onclick="document.getElementById('about').style.display='none'"
             class="w3-button w3-display-topright">&times;</span>
             </header>
-            <div class="w3-container w3-padding-16">
-                <p class="post-body">Mooody is a COS 333 project by Xiao Yang Yu, Lindy Zeng, Katelyn Neese, and Jesse Chou.
+            <div class="w3-container w3-padding-24">
+              <center><h3>Welcome to Mooody!</h3>
+                <p class="post-body w3-margin-left w3-margin-right">M<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-angry"></i>dy is a COS 333 project by Xiao Yang Yu, Lindy Zeng, Katelyn Neese, and Jesse Chou.
                     The team is advised by Nick Giannarakis. Visit our project site <a href="https://mooody-princeton.github.io/">here</a>.</p>
                 <br>
-                <p class="post-body"><span class="w3-tag w3-blue">DISCLAIMER</span> This web application is not intended to be used to diagnose
+                <p class="post-body w3-margin-left w3-margin-right"><span class="w3-tag w3-blue">Disclaimer</span> This web application is not intended to be used to diagnose
                     or treat any mental illness or medical condition. For diagnoses or treatment of any such condition, consult a medical
                     professional. All information on the web application are the responsibility of the individuals who posted it, and do not
-                    necessarily reflect the views of the web application developers.</p>
+                    necessarily reflect the views of the web application developers.</p></center>
             </div>
         </div>
     </div>
@@ -104,7 +106,7 @@
                             <button ng-click="flipStatus()" style="height:34px;font-size:15px;" class="btn btn-default" type="button">Edit</button>
                         </span>
                         </div>
-                        <div ng-if="!currentStatusSaved" style="margin-top:10px;" class="input-group">
+                        <div ng-if="!currentStatusSaved" style="margin-top:10px;" class="input-group" placeholder="Update your status.">
                         <input type="text" ng-model="copyStatus" maxlength="150" class="form-control w3-pale-yellow">
                         <span class="input-group-btn">
                             <button ng-click="saveStatus()" style="height:34px;" class="btn btn-default" type="button">Save</button>
@@ -116,36 +118,34 @@
                     <div align="center">
                         <span class="w3-padding-small sidebar-header">Princeton's Mood</span>
                     </div>
-                    <div style="padding-top:10px;"><div class="ct-chart ct-perfect-fourth" id="chart"></div></div>
+                    <div style="padding-top:10px;"><div class="ct-chart ct-perfect-fifth" id="chart"></div></div>
                     <!-- User mood -->
                     <div ng-show="isLoggedIn()">
                         <hr>
                         <div class="w3-padding-small sidebar-header" align="center"><span>Update your mood</span></div>
                         <div class="w3-bar w3-xlarge">
                             <!-- Relaxed -->
-                            <a ng-show="checkMood('relaxed')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('relaxed')"><i class="twa twa-satisfied"></i></a>
-                            <a ng-hide="checkMood('relaxed')" class="relaxedButton w3-bar-item w3-button" ng-click="setMoodTo('relaxed')"><i class="twa twa-satisfied"></i></a>
+                            <a title="Relaxed" ng-show="checkMood('relaxed')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('relaxed')"><i class="twa twa-satisfied"></i></a>
+                            <a title="Relaxed" ng-hide="checkMood('relaxed')" class="relaxedButton w3-bar-item w3-button" ng-click="setMoodTo('relaxed')"><i class="twa twa-satisfied"></i></a>
                             <!-- Happy -->
-                            <a ng-show="checkMood('happy')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
-                            <a ng-hide="checkMood('happy')" class="happyButton w3-bar-item w3-button" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
+                            <a title="Happy" ng-show="checkMood('happy')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
+                            <a title="Happy" ng-hide="checkMood('happy')" class="happyButton w3-bar-item w3-button" ng-click="setMoodTo('happy')"><i class="twa twa-smile"></i></a>
                             <!-- Could Be Better -->
-                            <a ng-show="checkMood('couldbebetter')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('couldbebetter')"><i class="twa twa-confused"></i></a>
-                            <a ng-hide="checkMood('couldbebetter')" class="couldbebetterButton w3-bar-item w3-button" ng-click="setMoodTo('couldbebetter')"><i class="twa twa-confused"></i></a>
+                            <a title="Could Be Better" ng-show="checkMood('couldbebetter')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('couldbebetter')"><i class="twa twa-confused"></i></a>
+                            <a title="Could Be Better" ng-hide="checkMood('couldbebetter')" class="couldbebetterButton w3-bar-item w3-button" ng-click="setMoodTo('couldbebetter')"><i class="twa twa-confused"></i></a>
                             <!-- Sad -->
-                            <a ng-show="checkMood('sad')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
-                            <a ng-hide="checkMood('sad')" class="sadButton w3-bar-item w3-button" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
+                            <a title="Sad" ng-show="checkMood('sad')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
+                            <a title="Sad" ng-hide="checkMood('sad')" class="sadButton w3-bar-item w3-button" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
                             <!-- Stressed -->
-                            <a ng-show="checkMood('stressed')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('stressed')"><i class="twa twa-persevere"></i></a>
-                            <a ng-hide="checkMood('stressed')" class="stressedButton w3-bar-item w3-button" ng-click="setMoodTo('stressed')"><i class="twa twa-persevere"></i></a>
+                            <a title="Stressed" ng-show="checkMood('stressed')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('stressed')"><i class="twa twa-persevere"></i></a>
+                            <a title="Stressed" ng-hide="checkMood('stressed')" class="stressedButton w3-bar-item w3-button" ng-click="setMoodTo('stressed')"><i class="twa twa-persevere"></i></a>
                             <!-- Angry -->
-                            <a ng-show="checkMood('angry')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('angry')"><i class="twa twa-angry"></i></a>
-                            <a ng-hide="checkMood('angry')" class="angryButton w3-bar-item w3-button" ng-click="setMoodTo('angry')"><i class="twa twa-angry"></i></a>
+                            <a title="Angry" ng-show="checkMood('angry')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('angry')"><i class="twa twa-angry"></i></a>
+                            <a title="Angry" ng-hide="checkMood('angry')" class="angryButton w3-bar-item w3-button" ng-click="setMoodTo('angry')"><i class="twa twa-angry"></i></a>
                         </div>
                         <div class="w3-padding-32" style="padding-top:20px !important;padding-bottom:5px !important;">
-                            <button class="w3-button w3-blue" ng-click="helpRandomUser()"><span style="font-size:15px;" text-align="center" class="glyphicon glyphicon-heart"></span> Help someone feel better</button>
-                        </div>
-                        <div class="w3-padding-32" style="padding-top:5px !important;">
-                            <a href="/#/mymessages/{{currentUserId()}}"><button class="w3-button w3-blue"><span class="glyphicon glyphicon-envelope"></span> View Messages</button></a>
+                            <button class="w3-button w3-blue" ng-click="helpRandomUser()" title="Help someone feel better!"><span style="font-size:15px;" text-align="center" class="glyphicon glyphicon-heart"></span> Help someone feel better!</button><br><br>
+                            <a href="/#/mymessages/{{currentUserId()}}"><button class="w3-button w3-blue" title = "View Messages"><span style="font-size:15px;" class="glyphicon glyphicon-envelope"></span> View Messages</button></a>
                         </div>
                     </div>
                 </div>
@@ -156,8 +156,10 @@
                             <span onclick="document.getElementById('helpsomeone').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         </header>
                         <div class="w3-container w3-padding-16">
-                            Your status:<br><br>
-                            {{fullstat}}
+                            <h3>Status</h3>
+                            <center><p class="post-body w3-margin-left w3-margin-right">Updating your status will allow other users to read more about how you're doing
+                            in the event that they want to send you a supportive message. </p></center>
+                            <b>Your current status:</b> {{fullstat}}
                         </div>
                     </div>
                 </div>
@@ -168,16 +170,16 @@
                             <span onclick="document.getElementById('helpsomeone').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         </header>
 
-                        <div class="w3-container w3-padding-16">
+                        <div class="w3-container  w3-padding-16">
 
-                            Help someone feel better!<br>
-                            We've randomly selected a user who isn't feeling too well. A few words of support could be just the little act of kindness to make a difference. Please only use this feature for support and encouragement.<br><br><hr>
+                            <h3>Help someone feel better!</h3>
+                            <center><p class="post-body w3-margin-left w3-margin-right">We've randomly selected an anonymous user who isn't feeling too well. A few words of support could be just the little act of kindness to make a difference. Please only use this feature for support and encouragement.</p></center><hr>
                             <div ng-show='showbox'>
-                                Anonymous user's mood: {{selectedMood}}<br>
-                                Anoynymous user's status: {{selectedStatus}}<br><br>
-                                Leave a little note:<br>
-                                <div class="w3-container w3-padding-32">
-                                    <form class="w3-container w3-padding-16" ng-submit="sendNote(selectedUserId)">
+                                <b>User's mood:</b>  {{selectedMood}}<br>
+                                <b>User's status:</b> {{selectedStatus}}<br><br>
+                                Leave a supportive note:
+                                <div class="w3-container w3-margin-left w3-margin-right">
+                                    <form class="w3-container w3-margin-left w3-margin-right" ng-submit="sendNote(selectedUserId)">
                                         <div class="w3-mobile">
                                             <textarea class="w3-input w3-border" ng-model="note" placeholder="A little note..." required></textarea>
                                         </div>
@@ -187,10 +189,11 @@
                                     </form>
                                 </div>
                                 <hr>
-                                Feel like writing a note to someone else?<button class="w3-button w3-blue" ng-click="helpAnotherUser(selectedUserId)">Press here to retry!</button>
+                                Feel like writing a note to someone else?<br><button class="w3-button w3-blue" ng-click="helpAnotherUser(selectedUserId)">Press here to retry!</button>
                             </div>
                             <div ng-show='!showbox'>
-                                {{donemessage}} Please drop by again later; we'll need your help. Thank you <span class="glyphicon glyphicon-heart">
+                                {{donemessage}} Please drop by again later; we'll need your help. Thank you <span class="glyphicon glyphicon-heart-empty">
+
                             </div>
                         </div>
                     </div>
@@ -232,12 +235,11 @@
                     <a class="w3-bar-item w3-button w3-bottombar {{active_h}}" ng-click="tab('happy')"><i class="twa twa-smile"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_s}}" ng-click="tab('sad')"><i class="twa twa-cry"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_a}}" ng-click="tab('angry')"><i class="twa twa-angry"></i></a>
-                    <a class="w3-bar-item w3-button w3-bottombar {{active_all}}" ng-click="tab('all')" style="font-size:21px;">All</a>
+                    <a class="w3-bar-item w3-button w3-bottombar {{active_all}}" ng-click="tab('all')" style="font-size:23px;">All</a>
                     </div>
-                    <div style="float:left;clear:both;margin-bottom:15px;margin-left:10px;">
                     <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_hot}}" ng-click="toggle('hot')"><i class="twa twa-fire"></i></a>
                     <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_new}}" ng-click="toggle('new')"><i class="twa twa-clock1"></i></a>
-                    </div>
+
                 </div>
             </div>
             <div class="w3-container w3-rest" style="margin-top:10px;">
@@ -266,13 +268,16 @@
             <div class="w3-container w3-padding-32">
                 <form class="w3-container w3-padding-16" ng-submit="addPost()">
                     <div class="w3-mobile">
-                        Post body:<br>
+                        Write a post:<br>
                         <textarea style="resize:vertical;" class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title" required></textarea>
+
                     </div>
                     <br><br>
                     <div class="w3-mobile">
+
                         Image link (optional):<br>
                         <input type="text" class="w3-input w3-border" placeholder="Only JPG, PNG and GIF allowed. Must start with http" ng-model="imagelink" oninput="readURL('lol')">
+
                     </div>
                     <br><br>
                     <div class="w3-mobile">
@@ -299,13 +304,13 @@
                         <li class="w3-hide-small" style="font-size:15px;">{{post.date | date:'MMM dd hh:mm a'}}</li>
                         <li class="w3-hide-large w3-hide-medium" style="font-size:15px;">{{post.date | date:'MM/dd hh:mm a'}}<br></li>
                         <li ng-if="post.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotes(post)"></span>
-                        {{post.upvotes}}</li>
+                        <!---{{post.upvotes}}---></li>
                         <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotes(post)"></span>
-                        {{post.upvotes}}</li>
+                        <!---{{post.upvotes}}---></li>
                         <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlags(post)"></span>
-                        {{post.flags}}</li>
+                        <!---{{post.flags}}---></li>
                         <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(post)"></span>
-                        {{post.flags}}</li>
+                        <!---{{post.flags}}---></li>
                         <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment w3-text-blue"></span></a>
                             {{post.comments.length}}</li>
                         <li ng-if="post.authorid===currentUserId()"><span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteCheck(post)"></span></li>
@@ -351,20 +356,20 @@
                     <li class="w3-hide-small" style="font-size:15px;">{{post.date | date:'MMM dd hh:mm a'}}</li>
                     <li class="w3-hide-large w3-hide-medium" style="font-size:15px;">{{post.date | date:'MM/dd hh:mm a'}}<br></li>
                     <li ng-if="post.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotesPost()"></span>
-                    {{post.upvotes}}</li>
+                    <!---{{post.upvotes}}---></li>
                     <li ng-if="!post.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotesPost()"></span>
-                    {{post.upvotes}}</li>
+                    <!---{{post.upvotes}}---></li>
                     <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlagsPost()"></span>
-                    {{post.flags}}</li>
+                    <!---{{post.flags}}---></li>
                     <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlagsPost()"></span>
-                    {{post.flags}}</li>
+                    <!---{{post.flags}}---></li>
                 </ul>
             </div>
         </div>
         <hr>
 
         <!-- Display comments -->
-        <span class="post-body">Comments:</span><br><br>
+        <span class="post-body"><!---Comments:---></span><br><br>
         <div ng-repeat="comment in post.comments | orderBy:'-date'">
             <span>
               <div ng-if="comment.deleted==false && comment.flags < 5" class="w3-panel w3-white w3-border comment w3-padding-small">
@@ -372,13 +377,13 @@
                 {{comment.body}}<br>
                 <ul class="w3-right post-buttons">
                     <li ng-if="comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-red" ng-click="incrementUpvotes(comment)"></span>
-                    {{comment.upvotes}}</li>
+                    <!---{{comment.upvotes}}---></li>
                     <li ng-if="!comment.upvoted"><span class="glyphicon glyphicon-heart w3-text-light-gray" ng-click="incrementUpvotes(comment)"></span>
-                    {{comment.upvotes}}</li>
+                    <!---{{comment.upvotes}}---></li>
                     <li ng-if="comment.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlags(comment)"></span>
-                    {{comment.flags}}</li>
+                    <!---{{comment.flags}}---></li>
                     <li ng-if="!comment.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(comment)"></span>
-                    {{comment.flags}}</li>
+                    <!---{{comment.flags}}---></li>
                     <li ng-if="comment.authorid===currentUserId()">
                         <span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteComCheck(comment)">
                         </span>
@@ -619,12 +624,12 @@
             <div><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
         </a>
 
-        Your Messages<br><hr>
+        <h3>Your Messages</h3><hr>
 
         <!-- Display notes -->
         <div ng-show="!notesEmpty">
             <div class="w3-container" ng-repeat="note in notes | orderBy: 'created_at':true">
-                <div class="w3-panel w3-white w3-border post">
+                <div class="w3-panel w3-white w3-border w3-padding-16 post message">
                     {{note.body}}
                 </div>
             </div>
