@@ -133,6 +133,8 @@
                             <!-- Could Be Better -->
                             <a title="Could Be Better" ng-show="checkMood('couldbebetter')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('couldbebetter')"><i class="twa twa-confused"></i></a>
                             <a title="Could Be Better" ng-hide="checkMood('couldbebetter')" class="couldbebetterButton w3-bar-item w3-button" ng-click="setMoodTo('couldbebetter')"><i class="twa twa-confused"></i></a>
+                        </div>
+                        <div class="w3-bar w3-xlarge">
                             <!-- Sad -->
                             <a title="Sad" ng-show="checkMood('sad')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
                             <a title="Sad" ng-hide="checkMood('sad')" class="sadButton w3-bar-item w3-button" ng-click="setMoodTo('sad')"><i class="twa twa-cry"></i></a>
@@ -368,7 +370,7 @@
         </div>
         <hr>
 
-        <!-- Display comments 
+        <!-- Display comments
         <span class="post-body"><!--Comments:--></span><br><br>
         <div ng-repeat="comment in post.comments | orderBy:'-date'">
             <span>

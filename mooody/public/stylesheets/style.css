@@ -142,11 +142,11 @@ h3 {
 #moodSidebar {
     padding-left:15px;
     padding-right:15px;
-    width:410px;
+    width:310px;
     right:0;
 }
 #mainContent {
-    margin-right:410px;
+    margin-right:310px;
 }
 
 /* chart colors */
