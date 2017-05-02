@@ -312,7 +312,7 @@
         <div class="w3-container" ng-repeat="post in posts | filter: filters | orderBy: orders">
             <div ng-if="post.deleted==false && post.flags < 5" class="w3-panel w3-white w3-border post">
                 <div><br>
-                    <div align="center"><img class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
+                    <div ng-if="post.imagelink" align="center"><img onerror="this.src='https://www.jainsusa.com/images/store/landscape/not-available.jpg'" class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
                     <a href="#/posts/{{post._id}}"><span class="post-title">
                     <div style="word-wrap: break-word;">{{post.title}}</div>
                     </span></a><br><br>

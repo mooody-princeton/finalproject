@@ -541,11 +541,11 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
                 $scope.imagelink = $scope.imageNA;
                 if (createAfter) $scope.createPost();
             }
-            // Does it end with the allowed extensions?
-            else if (!stringURL.endsWith('.jpg') && !stringURL.endsWith('.jpeg') && !stringURL.endsWith('.png') && !stringURL.endsWith('.gif')) {
-                $scope.imagelink = $scope.imageNA;
-                if (createAfter) $scope.createPost();
-            }
+            // Does it end with the allowed extensions? (commented out: many images don't end with their extensions)
+            // else if (!stringURL.endsWith('.jpg') && !stringURL.endsWith('.jpeg') && !stringURL.endsWith('.png') && !stringURL.endsWith('.gif')) {
+            //     $scope.imagelink = $scope.imageNA;
+            //     if (createAfter) $scope.createPost();
+            // }
             else {
                 // Is the URL safe (using Google's Safe Browsing API)?
                 var body = {
