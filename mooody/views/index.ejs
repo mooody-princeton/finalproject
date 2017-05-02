@@ -63,21 +63,23 @@
     </div>
 
     <!-- About popup (modal) -->
-    <div id="about" class="w3-modal" style="z-index:4;" onclick="this.style.display='none'">
+    <div id="about" class="w3-modal" style="z-index:4;">
         <div class="w3-modal-content">
             <header class="w3-container">
             <span onclick="document.getElementById('about').style.display='none'"
             class="w3-button w3-display-topright">&times;</span>
             </header>
             <div class="w3-container w3-padding-24">
-              <center><h3>Welcome to Mooody!</h3>
+              <center><h3>Welcome to mooody!</h3>
                 <p class="post-body w3-margin-left w3-margin-right">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-angry"></i>dy is a COS 333 project by Xiao Yang Yu, Lindy Zeng, Katelyn Neese, and Jesse Chou.
                     The team is advised by Nick Giannarakis. Visit our project site <a href="https://mooody-princeton.github.io/">here</a>.</p>
                 <br>
-                <p class="post-body w3-margin-left w3-margin-right"><span class="w3-tag w3-blue">Disclaimer</span> This web application is not intended to be used to diagnose
-                    or treat any mental illness or medical condition. For diagnoses or treatment of any such condition, consult a medical
-                    professional. All information on the web application are the responsibility of the individuals who posted it, and do not
-                    necessarily reflect the views of the web application developers.</p></center>
+                <p class="post-body w3-margin-left w3-margin-right"><span class="w3-tag w3-blue">mooody</span>
+                mooody is an anonymous posting platform for anyone from Princeton University. Posts are separated into three mood categories, for you to share your highs, your lows and anything in-between. Our mood tracking features allow you to get an idea of how others on campus are feeling; in addition, users can anonymously send some words of kindness to others who have selected a negative mood (the blue and red ones). <br><br>
+                We hope for this website to constitute an accessible supportive community for those who'd benefit from one. We believe complete anonymity encourages sharing; as such, you can rest assured that we will keep your account's email address and any other identifying information completely hidden from other users.
+                </p><br>
+                <p class="post-body w3-margin-left w3-margin-right"><span class="w3-tag w3-blue">Disclaimer</span> Although we wish for this application to provide a supportive community for our users when they need it, we do not, as we hope it is clear, in any way intend it to serve as any kind of substitute for professional counseling and/or therapy. Please be kind to yourself and seek professional help if you find yourself in such need. Take care of yourself, you matter <span style="font-size:15px;" class="glyphicon glyphicon-heart"></span><br><br>
+                The content of all posts and comments on this website is the responsibility of the individuals who authored them.</p></center>
             </div>
         </div>
     </div>
@@ -99,9 +101,9 @@
                     <!-- Status -->
                     <div ng-show="isLoggedIn()" class="w3-padding-small" align="center" style="font-size:20px;color:#666666;">
 
-                        <span class="sidebar-header">Status</span>
+                        <span class="sidebar-header">Status</span>  <span style="font-size:15px;cursor:pointer;" class="glyphicon glyphicon-question-sign" ng-click="statusAbout()"></span>
                         <div ng-if="currentStatusSaved" style="margin-top:10px;" class="input-group">
-                        <input ng-click="showStatus(currentStatus)" style="cursor:pointer;" type="text" ng-model="currentStatus" maxlength="150" class="form-control w3-white" placeholder="Write a status (max 150 char.)" readonly>
+                        <input ng-click="showStatus(currentStatus)" style="cursor:pointer;" type="text" ng-model="currentStatus" maxlength="150" class="form-control w3-white" placeholder="Status (max. 150 char.)" readonly>
                         <span class="input-group-btn">
                             <button ng-click="flipStatus()" style="height:34px;font-size:15px;" class="btn btn-default" type="button">Edit</button>
                         </span>
@@ -151,17 +153,29 @@
                         </div>
                     </div>
                 </div>
-                <!-- Status popup -->
-                <div id="fullstatus" class="w3-modal" onclick="this.style.display='none'">
+                <!-- Status explanation popup -->
+                <div id="statusinfo" class="w3-modal">
                     <div class="w3-modal-content">
                         <header class="w3-container">
-                            <span onclick="document.getElementById('helpsomeone').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                            <span onclick="document.getElementById('statusinfo').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                         </header>
                         <div class="w3-container w3-padding-16">
                             <h3>Status</h3>
-                            <center><p class="post-body w3-margin-left w3-margin-right">Updating your status will allow other users to read more about how you're doing
-                            in the event that they want to send you a supportive message. </p></center>
-                            <b>Your current status:</b> {{fullstat}}
+                            <center><p class="post-body w3-margin-left w3-margin-right">Your status is a short (max. 150 char.) message providing an idea of how you're doing and/or of what you're going through. You can expand your status by clicking on the textbox!<br><br>
+                            In the event that your profile is randomly selected for another user to send a note to (see our Messaging feature at the bottom of the sidebar), having a status will help the user get an idea of your situation to write a more personalized message. Rest assured that your identity will, as always, be kept completely hidden.</p></center>
+                        </div>
+                    </div>
+                </div>
+                <!-- Status popup -->
+                <div id="fullstatus" class="w3-modal">
+                    <div class="w3-modal-content">
+                        <header class="w3-container">
+                            <span onclick="document.getElementById('fullstatus').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                        </header>
+                        <div class="w3-container w3-padding-16">
+                            <h3>Your current status</h3>
+                            {{fullstat}}
+                            <br><br>
                         </div>
                     </div>
                 </div>
@@ -237,11 +251,12 @@
                     <a class="w3-bar-item w3-button w3-bottombar {{active_h}}" ng-click="tab('happy')"><i class="twa twa-smile"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_s}}" ng-click="tab('sad')"><i class="twa twa-cry"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_a}}" ng-click="tab('angry')"><i class="twa twa-angry"></i></a>
-                    <a class="w3-bar-item w3-button w3-bottombar {{active_all}}" ng-click="tab('all')" style="font-size:23px;">All</a>
+                    <a class="w3-bar-item w3-button w3-bottombar {{active_all}}" ng-click="tab('all')" style="font-size:21px;">All</a>
                     </div>
+                    <div style="float:left;clear:both;margin-bottom:15px;margin-left:10px;">
                     <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_hot}}" ng-click="toggle('hot')"><i class="twa twa-fire"></i></a>
                     <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_new}}" ng-click="toggle('new')"><i class="twa twa-clock1"></i></a>
-
+                    </div>
                 </div>
             </div>
             <div class="w3-container w3-rest" style="margin-top:10px;">
@@ -482,15 +497,15 @@
              </div>
              <div class="form-group">
                 <div class="w3-padding-16">
-                    <span class="post-body" style="margin-left:0px;">By signing up, you agree to our <a onclick="document.getElementById('terms').style.display='block'">Terms and Conditions</a>
-                        and <a onclick="document.getElementById('privacy').style.display='block'">Privacy Policy</a>.</span><br>
+                    <span class="post-body" style="margin-left:0px;">By signing up, you agree to our <a onclick="document.getElementById('terms').style.display='block'">Terms and Conditions</a>.
+                        <!-- and <a onclick="document.getElementById('privacy').style.display='block'">Privacy Policy</a>. --></span><br>
                 </div>
                 <button type="submit" class="w3-button w3-blue">Sign me up!</button>
              </div>
            </form>
 
             <!-- Terms and Conditions -->
-            <div id="terms" class="w3-modal" onclick="this.style.display='none'">
+            <div id="terms" class="w3-modal">
                 <div class="w3-modal-content">
                     <header class="w3-container">
                     <span onclick="document.getElementById('terms').style.display='none'"
@@ -499,33 +514,31 @@
                     <div class="w3-container w3-padding-16">
                         <p class="post-title">Terms and Conditions</p>
                         <p class="post-body">Last updated: April 9, 2017</p>
-                        <p class="post-body">Please read these Terms and Conditions carefully before using the Service operated by Mooody.
+                        <p class="post-body">Please read these Terms and Conditions carefully before using the Service operated by mooody.
                             Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms and Conditions.
-                            These Terms and Conditions apply to all visitors, users and others who access or use the Service.
-                            By accessing or using the Service you agree to be bound by these Terms and Conditions.
-                            If you disagree with any part of the terms then you may not access the Service.</p>
+                            These Terms and Conditions apply to all users.
+                            By accessing or using the Service you agree to be bound by these Terms and Conditions.</p>
                         <br>
-                        <p class="post-body"><span class="w3-tag w3-blue">Content</span> Our Service allows you to post, store, share and
-                            otherwise make available certain information, text, or other material. You are solely responsible for the
+                        <p class="post-body"><span class="w3-tag w3-blue">Content</span> Our Service allows you to publicly and anonymously share certain information, text, or other material. You are solely responsible for the
                             content, postings, and conduct made under your account. You accept full, sole risk for your use of these services.
-                            Mooody and its developers shall not be liable to you for any damages whatsoever. You agree to not upload content that:
+                            mooody and its developers shall not be liable to you for any damages whatsoever. You agree to not upload content that:
                             <ul>
                                 <li>May constitute or contribute to a crime</li>
                                 <li>Contains information or content which is illegal</li>
                                 <li>Is pornographic, harmful or dangerous, encourages acts of violence, hateful content, threats, or reveals other’s personal information</li>
                             </ul></p>
-                        <p class="post-body"><span class="w3-tag w3-blue">Changes</span> We reserve the right, at our sole discretion, to modify or replace these Terms and Conditionsat any time.
-                            If a revision is material we will try to provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined
+                        <p class="post-body"><span class="w3-tag w3-blue">Changes</span> We reserve the right, at our sole discretion, to modify or replace these Terms and Conditionsat at any time.
+                            In case of a revision, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined
                             at our sole discretion.</p>
-                        <p class="post-body"><span class="w3-tag w3-blue">Termination</span> We may terminate, suspend, or ban accounts and/or access to our Services immediately, without
-                            prior notice or liability to Mooody or its developers, for any reason whatsoever, including breach of Terms and Conditions.</p>
-                        <p class="post-body"><span class="w3-tag w3-blue">Conact Us</span> If you have any questions about these Terms and Conditions, please <a href="mailto:xyyu@princeton.edu">contact</a> us.</p>
+                        <p class="post-body"><span class="w3-tag w3-blue">Termination</span> We may terminate, suspend, or ban accounts immediately, without
+                            prior notice or liability to mooody or its developers, for any reason whatsoever, including breach of Terms and Conditions.</p>
+                        <p class="post-body"><span class="w3-tag w3-blue">Contact Us</span> If you have any questions about these Terms and Conditions, please <a href="mailto:xyyu@princeton.edu">contact</a> us.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Privacy Policy -->
-            <div id="privacy" class="w3-modal" onclick="this.style.display='none'">
+            <!-- <div id="privacy" class="w3-modal">
                 <div class="w3-modal-content">
                     <header class="w3-container">
                     <span onclick="document.getElementById('privacy').style.display='none'"
@@ -538,7 +551,7 @@
                         <p class="post-body"><span class="w3-tag w3-blue">Content</span> Not added yet</p>
                     </div>
                 </div>
-            </div>
+            </div> -->
     </script>
 
 <!-- 'login' template ******************************************************-->

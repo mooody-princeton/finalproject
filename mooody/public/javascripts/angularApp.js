@@ -1075,6 +1075,9 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
                 }
                 else {
                     $scope.selectedMood = data[0].mood;
+                    if ($scope.selectedMood == 'couldbebetter') {
+                        $scope.selectedMood = 'could be better';
+                    }
                     if (data[0].status == '') {
                         $scope.selectedStatus = 'The user has not provided a status';
                     }
@@ -1109,6 +1112,9 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
                 }
                 else {
                     $scope.selectedMood = data[0].mood;
+                    if ($scope.selectedMood == 'couldbebetter') {
+                        $scope.selectedMood = 'could be better';
+                    }
                     if (data[0].status == '') {
                         $scope.selectedStatus = 'The user has not provided a status';
                     }
@@ -1142,6 +1148,11 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
             $scope.fullstat = status;
             if ($scope.fullstat == '') $scope.fullstat = 'Your status is currently empty.'
             document.getElementById('fullstatus').style.display = 'block';
+         };
+
+         // Show status explanation popup
+         $scope.statusAbout = function() {
+            document.getElementById('statusinfo').style.display = 'block';
          };
     }]);
 
