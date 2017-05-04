@@ -367,7 +367,7 @@
             <a ng-click="goBack()">
                 <div><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
             </a>
-            <div class="w3-panel w3-white w3-border post">
+            <div class="w3-panel w3-white w3-border post {{'post-' + post.mood}}">
                 <div align="center" style="margin-top:10px;"><img class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
                 <div style="word-wrap: break-word;"><br><span class="post-title">{{post.title}}</span></div>
                 <ul class="w3-right post-buttons">
@@ -644,9 +644,13 @@
 
         <!-- Display notes -->
         <div ng-show="!notesEmpty">
-            <div class="w3-container" ng-repeat="note in notes | orderBy: 'created_at':true">
+            <div class="w3-container" ng-repeat="note in notes | orderBy: '-date'">
                 <div class="w3-panel w3-white w3-border w3-padding-16 post message">
-                    {{note.body}}
+                    <div style="word-wrap: break-word;">{{note.body}}</div><br>
+                    <ul class="w3-right post-buttons">
+                        <li class="w3-hide-small" style="font-size:15px;">{{note.date | date:'MMM dd hh:mm a'}}</li>
+                        <li class="w3-hide-large w3-hide-medium" style="font-size:15px;">{{note.date | date:'MM/dd hh:mm a'}}<br></li>
+                    </ul>
                 </div>
             </div>
         </div>

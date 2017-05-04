@@ -471,9 +471,12 @@ router.post('/messages', function(req, res, next) {
 // GET all notes for a user
 router.get('/allnotes/:user', function(req, res, next) {
   var filters = { recipient: req.userdocument._id };
-  var fields = {};
-  var options = {};
-  Message.find(filters, fields, options, function(err, notes){
+  var fields = {}; 
+  var options = {limit: 30, sort: {'date': -1}};
+
+  var query = Message.find(filters, fields, options);
+
+  query.exec(function(err, notes) {
     if(err) { return next(err); }
     if (!notes.length) { res.json([{author:'Dummy string', body:'Dummy string'}]); }
     else {res.json(notes)};
