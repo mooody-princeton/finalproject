@@ -161,7 +161,7 @@
                         </header>
                         <div class="w3-container w3-padding-16">
                             <h3>Status</h3>
-                            <center><p class="post-body w3-margin-left w3-margin-right">Your status is a short (max. 150 char.) message providing an idea of how you're doing and/or of what you're going through. You can expand your status by clicking on the textbox!<br><br>
+                            <center><p class="post-body w3-margin-left w3-margin-right">Your status is a short (max. 150 char.) message providing an idea of how you're doing and/or of what you're going through. You can view your status as a whole by clicking on the textbox!<br><br>
                             In the event that your profile is randomly selected for another user to send a note to (see our Messaging feature at the bottom of the sidebar), having a status will help the user get an idea of your situation to write a more personalized message. Rest assured that your identity will, as always, be kept completely hidden.</p></center>
                         </div>
                     </div>
@@ -265,9 +265,9 @@
                     <a class="w3-bar-item w3-button w3-right w3-blue" style="height:34px;" onclick="document.getElementById('write').style.display='block'" ng-hide="!isLoggedIn() || !isInFilter()"><i class="glyphicon glyphicon-pencil"></i>  Write Post</a>
                     </div>
                     <div class="input-group" style="z-index:1; padding-right: 20px">
-                        <input type="text" class="form-control" placeholder="Search for...">
+                        <input type="text" class="clearable form-control" ng-model="searchstring" placeholder="Search for... (At least 2 char.)">
                         <span class="input-group-btn">
-                            <button class="btn btn-secondary" type="button"><i class="glyphicon glyphicon-search w3-text-white"></i></button>
+                            <button ng-click='applySearch()' class="btn btn-secondary" type="button"><i class="glyphicon glyphicon-search w3-text-white"></i></button>
                         </span>
                     </div>
                 </div>
@@ -308,8 +308,8 @@
     <!-- Display posts -->
     <!-- NOTE: still scrolling too much? http://stackoverflow.com/questions/23666712/nginfinitescroll-loadmore-method-gets-called-on-every-mouse-scroll -->
     <!--<div infinite-scroll="loadMore()" infinite-scroll-use-document-bottom=true>-->
-    <div>
-        <div class="w3-container" ng-repeat="post in posts | filter: filters | orderBy: orders">
+    <div id="PostWrap">
+        <div class="w3-container" ng-repeat="post in posts | filter: filters | filter: searchfilter | orderBy: orders">
             <div ng-if="post.deleted==false && post.flags < 5" class="w3-panel w3-white w3-border post">
                 <div><br>
                     <div ng-if="post.imagelink" align="center"><img onerror="this.src='https://www.jainsusa.com/images/store/landscape/not-available.jpg'" class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
@@ -354,6 +354,7 @@
                 </div>
           </div>
       </div>
+
   </script>
 
 <!-- 'posts' template ******************************************************-->
@@ -650,10 +651,27 @@
             </div>
         </div>
         <div ng-show="notesEmpty">
-            Nothing to show here.
+            No messages.
         </div>
     </script>
 </div>
+
+<!-- Javascript ************************************************************-->
+
+<script type="text/javascript">
+    function tog(v){return v?'addClass':'removeClass';};
+    
+    $(document).on('input', '.clearable', function(){
+        $(this)[tog(this.value)]('x');
+    }).on('mousemove', '.x', function( e ){
+        $(this)[tog(this.offsetWidth-18 < e.clientX-this.getBoundingClientRect().left)]('onX');
+    }).on('touchstart click', '.onX', function( ev ){
+        ev.preventDefault();
+        $(this).removeClass('x onX').val('').change();
+        var injectedScope = angular.element(document.getElementById("PostWrap")).scope();
+        injectedScope.clearSearch();
+    });
+</script>
 
 <!-- Body end **************************************************************-->
 </body>

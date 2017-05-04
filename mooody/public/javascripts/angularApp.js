@@ -466,6 +466,8 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
         $scope.filters.mood = $rootScope.tabPos.mood;
         $scope.orders = $rootScope.tabPos.orders;
         $scope.inFilter;
+        $scope.searchstring = '';
+        $scope.searchfilter = '';
 
         if ($rootScope.tabPos.mood === 'happy') {
             $scope.placeholder = 'What makes you happy?'
@@ -702,6 +704,19 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
         // Determine whether to disable "Post" button based on filter
         $scope.isInFilter = function() {
             return $scope.inFilter;
+        };
+
+        // Apply search string to filter posts
+        $scope.applySearch = function() {
+            $scope.searchfilter = $scope.searchstring;
+            $scope.$applyAsync();
+        };
+
+        // Clear search
+        $scope.clearSearch = function() {
+            $scope.searchstring = '';
+            $scope.searchfilter = '';
+            $scope.$applyAsync();
         };
 
         // Expand image on click

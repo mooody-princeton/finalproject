@@ -355,4 +355,14 @@ h3 {
   padding-top:100px;
 
 }
+
+/* Search clearing */
+.clearable{
+  background: #fff url("../images/clear.gif") no-repeat right -10px center;
+  transition: background 0.2s;
+}
+.clearable.x  { background-position: right 5px center; }
+.clearable.onX{ cursor: pointer; }
+.clearable::-ms-clear {display: none; width:0; height:0;}
+
 /* add more custom styling here with comments */
