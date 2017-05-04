@@ -251,7 +251,7 @@
                     <a class="w3-bar-item w3-button w3-bottombar {{active_h}}" ng-click="tab('happy')"><i class="twa twa-smile"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_s}}" ng-click="tab('sad')"><i class="twa twa-cry"></i></a>
                     <a class="w3-bar-item w3-button w3-bottombar {{active_a}}" ng-click="tab('angry')"><i class="twa twa-angry"></i></a>
-                    <a class="w3-bar-item w3-button w3-bottombar {{active_all}}" ng-click="tab('all')" style="font-size:21px;">All</a>
+                    <a class="w3-bar-item w3-button {{active_all}}" ng-click="tab('all')" style="font-size:21px;">All</a>
                     </div>
                     <div style="float:left;clear:both;margin-bottom:15px;margin-left:10px;">
                     <a class="w3-bar-item w3-button w3-right w3-bottombar {{active_hot}}" ng-click="toggle('hot')"><i class="twa twa-fire"></i></a>
@@ -265,9 +265,9 @@
                     <a class="w3-bar-item w3-button w3-right w3-blue" style="height:34px;" onclick="document.getElementById('write').style.display='block'" ng-hide="!isLoggedIn() || !isInFilter()"><i class="glyphicon glyphicon-pencil"></i>  Write Post</a>
                     </div>
                     <div class="input-group" style="z-index:1; padding-right: 20px">
-                        <input type="text" class="clearable form-control" ng-model="searchstring" placeholder="Search for... (At least 2 char.)">
+                        <input type="text" class="clearable form-control" ng-model="searchstring" placeholder="Search for... (at least 2 char.)">
                         <span class="input-group-btn">
-                            <button ng-click='applySearch()' class="btn btn-secondary" type="button"><i class="glyphicon glyphicon-search w3-text-white"></i></button>
+                            <button style="background-color:gray;" ng-click='applySearch()' class="btn btn-secondary" type="button"><span class="glyphicon glyphicon-search w3-text-white"></span></button>
                         </span>
                     </div>
                 </div>
@@ -293,7 +293,7 @@
                     <div class="w3-mobile">
 
                         Image link (optional):<br>
-                        <input type="text" class="w3-input w3-border" placeholder="Only JPG, PNG and GIF allowed. Must start with http" ng-model="imagelink" oninput="readURL('lol')">
+                        <input type="text" class="w3-input w3-border" placeholder="Must start with http or https" ng-model="imagelink">
 
                     </div>
                     <br><br>
@@ -310,7 +310,7 @@
     <!--<div infinite-scroll="loadMore()" infinite-scroll-use-document-bottom=true>-->
     <div id="PostWrap">
         <div class="w3-container" ng-repeat="post in posts | filter: filters | filter: searchfilter | orderBy: orders">
-            <div ng-if="post.deleted==false && post.flags < 5" class="w3-panel w3-white w3-border post">
+            <div ng-if="post.deleted==false && post.flags < 5" class="w3-panel w3-white w3-border post {{'post-' + post.mood}}">
                 <div><br>
                     <div ng-if="post.imagelink" align="center"><img onerror="this.src='https://www.jainsusa.com/images/store/landscape/not-available.jpg'" class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
                     <a href="#/posts/{{post._id}}"><span class="post-title">

@@ -474,21 +474,21 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
             $scope.active_h = 'w3-border-yellow';
             $scope.active_s = 'w3-border-inactive';
             $scope.active_a = 'w3-border-inactive';
-            $scope.active_all = 'w3-border-inactive';
+            $scope.active_all = '';
             $scope.inFilter = true;
         } else if ($rootScope.tabPos.mood === 'sad') {
             $scope.placeholder = 'What makes you sad?'
             $scope.active_h = 'w3-border-inactive';
             $scope.active_s = 'w3-border-blue';
             $scope.active_a = 'w3-border-inactive';
-            $scope.active_all = 'w3-border-inactive';
+            $scope.active_all = '';
             $scope.inFilter = true;
         } else if ($rootScope.tabPos.mood === 'angry') {
             $scope.placeholder = 'What makes you angry?'
             $scope.active_h = 'w3-border-inactive';
             $scope.active_s = 'w3-border-inactive';
             $scope.active_a = 'w3-border-red';
-            $scope.active_all = 'w3-border-inactive';
+            $scope.active_all = '';
             $scope.inFilter = true;
         } else {
             $scope.filters = {};
@@ -497,7 +497,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
             $scope.active_h = 'w3-border-inactive';
             $scope.active_s = 'w3-border-inactive';
             $scope.active_a = 'w3-border-inactive';
-            $scope.active_all = 'w3-border-dark-gray';
+            $scope.active_all = 'w3-gray';
         }
 
         if ($rootScope.tabPos.orders === '-date') {
@@ -649,7 +649,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
                 $scope.active_h = 'w3-border-yellow';
                 $scope.active_s = 'w3-border-inactive';
                 $scope.active_a = 'w3-border-inactive';
-                $scope.active_all = 'w3-border-inactive';
+                $scope.active_all = '';
                 $rootScope.tabPos.mood = 'happy';
             }
             else if (tab === 'sad') {
@@ -659,7 +659,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
                 $scope.active_h = 'w3-border-inactive';
                 $scope.active_s = 'w3-border-blue';
                 $scope.active_a = 'w3-border-inactive';
-                $scope.active_all = 'w3-border-inactive';
+                $scope.active_all = '';
                 $rootScope.tabPos.mood = 'sad';
             }
             else if (tab === 'angry') {
@@ -669,7 +669,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
                 $scope.active_h = 'w3-border-inactive';
                 $scope.active_s = 'w3-border-inactive';
                 $scope.active_a = 'w3-border-red';
-                $scope.active_all = 'w3-border-inactive';
+                $scope.active_all = '';
                 $rootScope.tabPos.mood = 'angry';
             }
             else {
@@ -679,7 +679,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
                 $scope.active_h = 'w3-border-inactive';
                 $scope.active_s = 'w3-border-inactive';
                 $scope.active_a = 'w3-border-inactive';
-                $scope.active_all = 'w3-border-dark-gray';
+                $scope.active_all = 'w3-gray';
                 $rootScope.tabPos.mood = 'all';
             }
             $scope.posts = posts.posts;

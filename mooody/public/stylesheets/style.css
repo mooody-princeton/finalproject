@@ -123,9 +123,17 @@ h3 {
   margin: 0px auto 15px;
   text-align:justify;
 }
-.post:hover{
-  transition-duration: 0.4s;
+.post-happy:hover{
+  transition-duration: 0.2s;
+  border-color: #FDD835 !important;
+}
+.post-sad:hover{
+  transition-duration: 0.2s;
   border-color: #79C5FF !important;
+}
+.post-angry:hover{
+  transition-duration: 0.2s;
+  border-color: #F44336 !important;
 }
 
 .w3-border-inactive {
