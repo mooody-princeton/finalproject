@@ -7,6 +7,8 @@ app.run(function($rootScope) {
     $rootScope.tabPos = {};
     $rootScope.tabPos.mood = 'happy';
     $rootScope.tabPos.orders = '-date';
+    $rootScope.searchingstring = '';
+    $rootScope.searchingfilter = '';
 
     $rootScope.$on('$stateChangeStart', function() {
         // Store scroll position and current tabs for the view
@@ -466,8 +468,8 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
         $scope.filters.mood = $rootScope.tabPos.mood;
         $scope.orders = $rootScope.tabPos.orders;
         $scope.inFilter;
-        $scope.searchstring = '';
-        $scope.searchfilter = '';
+        $scope.searchstring = $rootScope.searchingstring;
+        $scope.searchfilter = $rootScope.searchingfilter;
 
         if ($rootScope.tabPos.mood === 'happy') {
             $scope.placeholder = 'What makes you happy?'
@@ -709,6 +711,8 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
         // Apply search string to filter posts
         $scope.applySearch = function() {
             $scope.searchfilter = $scope.searchstring;
+            $rootScope.searchingstring = $scope.searchstring;
+            $rootScope.searchingfilter = $scope.searchfilter;
             $scope.$applyAsync();
         };
 
@@ -716,6 +720,8 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
         $scope.clearSearch = function() {
             $scope.searchstring = '';
             $scope.searchfilter = '';
+            $rootScope.searchingstring = '';
+            $rootScope.searchingfilter = '';
             $scope.$applyAsync();
         };
 
