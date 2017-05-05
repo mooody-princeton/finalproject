@@ -201,9 +201,9 @@
                             <h3>Help someone feel better!</h3>
                             <center><p class="post-body w3-margin-left w3-margin-right">We've randomly selected a user who isn't feeling too well. A few words of support could be just the little act of kindness to make a difference. Please only use this feature for support and encouragement.</p></center><hr>
                             <div ng-show='showbox'>
-                                <b>User's mood:</b><br><br><div class="capitalized" style="word-wrap: break-word;">{{selectedMood}}</div><br>
-                                <b>User's status:</b><br><br> <div style="word-wrap: break-word;" class="w3-margin-left w3-margin-right">{{selectedStatus}}</div><br><br>
-                                Leave a little note:<br>
+                                <b>User's mood:</b> <span class="capitalized" style="word-wrap: break-word;">{{selectedMood}}</span><br><br>
+                                <b>User's status:</b><br><br><div style="word-wrap: break-word;" class="w3-margin-left w3-margin-right">{{selectedStatus}}</div><br>
+                                <b>Leave a little note:</b><br>
                                 <div class="w3-container w3-margin-left w3-margin-right">
                                     <form class="w3-container w3-margin-left w3-margin-right" ng-submit="sendNote(selectedUserId)">
                                         <div class="w3-mobile">
@@ -646,7 +646,7 @@
 <!-- mymessages.html -->
     <script type="text/ng-template" id="/mymessages.html">
         <a href="#">
-            <div><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
+            <div><span class="glyphicon glyphicon-arrow-left"></span> Back to home</div><br>
         </a>
 
         <h3>Your Messages</h3><hr>
@@ -673,11 +673,14 @@
 <!-- mymoodtracker.html -->
     <script type="text/ng-template" id="/mymoodtracker.html">
         <a href="#">
-            <div><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
+            <span class="glyphicon glyphicon-arrow-left"></span> Back to home
+        </a>
+        <a style="float:right;" href="/#/mymoodcharts/{{currentUserId()}}">
+            Go to my mood charts <span class="glyphicon glyphicon-arrow-right"></span>
         </a>
 
-        <h3>Welcome to your mood tracker!</h3>
-        <p id="subtitletracker">How've you been? We're here to help you keep track of your mood and potentially mood-affecting behaviors over time. Don't worry; your data is completely anonymous, and it will never be used for anything without your knowledge and consent. <span class="explanationTextButton" style="cursor:pointer;" ng-click="trackerPopup()">How does it work?</span></p>
+        <h3>How've you been?</h3>
+        <p id="subtitletracker">We're here to help you keep track of your mood and potentially mood-affecting behaviors over time. Don't worry; your data is completely anonymous, and it will never be used for anything without your knowledge and consent. <span class="explanationTextButton" style="cursor:pointer;" ng-click="trackerPopup()">How does it work?</span></p>
         <hr>
 
         <!-- Daily questionnaire -->
@@ -747,6 +750,21 @@
                 </div>
             </div>
         </div>
+    </script>
+
+<!-- 'mymoodcharts' template *************************************************-->
+
+<!-- mymoodcharts.html -->
+    <script type="text/ng-template" id="/mymoodcharts.html">
+        <a href="#">
+            <span class="glyphicon glyphicon-arrow-left"></span> Back to home
+        </a>
+        <a style="float:right;" href="/#/mymoodtracker/{{currentUserId()}}">
+            Go to my mood tracker <span class="glyphicon glyphicon-arrow-right"></span>
+        </a>
+
+        <h3>Your Mood Charts</h3>
+
     </script>
 
 </div>

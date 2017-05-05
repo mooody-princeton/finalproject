@@ -145,10 +145,21 @@ app.config(['$stateProvider','$urlRouterProvider',
                 else if (auth.currentUserId() != $stateParams.id) {
                     $state.go('home');
                 }
-            }],
-        resolve: {
-
-        }
+            }]
+    });
+    $stateProvider.state('mymoodcharts', {
+        url: '/mymoodcharts/{id}',
+        templateUrl: '/mymoodcharts.html',
+        controller: 'ChartsCtrl',
+        onEnter : ['$state', '$stateParams', 'auth',
+            function($state, $stateParams, auth) {
+                if (!auth.isLoggedIn()) {
+                    $state.go('home');
+                }
+                else if (auth.currentUserId() != $stateParams.id) {
+                    $state.go('home');
+                }
+            }]
     });
   $urlRouterProvider.otherwise('home');
 
@@ -1208,8 +1219,8 @@ app.controller('MsgCtrl', ['$scope', 'auth',
     }]);
 
 // Mood tracker controller
-app.controller('TrackerCtrl', ['$scope', 'auth',
-    function($scope, auth) {
+app.controller('TrackerCtrl', ['$scope', '$state', 'auth',
+    function($scope, $state, auth) {
         $scope.moodata = {};
         $scope.availableOptions = [{id: '1', name: '1'}, {id: '2', name: '2'}, {id: '3', name: '3'},
             {id: '4', name: '4'}, {id: '5', name: '5'}, {id: '6', name: '6'}, {id: '7', name: '7'},
@@ -1220,6 +1231,8 @@ app.controller('TrackerCtrl', ['$scope', 'auth',
         $scope.availableOptionsExercise = [{id: '1', name: '1'}, {id: '2', name: '2'}, {id: '3', name: '3'},
             {id: '4', name: '4'}, {id: '5', name: '5'}, {id: '6', name: '6'}, {id: '7', name: '7'},
             {id: '8', name: '8'}];
+
+        $scope.currentUserId = auth.currentUserId;
 
         // Show tracker explanation popup
         $scope.trackerPopup = function() {
@@ -1248,6 +1261,14 @@ app.controller('TrackerCtrl', ['$scope', 'auth',
                 exercise: $scope.moodata.exercise,
                 study: $scope.moodata.study,
                 social: $scope.moodata.social
+            }).then(function() {
+                $state.go('mymoodcharts', {id: auth.currentUserId()});
             });
         };
+    }]);
+
+// Mood charts controller
+app.controller('ChartsCtrl', ['$scope', '$state', 'auth',
+    function($scope, $state, auth) {
+        $scope.currentUserId = auth.currentUserId;
     }]);
