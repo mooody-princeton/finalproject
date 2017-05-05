@@ -133,6 +133,23 @@ app.config(['$stateProvider','$urlRouterProvider',
           }]
       }
     });
+    $stateProvider.state('mymoodtracker', {
+        url: '/mymoodtracker/{id}',
+        templateUrl: '/mymoodtracker.html',
+        controller: 'TrackerCtrl',
+        onEnter : ['$state', '$stateParams', 'auth',
+            function($state, $stateParams, auth) {
+                if (!auth.isLoggedIn()) {
+                    $state.go('home');
+                }
+                else if (auth.currentUserId() != $stateParams.id) {
+                    $state.go('home');
+                }
+            }],
+        resolve: {
+
+        }
+    });
   $urlRouterProvider.otherwise('home');
 
 }]);
@@ -289,6 +306,12 @@ function($http, $window) {
             else {
                 auth.notesEmpty = false;
             }
+        });
+    };
+    // Create a new mood data entry
+    auth.createMoodata = function(moodata) {
+        return $http.post('/moodata', moodata, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
         });
     };
     return auth;
@@ -1100,7 +1123,7 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
                         $scope.selectedMood = 'could be better';
                     }
                     if (data[0].status == '') {
-                        $scope.selectedStatus = 'The user has not provided a status';
+                        $scope.selectedStatus = 'The user has not provided a status.';
                     }
                     else {
                         $scope.selectedStatus = data[0].status;
@@ -1137,7 +1160,7 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
                         $scope.selectedMood = 'could be better';
                     }
                     if (data[0].status == '') {
-                        $scope.selectedStatus = 'The user has not provided a status';
+                        $scope.selectedStatus = 'The user has not provided a status.';
                     }
                     else {
                         $scope.selectedStatus = data[0].status;
@@ -1182,4 +1205,49 @@ app.controller('MsgCtrl', ['$scope', 'auth',
     function($scope, auth) {
         $scope.notes = auth.notes;
         $scope.notesEmpty = auth.notesEmpty;
+    }]);
+
+// Mood tracker controller
+app.controller('TrackerCtrl', ['$scope', 'auth',
+    function($scope, auth) {
+        $scope.moodata = {};
+        $scope.availableOptions = [{id: '1', name: '1'}, {id: '2', name: '2'}, {id: '3', name: '3'},
+            {id: '4', name: '4'}, {id: '5', name: '5'}, {id: '6', name: '6'}, {id: '7', name: '7'},
+            {id: '8', name: '8'}, {id: '9', name: '9'}, {id: '10', name: '10'}];
+        $scope.availableOptionsSpecial = [{id: '2', name: '2'}, {id: '3', name: '3'},
+            {id: '4', name: '4'}, {id: '5', name: '5'}, {id: '6', name: '6'}, {id: '7', name: '7'},
+            {id: '8', name: '8'}, {id: '9', name: '9'}];
+        $scope.availableOptionsExercise = [{id: '1', name: '1'}, {id: '2', name: '2'}, {id: '3', name: '3'},
+            {id: '4', name: '4'}, {id: '5', name: '5'}, {id: '6', name: '6'}, {id: '7', name: '7'},
+            {id: '8', name: '8'}];
+
+        // Show tracker explanation popup
+        $scope.trackerPopup = function() {
+           document.getElementById('trackerinfo').style.display = 'block';
+        };
+
+        // Create a new mood data entry for this user, for today
+        $scope.addMoodata = function() {
+            if (!$scope.moodata.wellbeing || !$scope.moodata.sleep || !$scope.moodata.exercise || !$scope.moodata.study || !$scope.moodata.social) {
+                return;
+            }
+            if (typeof($scope.moodata.wellbeing) != 'string' || typeof($scope.moodata.sleep) != 'string' ||
+                typeof($scope.moodata.exercise) != 'string' || typeof($scope.moodata.study) != 'string' || typeof($scope.moodata.social) != 'string') {
+                return;
+            }
+
+            var todayDate = new Date();
+            var todayString = todayDate.getMonth() + "," + todayDate.getDate() + "," + todayDate.getFullYear();
+
+            auth.createMoodata({
+                entryuser: auth.currentUserId(),
+                date: todayDate,
+                today: todayString,
+                wellbeing: $scope.moodata.wellbeing,
+                sleep: $scope.moodata.sleep,
+                exercise: $scope.moodata.exercise,
+                study: $scope.moodata.study,
+                social: $scope.moodata.social
+            });
+        };
     }]);

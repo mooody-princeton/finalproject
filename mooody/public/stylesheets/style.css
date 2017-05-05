@@ -373,4 +373,25 @@ h3 {
 .clearable.onX{ cursor: pointer; }
 .clearable::-ms-clear {display: none; width:0; height:0;}
 
+.capitalized:first-letter{
+  text-transform:capitalize;
+}
+
+#subtitletracker {
+  font-weight:bold;
+}
+
+.questionString {
+  font-weight:normal !important;
+}
+
+.selectInput {
+  max-width:150px;
+}
+
+.explanationTextButton {
+  text-decoration:underline;
+  color:#3385ff;
+}
+
 /* add more custom styling here with comments */

@@ -47,6 +47,7 @@ var User = mongoose.model('User');
 var SocialMood = mongoose.model('SocialMood');
 var Token = mongoose.model('Token');
 var Message = mongoose.model('Message');
+var Moodata = mongoose.model('Moodata');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
@@ -480,6 +481,20 @@ router.get('/allnotes/:user', function(req, res, next) {
     if(err) { return next(err); }
     if (!notes.length) { res.json([{author:'Dummy string', body:'Dummy string'}]); }
     else {res.json(notes)};
+  });
+});
+
+// Routing functions for mood tracking ****************************************
+
+// POST a new mood data entry
+router.post('/moodata', function(req, res, next) {
+  var filters = { entryuser: req.body.entryuser, today: req.body.today };
+  var options = {upsert: true, new: true};
+  
+  // Overwrite today's entry, or create a new one if no entry yet for today
+  Moodata.findOneAndUpdate(filters, req.body, options, function(err, moodata) {
+    if(err){ return next(err); }
+    else {res.json(moodata);}
   });
 });
 

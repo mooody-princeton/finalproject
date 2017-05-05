@@ -21,6 +21,7 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"></script>
     <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+    <script src="https://use.fontawesome.com/c7aeb8ed86.js"></script>
     <script src="/javascripts/angular-spinkit.min.js"></script>
     <script src="/javascripts/angularApp.js"></script>
     <script src="/javascripts/sidebar.js"></script>
@@ -56,9 +57,8 @@
         <div class="w3-bar w3-white w3-large w3-border" ng-controller="NavCtrl">
                   <a class="w3-bar-item" href="#" style="text-decoration: none;">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-angry"></i>dy</a>
                   <a class="w3-bar-item w3-button w3-text-blue" onclick="document.getElementById('about').style.display='block'">About</a>
-                  <!---<a class="w3-bar-item w3-button w3-text-blue" ng-show="isLoggedIn()" href="/#/mymessages/{{currentUserId()}}">Messages</a>--->
-                  <a class="w3-bar-item w3-button" ng-show="isLoggedIn()" href="" ng-click="logOut()">Log Out</a>
-                  <a class="w3-bar-item w3-button" ng-hide="isLoggedIn()" href="/#/login">Log In ⋅ Register</a>
+                  <a class="w3-bar-item w3-button w3-text-blue" ng-show="isLoggedIn()" href="" ng-click="logOut()">Log Out</a>
+                  <a class="w3-bar-item w3-button w3-text-blue" ng-hide="isLoggedIn()" href="/#/login">Log In ⋅ Register</a>
         </div>
     </div>
 
@@ -103,13 +103,13 @@
 
                         <span class="sidebar-header">Status</span>  <span style="font-size:15px;cursor:pointer;" class="glyphicon glyphicon-question-sign" ng-click="statusAbout()"></span>
                         <div ng-if="currentStatusSaved" style="margin-top:10px;" class="input-group">
-                        <input ng-click="showStatus(currentStatus)" style="cursor:pointer;" type="text" ng-model="currentStatus" maxlength="150" class="form-control w3-white" placeholder="Status (max. 150 char.)" readonly>
+                        <input ng-click="showStatus(currentStatus)" style="cursor:pointer;" type="text" ng-model="currentStatus" maxlength="200" class="form-control w3-white" placeholder="Status (max. 200 char.)" readonly>
                         <span class="input-group-btn">
                             <button ng-click="flipStatus()" style="height:34px;font-size:15px;" class="btn btn-default" type="button">Edit</button>
                         </span>
                         </div>
                         <div ng-if="!currentStatusSaved" style="margin-top:10px;" class="input-group" placeholder="Update your status.">
-                        <input type="text" ng-model="copyStatus" maxlength="150" class="form-control w3-pale-yellow">
+                        <input type="text" ng-model="copyStatus" maxlength="200" class="form-control w3-pale-yellow" ng-blur="saveStatus()">
                         <span class="input-group-btn">
                             <button ng-click="saveStatus()" style="height:34px;" class="btn btn-default" type="button">Save</button>
                         </span>
@@ -121,7 +121,7 @@
                         <span class="w3-padding-small sidebar-header">Princeton's Mood</span>
                     </div>
                     <div style="padding-top:10px;"><div class="ct-chart ct-perfect-fifth" id="chart"></div></div>
-                    <!-- User mood -->
+                    <!-- User mood and mood tracking -->
                     <div ng-show="isLoggedIn()">
                         <hr>
                         <div class="w3-padding-small sidebar-header" align="center"><span>Update your mood</span></div>
@@ -146,13 +146,23 @@
                             <!-- Angry -->
                             <a title="Angry" ng-show="checkMood('angry')" class="w3-bar-item w3-button w3-gray" ng-click="setMoodTo('angry')"><i class="twa twa-angry"></i></a>
                             <a title="Angry" ng-hide="checkMood('angry')" class="angryButton w3-bar-item w3-button" ng-click="setMoodTo('angry')"><i class="twa twa-angry"></i></a>
+                        </div><br><br>
+                        <div>
+                            <a href="/#/mymoodtracker/{{currentUserId()}}"><button class="w3-button w3-blue" title="Take me to the mood tracker"><span style="font-size:15px;" text-align="center" class="fa fa-line-chart"></span> Take me to the mood tracker</button></a>
                         </div>
-                        <div class="w3-padding-32" style="padding-top:20px !important;padding-bottom:5px !important;">
+                    </div>
+                    <!-- Messaging -->
+                    <div ng-show="isLoggedIn()" align="center">
+                        <hr>
+                        <div class="w3-padding-small sidebar-header" align="center"><span>Messaging</span></div>
+                        <div>
                             <button class="w3-button w3-blue" ng-click="helpRandomUser()" title="Help someone feel better!"><span style="font-size:15px;" text-align="center" class="glyphicon glyphicon-heart"></span> Help someone feel better!</button><br><br>
                             <a href="/#/mymessages/{{currentUserId()}}"><button class="w3-button w3-blue" title = "View Messages"><span style="font-size:15px;" class="glyphicon glyphicon-envelope"></span> View Messages</button></a><br><br>
                         </div>
                     </div>
                 </div>
+
+
                 <!-- Status explanation popup -->
                 <div id="statusinfo" class="w3-modal">
                     <div class="w3-modal-content">
@@ -161,7 +171,7 @@
                         </header>
                         <div class="w3-container w3-padding-16">
                             <h3>Status</h3>
-                            <center><p class="post-body w3-margin-left w3-margin-right">Your status is a short (max. 150 char.) message providing an idea of how you're doing and/or of what you're going through. You can view your status as a whole by clicking on the textbox!<br><br>
+                            <center><p class="post-body w3-margin-left w3-margin-right">Your status is a short (max. 200 char.) message providing an idea of how you're doing and/or of what you're going through. You can view your status as a whole by clicking on the textbox!<br><br>
                             In the event that your profile is randomly selected for another user to send a note to (see our Messaging feature at the bottom of the sidebar), having a status will help the user get an idea of your situation to write a more personalized message. Rest assured that your identity will, as always, be kept completely hidden.</p></center>
                         </div>
                     </div>
@@ -174,7 +184,7 @@
                         </header>
                         <div class="w3-container w3-padding-16">
                             <h3>Your current status</h3>
-                            {{fullstat}}
+                            <div style="word-wrap: break-word;" class="post-body w3-margin-left w3-margin-right">{{fullstat}}</div>
                             <br><br>
                         </div>
                     </div>
@@ -189,15 +199,15 @@
                         <div class="w3-container  w3-padding-16">
 
                             <h3>Help someone feel better!</h3>
-                            <center><p class="post-body w3-margin-left w3-margin-right">We've randomly selected an anonymous user who isn't feeling too well. A few words of support could be just the little act of kindness to make a difference. Please only use this feature for support and encouragement.</p></center><hr>
+                            <center><p class="post-body w3-margin-left w3-margin-right">We've randomly selected a user who isn't feeling too well. A few words of support could be just the little act of kindness to make a difference. Please only use this feature for support and encouragement.</p></center><hr>
                             <div ng-show='showbox'>
-                                <b>User's mood:</b>  {{selectedMood}}<br>
-                                <b>User's status:</b> {{selectedStatus}}<br><br>
-                                Leave a supportive note:
+                                <b>User's mood:</b><br><br><div class="capitalized" style="word-wrap: break-word;">{{selectedMood}}</div><br>
+                                <b>User's status:</b><br><br> <div style="word-wrap: break-word;" class="w3-margin-left w3-margin-right">{{selectedStatus}}</div><br><br>
+                                Leave a little note:<br>
                                 <div class="w3-container w3-margin-left w3-margin-right">
                                     <form class="w3-container w3-margin-left w3-margin-right" ng-submit="sendNote(selectedUserId)">
                                         <div class="w3-mobile">
-                                            <textarea class="w3-input w3-border" ng-model="note" placeholder="A little note..." required></textarea>
+                                            <textarea maxlength="500" class="w3-input w3-border" ng-model="note" placeholder="Max. 500 char." required></textarea>
                                         </div>
                                         <div class="w3-mobile">
                                             <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Send</button>
@@ -205,11 +215,10 @@
                                     </form>
                                 </div>
                                 <hr>
-                                Feel like writing a note to someone else?<br><button class="w3-button w3-blue" ng-click="helpAnotherUser(selectedUserId)">Press here to retry!</button>
+                                Feel like writing a note to someone else?<br><br><button class="w3-button w3-blue" ng-click="helpAnotherUser(selectedUserId)">Press here to retry!</button>
                             </div>
                             <div ng-show='!showbox'>
                                 {{donemessage}} Please drop by again later; we'll need your help. Thank you <span class="glyphicon glyphicon-heart-empty">
-
                             </div>
                         </div>
                     </div>
@@ -265,7 +274,7 @@
                     <a class="w3-bar-item w3-button w3-right w3-blue" style="height:34px;" onclick="document.getElementById('write').style.display='block'" ng-hide="!isLoggedIn() || !isInFilter()"><i class="glyphicon glyphicon-pencil"></i>  Write Post</a>
                     </div>
                     <div class="input-group" style="z-index:1; padding-right: 20px">
-                        <input type="text" class="clearable form-control" ng-model="searchstring" placeholder="Search for... (at least 2 char.)">
+                        <input maxlength="500" type="text" class="clearable form-control" ng-model="searchstring" placeholder="Search for... (at least 2 char.)" ng-blur="applySearch()">
                         <span class="input-group-btn">
                             <button style="background-color:gray;" ng-click='applySearch()' class="btn btn-secondary" type="button"><span class="glyphicon glyphicon-search w3-text-white"></span></button>
                         </span>
@@ -283,17 +292,18 @@
             class="w3-button w3-display-topright">&times;</span>
             </header>
             <div class="w3-container w3-padding-32">
+                <center><h3>Write a new post</h3></center>
                 <form class="w3-container w3-padding-16" ng-submit="addPost()">
                     <div class="w3-mobile">
-                        Write a post:<br>
-                        <textarea style="resize:vertical;" class="w3-input w3-border" ng-attr-placeholder="{{placeholder}}" ng-model="title" id="form-title" required></textarea>
+                        Post body:<br><br>
+                        <textarea maxlength="500" style="resize:vertical;" class="w3-input w3-border" ng-attr-placeholder="{{placeholder + ' (Max. 500 char.)'}}" ng-model="title" id="form-title" required></textarea>
 
                     </div>
                     <br><br>
                     <div class="w3-mobile">
 
-                        Image link (optional):<br>
-                        <input type="text" class="w3-input w3-border" placeholder="Must start with http or https" ng-model="imagelink">
+                        Image link (optional):<br><br>
+                        <input maxlength="1000" type="text" class="w3-input w3-border" placeholder="Must start with http or https" ng-model="imagelink">
 
                     </div>
                     <br><br>
@@ -386,8 +396,8 @@
         </div>
         <hr>
 
-        <!-- Display comments
-        <span class="post-body"><!--Comments:--></span><br><br>
+        <!-- Display comments -->
+        <span class="post-body" style="font-weight:bold;">Comments:</span><br><br>
         <div ng-repeat="comment in post.comments | orderBy:'-date'">
             <span>
               <div ng-if="comment.deleted==false && comment.flags < 5" class="w3-panel w3-white w3-border comment w3-padding-small">
@@ -430,10 +440,10 @@
         <!-- Section to add a new comment -->
         <form class="w3-container" ng-hide="!isLoggedIn()" ng-submit="addComment()">
             <div class="w3-threequarter">
-                <input class="w3-input w3-border" placeholder="Add a new comment" ng-model="body" required></textarea>
+                <input maxlength="500" class="w3-input w3-border" placeholder="Add a new comment (max. 500 char.)" ng-model="body" required></textarea>
             </div>
             <div class="w3-quarter">
-                <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Post</button>
+                <button type="submit" class="w3-button w3-blue w3-border w3-border-blue w3-block">Comment</button>
             </div>
         </form>
         <div class="w3-container" ng-hide="isLoggedIn()">
@@ -479,9 +489,9 @@
            <div class="form-group has-feedback">
                <label for="inputTwitter" class="w3-text-blue">Princeton Email</label>
                <div class="input-group">
-                   <input type="text" class="form-control" placeholder="NetID" ng-model="user.netid" required>
+                   <input maxlength="100" type="text" class="form-control" placeholder="NetID" ng-model="user.netid" required>
                    <span class="input-group-addon">@</span>
-                   <input type="text" class="form-control" placeholder="Anything in-between (if any)" ng-model="user.optional">
+                   <input maxlength="100" type="text" class="form-control" placeholder="Anything in-between (if any)" ng-model="user.optional">
                    <span class="input-group-addon">princeton.edu</span>
                </div>
                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
@@ -514,7 +524,7 @@
                     </header>
                     <div class="w3-container w3-padding-16">
                         <p class="post-title">Terms and Conditions</p>
-                        <p class="post-body">Last updated: April 9, 2017</p>
+                        <p class="post-body">Last updated: May 5, 2017</p>
                         <p class="post-body">Please read these Terms and Conditions carefully before using the Service operated by mooody.
                             Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms and Conditions.
                             These Terms and Conditions apply to all users.
@@ -577,9 +587,9 @@
            <div class="form-group has-feedback">
                <label for="inputName" class="w3-text-blue">Princeton Email</label>
                <div class="input-group">
-                   <input type="text" class="form-control" placeholder="NetID" ng-model="user.netid" required>
+                   <input maxlength="100" type="text" class="form-control" placeholder="NetID" ng-model="user.netid" required>
                    <span class="input-group-addon">@</span>
-                   <input type="text" class="form-control" placeholder="Anything in-between (if any)" ng-model="user.optional">
+                   <input maxlength="100" type="text" class="form-control" placeholder="Anything in-between (if any)" ng-model="user.optional">
                    <span class="input-group-addon">princeton.edu</span>
                </div>
                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
@@ -623,13 +633,12 @@
         <form data-toggle="validator" role="form" ng-submit="verifyNow()">
             <div class="form-group">
                 <label for="inputName" class="w3-text-blue">Code (case sensitive)</label>
-                <input type="text" class="w3-input w3-border" id="inputName" placeholder="Code" ng-model="code" required>
+                <input maxlength="10" type="text" class="w3-input w3-border" id="inputName" placeholder="Code" ng-model="code" required>
             </div>
             <div class="form-group">
                 <button type="submit" class="w3-button w3-blue">Activate your account!</button>
             </div>
         </form>
-        <!--{{code}}-->
     </script>
 
 <!-- 'mymessages' template *************************************************-->
@@ -654,10 +663,92 @@
                 </div>
             </div>
         </div>
-        <div ng-show="notesEmpty">
-            No messages.
+        <div style="font-weight:bold;" ng-show="notesEmpty">
+            No messages to display.
         </div>
     </script>
+
+<!-- 'mymoodtracker' template *************************************************-->
+
+<!-- mymoodtracker.html -->
+    <script type="text/ng-template" id="/mymoodtracker.html">
+        <a href="#">
+            <div><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
+        </a>
+
+        <h3>Welcome to your mood tracker!</h3>
+        <p id="subtitletracker">How've you been? We're here to help you keep track of your mood and potentially mood-affecting behaviors over time. Don't worry; your data is completely anonymous, and it will never be used for anything without your knowledge and consent. <span class="explanationTextButton" style="cursor:pointer;" ng-click="trackerPopup()">How does it work?</span></p>
+        <hr>
+
+        <!-- Daily questionnaire -->
+        <form ng-submit="addMoodata()">
+            <!-- Wellbeing -->
+            <div class="form-group" align="center">
+                <label class="questionString" for="wellbeing">From 1 being the worst to 10 being the best, how are you feeling today?</label>
+                <select class="form-control selectInput" name="wellbeing" id="wellbeing" ng-model="moodata.wellbeing" required>
+                    <option value="" disabled>Please select</option>
+                    <option ng-repeat="option in availableOptions" value="{{option.id}}">{{option.name}}</option>
+                </select>
+            </div>
+            <!-- Sleep -->
+            <div class="form-group" align="center">
+                <label class="questionString" for="sleep">How much sleep did you get last night?</label>
+                <select class="form-control selectInput" name="sleep" id="sleep" ng-model="moodata.sleep" required>
+                    <option value="" disabled>Please select</option>
+                    <option value="1">1 hour or less</option>
+                    <option ng-repeat="option in availableOptionsSpecial" value="{{option.id}}">{{option.name+" hours"}}</option>
+                    <option value="10">10 hours or more</option>
+                </select>
+            </div>
+            <!-- Exercise -->
+            <div class="form-group" align="center">
+                <label class="questionString" for="exercise">How much physical exercise did you get today?</label>
+                <select class="form-control selectInput" name="exercise" id="exercise" ng-model="moodata.exercise" required>
+                    <option value="" disabled>Please select</option>
+                    <option value="0">0</option>
+                    <option ng-repeat="option in availableOptionsExercise" value="{{option.id}}">{{option.name+"0 minutes"}}</option>
+                    <option value="9">90 minutes or more</option>
+                </select>
+            </div>
+            <!-- Study -->
+            <div class="form-group" align="center">
+                <label class="questionString" for="study">How much time did you spend studying today?</label>
+                <select class="form-control selectInput" name="study" id="study" ng-model="moodata.study" required>
+                    <option value="" disabled>Please select</option>
+                    <option value="1">1 hour or less</option>
+                    <option ng-repeat="option in availableOptionsSpecial" value="{{option.id}}">{{option.name+" hours"}}</option>
+                    <option value="10">10 hours or more</option>
+                </select>
+            </div>
+            <!-- Social -->
+            <div class="form-group" align="center">
+                <label class="questionString" for="social">How much time did you spend socializing today?</label>
+                <select class="form-control selectInput" name="social" id="social" ng-model="moodata.social" required>
+                    <option value="" disabled>Please select</option>
+                    <option value="1">1 hour or less</option>
+                    <option ng-repeat="option in availableOptionsSpecial" value="{{option.id}}">{{option.name+" hours"}}</option>
+                    <option value="10">10 hours or more</option>
+                </select>
+            </div>
+            <div class="w3-mobile" align="center">
+                <button type="submit" style="max-width:500px;" class="w3-button w3-blue w3-border w3-border-blue w3-block">Submit</button>
+            </div>
+        </form>
+
+        <!-- Tracker explanation popup -->
+        <div id="trackerinfo" class="w3-modal w3-center">
+            <div class="w3-modal-content">
+                <header class="w3-container">
+                    <span onclick="document.getElementById('trackerinfo').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                </header>
+                <div class="w3-container w3-padding-16">
+                    <h3>Mood tracking</h3>
+                    <center><p class="post-body w3-margin-left w3-margin-right">Your daily mood data is kept in the form of the five indicators below, and is used for the plotting of your mood charts. One new day, one new set of data; if you wish to update your mood data for today, just submit the form again!</p></center>
+                </div>
+            </div>
+        </div>
+    </script>
+
 </div>
 
 <!-- Javascript ************************************************************-->

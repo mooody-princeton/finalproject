@@ -25,6 +25,7 @@ mongoose.plugin(random);
 require('./models/Posts');
 require('./models/Comments');
 require('./models/Messages');
+require('./models/Moodatas');
 require('./models/Users');
 require('./models/SocialMood');
 require('./models/Tokens');
