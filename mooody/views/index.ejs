@@ -698,9 +698,9 @@
                 <label class="questionString" for="sleep">How much sleep did you get last night?</label>
                 <select class="form-control selectInput" name="sleep" id="sleep" ng-model="moodata.sleep" required>
                     <option value="" disabled>Please select</option>
-                    <option value="1">1 hour or less</option>
+                    <option value="0">1 hour or less</option>
                     <option ng-repeat="option in availableOptionsSpecial" value="{{option.id}}">{{option.name+" hours"}}</option>
-                    <option value="10">10 hours or more</option>
+                    <option value="9">10 hours or more</option>
                 </select>
             </div>
             <!-- Exercise -->
@@ -708,9 +708,9 @@
                 <label class="questionString" for="exercise">How much physical exercise did you get today?</label>
                 <select class="form-control selectInput" name="exercise" id="exercise" ng-model="moodata.exercise" required>
                     <option value="" disabled>Please select</option>
-                    <option value="0">0</option>
-                    <option ng-repeat="option in availableOptionsExercise" value="{{option.id}}">{{option.name+"0 minutes"}}</option>
-                    <option value="9">90 minutes or more</option>
+                    <option value="0">No exercise at all</option>
+                    <option ng-repeat="option in availableOptionsExercise" value="{{option.id}}">{{option.name+" minutes"}}</option>
+                    <option value="9">135 minutes or more</option>
                 </select>
             </div>
             <!-- Study -->
@@ -718,9 +718,9 @@
                 <label class="questionString" for="study">How much time did you spend studying today?</label>
                 <select class="form-control selectInput" name="study" id="study" ng-model="moodata.study" required>
                     <option value="" disabled>Please select</option>
-                    <option value="1">1 hour or less</option>
+                    <option value="0">1 hour or less</option>
                     <option ng-repeat="option in availableOptionsSpecial" value="{{option.id}}">{{option.name+" hours"}}</option>
-                    <option value="10">10 hours or more</option>
+                    <option value="9">10 hours or more</option>
                 </select>
             </div>
             <!-- Social -->
@@ -728,9 +728,9 @@
                 <label class="questionString" for="social">How much time did you spend socializing today?</label>
                 <select class="form-control selectInput" name="social" id="social" ng-model="moodata.social" required>
                     <option value="" disabled>Please select</option>
-                    <option value="1">1 hour or less</option>
+                    <option value="0">1 hour or less</option>
                     <option ng-repeat="option in availableOptionsSpecial" value="{{option.id}}">{{option.name+" hours"}}</option>
-                    <option value="10">10 hours or more</option>
+                    <option value="9">10 hours or more</option>
                 </select>
             </div>
             <div class="w3-mobile" align="center">

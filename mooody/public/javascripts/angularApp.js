@@ -1265,15 +1265,15 @@ app.controller('MsgCtrl', ['$scope', 'auth',
 app.controller('TrackerCtrl', ['$scope', '$state', 'auth',
     function($scope, $state, auth) {
         $scope.moodata = {};
-        $scope.availableOptions = [{id: '1', name: '1'}, {id: '2', name: '2'}, {id: '3', name: '3'},
-            {id: '4', name: '4'}, {id: '5', name: '5'}, {id: '6', name: '6'}, {id: '7', name: '7'},
-            {id: '8', name: '8'}, {id: '9', name: '9'}, {id: '10', name: '10'}];
-        $scope.availableOptionsSpecial = [{id: '2', name: '2'}, {id: '3', name: '3'},
-            {id: '4', name: '4'}, {id: '5', name: '5'}, {id: '6', name: '6'}, {id: '7', name: '7'},
-            {id: '8', name: '8'}, {id: '9', name: '9'}];
-        $scope.availableOptionsExercise = [{id: '1', name: '1'}, {id: '2', name: '2'}, {id: '3', name: '3'},
-            {id: '4', name: '4'}, {id: '5', name: '5'}, {id: '6', name: '6'}, {id: '7', name: '7'},
-            {id: '8', name: '8'}];
+        $scope.availableOptions = [{id: '0', name: '1'}, {id: '1', name: '2'}, {id: '2', name: '3'},
+            {id: '3', name: '4'}, {id: '4', name: '5'}, {id: '5', name: '6'}, {id: '6', name: '7'},
+            {id: '7', name: '8'}, {id: '8', name: '9'}, {id: '9', name: '10'}];
+        $scope.availableOptionsSpecial = [{id: '1', name: '2'}, {id: '2', name: '3'},
+            {id: '3', name: '4'}, {id: '4', name: '5'}, {id: '5', name: '6'}, {id: '6', name: '7'},
+            {id: '7', name: '8'}, {id: '8', name: '9'}];
+        $scope.availableOptionsExercise = [{id: '1', name: '15'}, {id: '2', name: '30'},
+            {id: '3', name: '45'}, {id: '4', name: '60'}, {id: '5', name: '75'}, {id: '6', name: '90'},
+            {id: '7', name: '105'}, {id: '8', name: '120'}];
 
         $scope.currentUserId = auth.currentUserId;
 
@@ -1336,5 +1336,5 @@ app.controller('ChartsCtrl', ['$scope', '$state', 'auth', 'moodataPromise',
             studyArray: $scope.allmoodata.studyArray.slice(0, 365),
             socialArray: $scope.allmoodata.socialArray.slice(0, 365),
         };
-        
+
     }]);
