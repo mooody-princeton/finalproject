@@ -53,7 +53,7 @@
 <div id="main-cont">
 
 <!-- Navbar and sidebar ****************************************************-->
-    <div class="w3-top" style="z-index:3;">
+    <div class="w3-top" style="z-index:3;min-width:320px;">
         <div class="w3-bar w3-white w3-large w3-border" ng-controller="NavCtrl">
                   <a class="w3-bar-item" href="#" style="text-decoration: none;">m<i class="twa twa-smile"></i><i class="twa twa-cry"></i><i class="twa twa-angry"></i>dy</a>
                   <a class="w3-bar-item w3-button w3-text-blue" onclick="document.getElementById('about').style.display='block'">About</a>
@@ -148,7 +148,7 @@
                             <a title="Angry" ng-hide="checkMood('angry')" class="angryButton w3-bar-item w3-button" ng-click="setMoodTo('angry')"><i class="twa twa-angry"></i></a>
                         </div><br><br>
                         <div>
-                            <a href="/#/mymoodtracker/{{currentUserId()}}"><button class="w3-button w3-blue" title="Take me to the mood tracker"><span style="font-size:15px;" text-align="center" class="fa fa-line-chart"></span> Take me to the mood tracker</button></a>
+                            <a href="/#/mymoodtracker/{{currentUserId()}}/go"><button class="w3-button w3-blue" title="Take me to my mood tracker"><span style="font-size:15px;" text-align="center" class="fa fa-line-chart"></span> Take me to my mood tracker</button></a>
                         </div>
                     </div>
                     <!-- Messaging -->
@@ -646,7 +646,7 @@
 <!-- mymessages.html -->
     <script type="text/ng-template" id="/mymessages.html">
         <a href="#">
-            <div><span class="glyphicon glyphicon-arrow-left"></span> Back to home</div><br>
+            <div><span class="glyphicon glyphicon-arrow-left"></span> Home</div><br>
         </a>
 
         <h3>Your Messages</h3><hr>
@@ -673,10 +673,10 @@
 <!-- mymoodtracker.html -->
     <script type="text/ng-template" id="/mymoodtracker.html">
         <a href="#">
-            <span class="glyphicon glyphicon-arrow-left"></span> Back to home
+            <span class="glyphicon glyphicon-arrow-left"></span> Home
         </a>
         <a style="float:right;" href="/#/mymoodcharts/{{currentUserId()}}">
-            Go to my mood charts <span class="glyphicon glyphicon-arrow-right"></span>
+            Show mood charts <span class="glyphicon glyphicon-arrow-right"></span>
         </a>
 
         <h3>How've you been?</h3>
@@ -757,13 +757,18 @@
 <!-- mymoodcharts.html -->
     <script type="text/ng-template" id="/mymoodcharts.html">
         <a href="#">
-            <span class="glyphicon glyphicon-arrow-left"></span> Back to home
+            <span class="glyphicon glyphicon-arrow-left"></span> Home
         </a>
-        <a style="float:right;" href="/#/mymoodtracker/{{currentUserId()}}">
-            Go to my mood tracker <span class="glyphicon glyphicon-arrow-right"></span>
+        <a style="float:right;" href="/#/mymoodtracker/{{currentUserId()}}/stay">
+            Enter/update today's mood <span class="glyphicon glyphicon-arrow-right"></span>
         </a>
 
         <h3>Your Mood Charts</h3>
+        <hr>
+
+        <!-- Mood charts -->
+        {{oneweek}}
+
 
     </script>
 

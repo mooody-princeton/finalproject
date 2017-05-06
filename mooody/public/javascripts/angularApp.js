@@ -134,7 +134,7 @@ app.config(['$stateProvider','$urlRouterProvider',
       }
     });
     $stateProvider.state('mymoodtracker', {
-        url: '/mymoodtracker/{id}',
+        url: '/mymoodtracker/{id}/{mode}',
         templateUrl: '/mymoodtracker.html',
         controller: 'TrackerCtrl',
         onEnter : ['$state', '$stateParams', 'auth',
@@ -145,7 +145,18 @@ app.config(['$stateProvider','$urlRouterProvider',
                 else if (auth.currentUserId() != $stateParams.id) {
                     $state.go('home');
                 }
+                else if ($stateParams.mode != "go" && $stateParams.mode != "stay") {
+                    $state.go('home');
+                }
+            }],
+        resolve: {
+            checkRedirection: ['$stateParams', 'auth', function($stateParams, auth) {
+                // If mode is go and the user already entered data today, redirect to mood charts
+                if ($stateParams.mode == "go") {
+                    return auth.trackedToday($stateParams.id);
+                }
             }]
+        }
     });
     $stateProvider.state('mymoodcharts', {
         url: '/mymoodcharts/{id}',
@@ -159,7 +170,12 @@ app.config(['$stateProvider','$urlRouterProvider',
                 else if (auth.currentUserId() != $stateParams.id) {
                     $state.go('home');
                 }
-            }]
+            }],
+        resolve: {
+          moodataPromise: ['$stateParams', 'auth', function($stateParams, auth) {
+              return auth.getMoodata($stateParams.id);
+          }]
+        }
     });
   $urlRouterProvider.otherwise('home');
 
@@ -168,8 +184,8 @@ app.config(['$stateProvider','$urlRouterProvider',
 // Factories **********************************************
 
 // Authorization factory, simultaneously takes care of mood tracking and other user functionalities
-app.factory('auth', ['$http', '$window',
-function($http, $window) {
+app.factory('auth', ['$http', '$state', '$window',
+function($http, $state, $window) {
 	var auth = {
         usermood: [],
         socialmood: [],
@@ -309,7 +325,9 @@ function($http, $window) {
     };
     // Get all notes for a user
     auth.getNotes = function(userid) {
-        return $http.get('/allnotes/' + userid).then(function(res) {
+        return $http.get('/allnotes/' + userid, null, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).then(function(res) {
             angular.copy(res.data, auth.notes);
             if (res.data[0].author == "Dummy string" && res.data[0].body == "Dummy string") {
                 auth.notesEmpty = true;
@@ -325,11 +343,34 @@ function($http, $window) {
             headers: { Authorization: 'Bearer ' + auth.getToken()}
         });
     };
+    // Did the user enter a mood data entry today? If so, redirect
+    auth.trackedToday = function(userid) {
+        $http.put('/trackedtoday', {curruser: userid}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).then(function(res) {
+            if (res.data[0].doneToday) {
+                $state.go('mymoodcharts', {id: userid});
+                return;
+            }
+            else {return;}
+        });
+    };
+    // Fetch user's mood data (array of entries)
+    auth.getMoodata = function(userid) {
+        return $http.get('/showmoodata/' + userid, null, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).error(function(error) {
+            console.log(error);
+            $state.go('home');
+        }).then(function(res) {
+            return res.data[0];
+        });
+    };
     return auth;
 }]);
 
 // Posts factory
-app.factory('posts', ['$http', 'auth', function($http, auth) {
+app.factory('posts', ['$http', '$state', 'auth', function($http, $state, auth) {
     var o = {
         posts: []
     };
@@ -383,7 +424,9 @@ app.factory('posts', ['$http', 'auth', function($http, auth) {
 	        });
 	};
     o.get = function(id) {
-        return $http.get('/posts/' + id).then(function(res) {
+        return $http.get('/posts/' + id).error(function(error) {
+                $state.go('home');
+            }).then(function(res) {
                 // Take care of heart/flag buttons display for the post's comments
                 var i;
                 for (i = 0; i < res.data.comments.length; i++) {
@@ -1268,7 +1311,30 @@ app.controller('TrackerCtrl', ['$scope', '$state', 'auth',
     }]);
 
 // Mood charts controller
-app.controller('ChartsCtrl', ['$scope', '$state', 'auth',
-    function($scope, $state, auth) {
+app.controller('ChartsCtrl', ['$scope', '$state', 'auth', 'moodataPromise',
+    function($scope, $state, auth, moodataPromise) {
         $scope.currentUserId = auth.currentUserId;
+        $scope.allmoodata = moodataPromise;
+        $scope.oneweek = {
+            wellbeingArray: $scope.allmoodata.wellbeingArray.slice(0, 7),
+            sleepArray: $scope.allmoodata.sleepArray.slice(0, 7),
+            exerciseArray: $scope.allmoodata.exerciseArray.slice(0, 7),
+            studyArray: $scope.allmoodata.studyArray.slice(0, 7),
+            socialArray: $scope.allmoodata.socialArray.slice(0, 7),
+        };
+        $scope.onemonth = {
+            wellbeingArray: $scope.allmoodata.wellbeingArray.slice(0, 31),
+            sleepArray: $scope.allmoodata.sleepArray.slice(0, 31),
+            exerciseArray: $scope.allmoodata.exerciseArray.slice(0, 31),
+            studyArray: $scope.allmoodata.studyArray.slice(0, 31),
+            socialArray: $scope.allmoodata.socialArray.slice(0, 31),
+        };
+        $scope.oneyear = {
+            wellbeingArray: $scope.allmoodata.wellbeingArray.slice(0, 365),
+            sleepArray: $scope.allmoodata.sleepArray.slice(0, 365),
+            exerciseArray: $scope.allmoodata.exerciseArray.slice(0, 365),
+            studyArray: $scope.allmoodata.studyArray.slice(0, 365),
+            socialArray: $scope.allmoodata.socialArray.slice(0, 365),
+        };
+        
     }]);

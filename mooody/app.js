@@ -15,6 +15,7 @@ var sendgrid = require("sendgrid");
 var uuid = require('node-uuid-v4');
 var randtoken = require('rand-token');
 var ejs = require('ejs');
+var async = require('async');
 var twilio = require('twilio');
 
 mongoose.connect('mongodb://localhost/news'); // NOTE: change the name of the db for a new one

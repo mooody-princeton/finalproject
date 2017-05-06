@@ -1,5 +1,7 @@
 /* Format body */
 body {
+  min-width:320px;
+  overflow: scroll !important;
   padding-top: 15px;
   font: 14px "Roboto", Helvetica, Arial, sans-serif;
   font-weight:200;

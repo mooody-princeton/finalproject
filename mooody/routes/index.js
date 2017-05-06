@@ -6,6 +6,7 @@ var jwt = require('express-jwt');
 var uuid = require('node-uuid-v4');
 var ejs = require('ejs');
 var random = require('mongoose-simple-random');
+var async = require('async');
 mongoose.plugin(random);
 
 // Account verification *******************************************************
@@ -109,7 +110,7 @@ router.param('comment', function(req, res, next, id) {
 router.get('/posts/:post', function(req, res) {
     req.post.populate('comments', function(err, post) {
         if (err) { return next(err); }
-        if (!post.deleted) res.json(post);
+        else if (!post.deleted) res.json(post);
         else res.json("ERROR");
     });
 });
@@ -495,6 +496,77 @@ router.post('/moodata', function(req, res, next) {
   Moodata.findOneAndUpdate(filters, req.body, options, function(err, moodata) {
     if(err){ return next(err); }
     else {res.json(moodata);}
+  });
+});
+
+// Use PUT to check if user has entered a mood data entry today
+// (Using PUT instead of GET to prevent URL querying; not sure if this is an actual worry? Works for now anyway.)
+router.put('/trackedtoday', function(req, res, next) {
+  var todayDate = new Date();
+  var todayString = todayDate.getMonth() + "," + todayDate.getDate() + "," + todayDate.getFullYear();
+  var filters = { entryuser: req.body.curruser, today: todayString };
+  var fields = {};
+  var options = {limit: 1};
+
+  Moodata.find(filters, fields, options, function(err, results) {
+    if (err) { return next(err); }
+    if (!results.length) { res.json([{doneToday: false}]); }
+    else { res.json([{doneToday: true}]); }
+  });
+});
+
+// GET a user's mood data information in array form
+router.get('/showmoodata/:user', function(req, res, next) {
+  // Get data from last 365 days
+  var i;
+  var tempArray = [];
+  for (i = 0; i < 365; i++) {
+    tempArray[i] = i; // i days ago
+  }
+  var allInfo = {
+    wellbeingArray: [],
+    sleepArray: [],
+    exerciseArray: [],
+    studyArray: [],
+    socialArray: []
+  };
+  var callback = function(error) {
+    if (error == null) return;
+    else console.log(error);
+  };
+  async.each(tempArray, function(index, callback) {
+    var d = new Date();
+    d.setDate(d.getDate() - index);
+    var tempString = d.getMonth() + "," + d.getDate() + "," + d.getFullYear();
+
+    var filters = { entryuser: req.userdocument._id, today: tempString };
+    var fields = {};
+    var options = {limit: 1};
+
+    Moodata.find(filters, fields, options, function(err, results) {
+      if (err) { return next(err); }
+      // If no mood data for this day...
+      if (!results.length) { 
+        allInfo.wellbeingArray[index] = '\0';
+        allInfo.sleepArray[index] = '\0';
+        allInfo.exerciseArray[index] = '\0';
+        allInfo.studyArray[index] = '\0';
+        allInfo.socialArray[index] = '\0';
+        callback(null);
+      }
+      // If mood data found for this day...
+      else {
+        allInfo.wellbeingArray[index] = results[0].wellbeing;
+        allInfo.sleepArray[index] = results[0].sleep;
+        allInfo.exerciseArray[index] = results[0].exercise;
+        allInfo.studyArray[index] = results[0].study;
+        allInfo.socialArray[index] = results[0].social;
+        callback(null);
+      }
+    });
+  }, function(err) {
+    if (err) { console.log('Mood data retrieval failed'); }
+    else { return res.json([allInfo]); }
   });
 });
 
