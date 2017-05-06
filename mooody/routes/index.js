@@ -517,10 +517,10 @@ router.put('/trackedtoday', function(req, res, next) {
 
 // GET a user's mood data information in array form
 router.get('/showmoodata/:user', function(req, res, next) {
-  // Get data from last 365 days
+  // Get data from last 31 days
   var i;
   var tempArray = [];
-  for (i = 0; i < 365; i++) {
+  for (i = 0; i < 31; i++) {
     tempArray[i] = i; // i days ago
   }
   var allInfo = {

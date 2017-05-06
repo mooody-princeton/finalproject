@@ -1329,12 +1329,14 @@ app.controller('ChartsCtrl', ['$scope', '$state', 'auth', 'moodataPromise',
             studyArray: $scope.allmoodata.studyArray.slice(0, 31),
             socialArray: $scope.allmoodata.socialArray.slice(0, 31),
         };
-        $scope.oneyear = {
-            wellbeingArray: $scope.allmoodata.wellbeingArray.slice(0, 365),
-            sleepArray: $scope.allmoodata.sleepArray.slice(0, 365),
-            exerciseArray: $scope.allmoodata.exerciseArray.slice(0, 365),
-            studyArray: $scope.allmoodata.studyArray.slice(0, 365),
-            socialArray: $scope.allmoodata.socialArray.slice(0, 365),
-        };
+        // Currently, we're only allowing for up to 1 month 
+        // (At this point, charts would look empty and ugly if we allowed for more)
+        // $scope.oneyear = {
+        //     wellbeingArray: $scope.allmoodata.wellbeingArray.slice(0, 365),
+        //     sleepArray: $scope.allmoodata.sleepArray.slice(0, 365),
+        //     exerciseArray: $scope.allmoodata.exerciseArray.slice(0, 365),
+        //     studyArray: $scope.allmoodata.studyArray.slice(0, 365),
+        //     socialArray: $scope.allmoodata.socialArray.slice(0, 365),
+        // };
 
     }]);
