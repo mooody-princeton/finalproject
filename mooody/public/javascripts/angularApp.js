@@ -1002,64 +1002,73 @@ app.controller('AuthCtrl', ['$scope', '$state', '$window', 'auth',
     function($scope, $state, $window, auth) {
         $scope.user = {};
         $scope.user.email = '';
+        $scope.error = '';
+        $scope.frontenderror = '';
+        $scope.confirmation = '';
 
         $scope.register = function() {
-            if (!$scope.user.password || !$scope.user.netid || auth.isLoggedIn()) return;
-            else if (typeof($scope.user.password) != "string" || typeof($scope.user.netid) != "string") return;
-            else if ((!$scope.user.optional) == false) {
-                if (typeof($scope.user.optional) != "string") return;
+            if (!$scope.user.password || !$scope.user.netid || !$scope.confirmation) return;
+            if (typeof($scope.user.password) != "string" || typeof($scope.user.netid) != "string" || typeof($scope.confirmation) != "string") return;
+            if ((!$scope.user.optional) == false) {
+                if (typeof($scope.user.optional) != "string") {
+                    return;
+                }
             }
-
-            else {
-                console.log($scope.user);
-                auth.register($scope.user).error(function(error) {
-                    console.log("Error in angularApp.js");
-                    $scope.error = error;
-                }).then(function() {
-                    auth.logOut(); // Must verify first before being able to log in
-                    $state.go('verify');
-                });
+            if ($scope.user.password != $scope.confirmation) {
+                $scope.error = '';
+                $scope.frontenderror = 'Your confirmation password does not match.';
+                $scope.user.password = '';
+                $scope.confirmation = '';
+                return;
             }
+            console.log($scope.user);
+            auth.register($scope.user).error(function(error) {
+                console.log("Error in angularApp.js");
+                $scope.frontenderror = '';
+                $scope.error = error;
+                return;
+            }).then(function() {
+                auth.logOut(); // Must verify first before being able to log in
+                $state.go('verify');
+            });
         };
 
         $scope.logIn = function() {
-            if (!$scope.user.netid || !$scope.user.password || auth.isLoggedIn()) return;
-            else if (typeof($scope.user.netid) != "string" || typeof($scope.user.password) != "string") return;
-            else if ((!$scope.user.optional) == false) {
+            if (!$scope.user.netid || !$scope.user.password) return;
+            if (typeof($scope.user.netid) != "string" || typeof($scope.user.password) != "string") return;
+            if ((!$scope.user.optional) == false) {
                 if (typeof($scope.user.optional) != "string") return;
             }
-            else {
-                var tempString = '';
-                if ($scope.user.hasOwnProperty('optional') && "undefined" !== typeof $scope.user.optional) {
-                  tempString = $scope.user.optional;
-                }
-                $scope.user.email = $scope.user.netid + "@" + tempString + "princeton.edu";
 
-                auth.logIn($scope.user).error(function(error) {
-                    $scope.error = error;
-                }).then(function() {
-                    auth.getUserMood(auth.currentUserId()).then(function() {
-                        auth.getUserStatus(auth.currentUserId()).then(function() {
-                            $scope.user.email = '';
-                            $window.location.reload(); // Reload entire page to update Angular variables in sidebar
-                        });
+            var tempString = '';
+            if ($scope.user.hasOwnProperty('optional') && "undefined" !== typeof $scope.user.optional) {
+              tempString = $scope.user.optional;
+            }
+            $scope.user.email = $scope.user.netid + "@" + tempString + "princeton.edu";
+
+            auth.logIn($scope.user).error(function(error) {
+                $scope.error = error;
+            }).then(function() {
+                auth.getUserMood(auth.currentUserId()).then(function() {
+                    auth.getUserStatus(auth.currentUserId()).then(function() {
+                        $scope.user.email = '';
+                        $window.location.reload(); // Reload entire page to update Angular variables in sidebar
                     });
                 });
-            }
+            });
         };
 
         $scope.verifyNow = function() {
-            if (!$scope.code || auth.isLoggedIn()) return;
-            else if (typeof($scope.code) != "string") return;
-            else {
-                auth.verify($scope.code).error(function(error) {
-                    $scope.error = error;
-                    $scope.success = false;
-                }).success(function(msg){
-                    $scope.success = msg;
-                    $scope.error = false;
-                });
-            }    
+            if (!$scope.code) return;
+            if (typeof($scope.code) != "string") return;
+
+            auth.verify($scope.code).error(function(error) {
+                $scope.error = error;
+                $scope.success = false;
+            }).success(function(msg){
+                $scope.success = msg;
+                $scope.error = false;
+            }); 
         };
     }]);
 
@@ -1169,7 +1178,9 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
             else if ("undefined" === typeof $scope.currentMood[0].mood) {
                 return false;
             }
-            else if ($scope.currentMood[0].mood == 'Select one below!');
+            else if ($scope.currentMood[0].mood == 'Select one below!') {
+                return false;
+            }
             // Button only gets highlighted if current mood is equal to button mood (new users have nothing highlighted)
             else if ($scope.currentMood[0].mood === moodString) {
                 return true;

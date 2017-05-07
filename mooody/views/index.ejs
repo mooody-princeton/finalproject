@@ -321,7 +321,7 @@
     <!--<div infinite-scroll="loadMore()" infinite-scroll-use-document-bottom=true>-->
     <div id="PostWrap">
         <div class="w3-container" ng-repeat="post in posts | filter: filters | filter: searchfilter | orderBy: orders">
-            <div ng-if="post.deleted==false && post.flags < 5" class="w3-panel w3-white w3-border post {{'post-' + post.mood}}">
+            <div ng-if="post.deleted==false && post.flags < 3" class="w3-panel w3-white w3-border post {{'post-' + post.mood}}">
                 <div><br>
                     <div ng-if="post.imagelink" align="center"><img onerror="this.src='https://www.jainsusa.com/images/store/landscape/not-available.jpg'" class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>
                     <a href="#/posts/{{post._id}}"><span class="post-title">
@@ -427,7 +427,7 @@
         <span class="post-body" style="font-weight:bold;">Comments:</span><br><br>
         <div ng-repeat="comment in post.comments | orderBy:'-date'">
             <span>
-              <div ng-if="comment.deleted==false && comment.flags < 5" class="w3-panel w3-white w3-border comment w3-padding-small">
+              <div ng-if="comment.deleted==false && comment.flags < 3" class="w3-panel w3-white w3-border comment w3-padding-small">
                 {{comment.commentTracker}}:<hr>
                 <div style="word-wrap: break-word;">{{comment.body}}</div><br>
                 <ul class="w3-right post-buttons">
@@ -501,14 +501,17 @@
 <!-- register.html -->
     <script type="text/ng-template" id="/register.html">
 
-        <!-- Error message -->
+        <!-- Error messages -->
         <div ng-show="error" class="w3-panel w3-pale-red">
             <span>{{ error.message }}</span>
+        </div>
+        <div ng-show="frontenderror" class="w3-panel w3-pale-red">
+            <span>{{ frontenderror }}</span>
         </div>
 
         <!-- Registration form with validator -->
         <div class="w3-padding-16"><span class="title">Register</span></div>
-       <form data-toggle="validator" role="form" ng-submit="register()">
+        <form data-toggle="validator" role="form" ng-submit="register()">
            <!-- Username -->
            <!-- <div class="form-group">
                <label for="inputName" class="w3-text-blue">Username</label>
@@ -533,6 +536,7 @@
                    <span class="input-group-addon">princeton.edu</span>
                </div>
                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+               <span style="font-size:14px;" ng-if="user.netid"><br>Make sure this is your email: {{user.netid + "@" + user.optional + "princeton.edu"}}</span>
            </div>
            <!-- Password -->
            <div class="form-group">
@@ -543,15 +547,22 @@
                    <div class="help-block">Minimum of 6 characters</div>
                  </div>
                </div>
-             </div>
-             <div class="form-group">
+               <label for="confPassword" class="w3-text-blue">Confirm your password</label>
+               <div class="form-inline row">
+                 <div class="form-group col-sm-6">
+                   <input type="password" minlength="6" class="w3-input w3-border" id="confPassword" placeholder="Confirm password" ng-model="confirmation" required>
+                 </div>
+               </div>
+            </div>
+            <!-- Sign up button -->
+            <div class="form-group">
                 <div class="w3-padding-16">
                     <span class="post-body" style="margin-left:0px;">By signing up, you agree to our <a onclick="document.getElementById('terms').style.display='block'">Terms and Conditions</a>.
                         <!-- and <a onclick="document.getElementById('privacy').style.display='block'">Privacy Policy</a>. --></span><br>
                 </div>
                 <button type="submit" class="w3-button w3-blue">Sign me up!</button>
-             </div>
-           </form>
+            </div>
+        </form>
 
             <!-- Terms and Conditions -->
             <div id="terms" class="w3-modal">
