@@ -821,6 +821,12 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
             document.getElementById('delcheck').style.display = 'block';
             $scope.curPost = post;
         };
+
+        // Expand flag modal on click
+        $scope.flagCheck = function(post) {
+            document.getElementById('flagcheck').style.display = 'block';
+            $scope.curPost = post;
+        };
     }]);
 
 // Posts Controller
@@ -923,6 +929,12 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
         // Expand delete modal on click
         $scope.deleteComCheck = function(comment) {
             document.getElementById('delcomcheck').style.display = 'block';
+            $scope.curComment = comment;
+        };
+
+        // Expand delete modal on click
+        $scope.flagComCheck = function(comment) {
+            document.getElementById('flagcomcheck').style.display = 'block';
             $scope.curComment = comment;
         };
 

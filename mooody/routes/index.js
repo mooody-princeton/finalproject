@@ -271,7 +271,7 @@ router.post('/register', function(req, res, next) {
         // Send verification email if successful so far
         //var toEmail = new helper.Email(user.email);
         console.log(process.env.SENDGRID_API_KEY);
-        var toEmail = new helper.Email('xyyu@princeton.edu');
+        var toEmail = new helper.Email('jc45@princeton.edu');
         var content = new helper.Content('text/plain', 'Hello from Mooody! Here is your verification code: ' + token);
         var mail = new helper.Mail(fromEmail, subject, toEmail, content);
         var request = sg.emptyRequest({
