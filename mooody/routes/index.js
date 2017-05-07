@@ -270,7 +270,6 @@ router.post('/register', function(req, res, next) {
         if (err) return console.log("Couldn't create verification token", err);
         // Send verification email if successful so far
         //var toEmail = new helper.Email(user.email);
-        console.log(process.env.SENDGRID_API_KEY);
         var toEmail = new helper.Email('xyyu@princeton.edu');
         var content = new helper.Content('text/plain', 'Hello from Mooody! Here is your verification code: ' + token);
         var mail = new helper.Mail(fromEmail, subject, toEmail, content);
