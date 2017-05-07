@@ -1,7 +1,6 @@
 // MongoDB Tokens schema
 
 var mongoose = require('mongoose');
-var uuid = require('node-uuid-v4');
 var randtoken = require('rand-token');
 
 var VerificationTokenSchema = new mongoose.Schema({
