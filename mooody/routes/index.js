@@ -268,8 +268,8 @@ router.post('/register', function(req, res, next) {
       newtoken.createToken(function(err, token) {
         if (err) return console.log("Couldn't create verification token", err);
         // Send verification email if successful so far
-        //var toEmail = new helper.Email(user.email);
-        var toEmail = new helper.Email('xyyu@princeton.edu');
+        var toEmail = new helper.Email(user.email);
+        //var toEmail = new helper.Email('xyyu@princeton.edu');
         var content = new helper.Content('text/plain', 'Hello from Mooody! Here is your verification code: ' + token);
         var mail = new helper.Mail(fromEmail, subject, toEmail, content);
         var request = sg.emptyRequest({
