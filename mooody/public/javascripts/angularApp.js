@@ -1118,7 +1118,7 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
                     {meta:'Stressed: ', value:percent[4]},
                     {meta:'Angry: ', value:percent[5]}
                 ]})
-            }, 10000);
+            }, 37500);
 
             // Redraw when sidebar is toggled
             var toggle = document.getElementById("toggleOn");
