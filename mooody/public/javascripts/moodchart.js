@@ -13,7 +13,7 @@ get_moodchartdata = function(scope_data, timeframe) {
     if (timeframe === 7) {
         data = {
           //labels: ['6 Days Ago', '5 Days Ago', '4 Days Ago', '3 Days Ago', '2 Days Ago', '1 Day Ago', 'Today'],
-          labels: ['', '', '', '', '', '', 'TODAY'],
+          //labels: ['', '← LAST WEEK', '', '', '', 'TODAY →', ''],
           series: [
             [null, null, null, null, null, null, null],
             {
@@ -68,7 +68,7 @@ get_moodchartdata = function(scope_data, timeframe) {
         data.series[3].name = 'Exercise';
         data.series[4].name = 'Study';
         data.series[5].name = 'Social';
-        data.labels[timeframe - 1] = 'TODAY';
+        //data.labels[timeframe - 1] = 'TODAY';
     }
 
     return data;
