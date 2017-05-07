@@ -14,7 +14,8 @@ var randtoken = require('rand-token');
 var ejs = require('ejs');
 var async = require('async');
 
-mongoose.connect('mongodb://localhost/news'); // NOTE: change the name of the db for a new one
+//mongoose.connect('mongodb://localhost/news'); // Local database testing
+mongoose.connect(process.env.MLAB_URI); // mLab database
 
 var random = require('mongoose-simple-random');
 mongoose.plugin(random);

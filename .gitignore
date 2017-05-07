@@ -1,5 +1,6 @@
 sendgrid.env
 safebrowse.env
+mlaburi.env
 /node_modules
 npm-debug.log
 .DS_Store
