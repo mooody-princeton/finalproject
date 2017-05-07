@@ -765,22 +765,23 @@
         </a>
 
         <h3>Your Mood Chart</h3>
+        <p id="subtitletracker">Your mood data can be be displayed over a week or a month. Click on the legend to toggle the display of specific data on the charts!</p>
+        <hr>
+
+        <!-- Mood charts -->
         <div class="w3-show-inline-block">
             <div class="w3-bar">
               <button class="w3-bar-item w3-button w3-border-left w3-border-top w3-border-bottom {{active_week}}" ng-click="change_timeframe('week')">Week</button>
               <button class="w3-bar-item w3-button w3-border-right w3-border-top w3-border-bottom {{active_month}}" ng-click="change_timeframe('month')">Month</button>
             </div>
         </div>
-        <hr>
 
-        <!-- Mood charts -->
         <div>
-            <div id='moodchart-legend'></div>
+            <div style="padding-top:10px;" id='moodchart-legend'></div>
             <div class="ct-chart ct-octave" id="moodchart"></div>
             <span style="float:left;color:#2196f3;">LEAST RECENT ←</span>
             <span style="float:right;color:#2196f3">→ MOST RECENT</span>
         </div>
-
     </script>
 
 </div>

@@ -91,7 +91,7 @@ create_moodchart = function(data) {
                }
            }),
            Chartist.plugins.legend({
-               legendNames: ['', 'Wellbeing', 'Sleep', 'Exercise', 'Study', 'Social'],
+               legendNames: ['', 'Wellbeing', 'Sleep', 'Exercise', 'Study', 'Social', ''],
                position: document.getElementById('moodchart-legend')
            })
        ]
