@@ -337,7 +337,7 @@
                         {{post.upvotes}}</li>
                         <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlags(post)"></span>
                         {{post.flags}}</li>
-                        <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(post)"></span>
+                        <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="flagCheck(post)"></span>
                         {{post.flags}}</li>
                         <li><a href="#/posts/{{post._id}}"><span class="glyphicon glyphicon-comment w3-text-blue"></span></a>
                             {{post.comments.length}}</li>
@@ -354,6 +354,20 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Delete popup (modal) -->
+                        <div id="flagcheck" class="w3-modal w3-animate-opacity">
+                            <div class="w3-modal-content">
+                                <div class="w3-container w3-center w3-padding-large">
+                                    <p class="post-body">Are you sure you want to flag this post? Posts will be removed after 5 flags. </p>
+                                    <br>
+                                    <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="incrementFlags(curPost)" onclick="document.getElementById('flagcheck').style.display='none'"></span>
+                                    <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('flagcheck').style.display='none'"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        
                     </ul>
                 </div>
 
@@ -411,7 +425,7 @@
                     {{comment.upvotes}}</li>
                     <li ng-if="comment.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlags(comment)"></span>
                     {{comment.flags}}</li>
-                    <li ng-if="!comment.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlags(comment)"></span>
+                    <li ng-if="!comment.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="flagComCheck(comment)"></span>
                     {{comment.flags}}</li>
                     <li ng-if="comment.authorid===currentUserId()">
                         <span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteComCheck(comment)">
@@ -433,6 +447,18 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Flag popup (modal) -->
+                        <div id="flagcomcheck" class="w3-modal w3-animate-opacity">
+                            <div class="w3-modal-content">
+                                <div class="w3-container w3-center w3-padding-large">
+                                    <p class="post-body">Are you sure you want to flag this comment? Posts will be removed after 5 flags. </p>
+                                    <br>
+                                    <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="incrementFlags(curComment)" onclick="document.getElementById('flagcomcheck').style.display='none'"></span>
+                                    <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('flagcomcheck').style.display='none'"></span>
+                                </div>
+                            </div>
+                        </div>
                     </ul>
               </div>
             </span>
