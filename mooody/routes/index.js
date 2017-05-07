@@ -3,7 +3,6 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var passport = require('passport');
 var jwt = require('express-jwt');
-var uuid = require('node-uuid-v4');
 var ejs = require('ejs');
 var random = require('mongoose-simple-random');
 var async = require('async');

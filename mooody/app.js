@@ -1,7 +1,6 @@
 // Express stuff (connect front-end with back-end)
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -10,13 +9,10 @@ var app = express();
 
 var mongoose = require('mongoose');
 var passport = require('passport');
-var postmark = require("postmark");
 var sendgrid = require("sendgrid");
-var uuid = require('node-uuid-v4');
 var randtoken = require('rand-token');
 var ejs = require('ejs');
 var async = require('async');
-var twilio = require('twilio');
 
 mongoose.connect('mongodb://localhost/news'); // NOTE: change the name of the db for a new one
 
