@@ -6,7 +6,7 @@ var randtoken = require('rand-token');
 var VerificationTokenSchema = new mongoose.Schema({
   _userid: {type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User'},
   token: {type: String, required: true},
-  time: {type: Date, required: true, default: Date.now, expires: '48h'} // Change back to 3h after grading is done
+  time: {type: Date, required: true, default: Date.now, expires: '72h'} // Change back to 3h after grading is done
 });
 
 VerificationTokenSchema.methods.createToken = function(done) {
