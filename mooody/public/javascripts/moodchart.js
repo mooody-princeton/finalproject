@@ -89,6 +89,10 @@ create_moodchart = function(data) {
                transformTooltipTextFnc: function(value) {
                    return ""; // bwahaha relativity
                }
+           }),
+           Chartist.plugins.legend({
+               legendNames: ['', 'Wellbeing', 'Sleep', 'Exercise', 'Study', 'Social'],
+               position: document.getElementById('moodchart-legend')
            })
        ]
     };

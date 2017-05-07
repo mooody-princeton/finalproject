@@ -29,8 +29,8 @@
     <script src="/javascripts/misc.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.scrollto/2.1.2/jquery.scrollTo.min.js"></script>
     <script src="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-    <script src="/javascripts/chartist-plugin-fill-donut.js"></script>
     <script src="/javascripts/chartist-plugin-tooltip.js"></script>
+    <script src="/javascripts/chartist-plugin-legend.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.js"
     integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
     crossorigin="anonymous"></script>
@@ -774,9 +774,12 @@
         <hr>
 
         <!-- Mood charts -->
-        <div><div class="ct-chart ct-octave" id="moodchart"></div></div>
-        <div style="float:left;color:#33ccff;">LEAST RECENT ←</div>
-        <div style="float:right;color:#33ccff">→ MOST RECENT</div>
+        <div>
+            <div id='moodchart-legend'></div>
+            <div class="ct-chart ct-octave" id="moodchart"></div>
+            <span style="float:left;color:#2196f3;">LEAST RECENT ←</span>
+            <span style="float:right;color:#2196f3">→ MOST RECENT</span>
+        </div>
 
     </script>
 
