@@ -12,7 +12,8 @@ get_moodchartdata = function(scope_data, timeframe) {
     var data = {};
     if (timeframe === 7) {
         data = {
-          labels: ['6 Days Ago', '5 Days Ago', '4 Days Ago', '3 Days Ago', '2 Days Ago', '1 Day Ago', 'Today'],
+          //labels: ['6 Days Ago', '5 Days Ago', '4 Days Ago', '3 Days Ago', '2 Days Ago', '1 Day Ago', 'Today'],
+          labels: ['', '', '', '', '', '', 'TODAY'],
           series: [
             [null, null, null, null, null, null, null],
             {
@@ -54,7 +55,7 @@ get_moodchartdata = function(scope_data, timeframe) {
         data.series[5].data = [];
 
         for (var i = 0; i < timeframe; i++) {
-            data.labels[i] = timeframe - i - 1;
+            data.labels[i] = '';
             data.series[0].data[i] = null;
             data.series[1].data[i] = wellbeing[timeframe - i - 1];
             data.series[2].data[i] = sleep[timeframe - i - 1];
@@ -67,7 +68,7 @@ get_moodchartdata = function(scope_data, timeframe) {
         data.series[3].name = 'Exercise';
         data.series[4].name = 'Study';
         data.series[5].name = 'Social';
-        data.labels[timeframe - 1] = 'Today';
+        data.labels[timeframe - 1] = 'TODAY';
     }
 
     return data;
@@ -97,8 +98,7 @@ create_moodchart = function(data) {
         showPoint: false,
         axisX: {
           labelInterpolationFnc: function(value) {
-            // Will return Mon, Tue, Wed etc. on medium screens
-            return value.slice(0, 3);
+            return "";
           }
         }
       }],
@@ -106,8 +106,7 @@ create_moodchart = function(data) {
         showPoint: false,
         axisX: {
           labelInterpolationFnc: function(value) {
-            // Will return M, T, W etc. on small screens
-            return value[0];
+            return "";
           }
         }
       }]

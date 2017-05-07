@@ -1340,22 +1340,22 @@ app.controller('ChartsCtrl', ['$scope', '$state', 'auth', 'moodataPromise',
         // };
 
         $scope.timeframe = 'week';
-        $scope.active_week = 'w3-light-gray';
-        $scope.active_month = '';
+        $scope.active_week = 'w3-gray';
+        $scope.active_month = 'w3-inactive';
 
         var data = get_moodchartdata($scope.oneweek, 7);
         var chart = create_moodchart(data);
         $scope.change_timeframe = function(timeframe) {
             if (timeframe === 'week') {
                 $scope.timeframe == 'week';
-                $scope.active_week = 'w3-light-gray';
-                $scope.active_month = '';
+                $scope.active_week = 'w3-gray';
+                $scope.active_month = 'w3-inactive';
                 data = get_moodchartdata($scope.oneweek, 7);
                 chart = create_moodchart(data);
             } else {
                 $scope.timeframe = 'month';
-                $scope.active_week = '';
-                $scope.active_month = 'w3-light-gray';
+                $scope.active_week = 'w3-inactive';
+                $scope.active_month = 'w3-gray';
                 data = get_moodchartdata($scope.onemonth, 31);
                 chart = create_moodchart(data);
             }
