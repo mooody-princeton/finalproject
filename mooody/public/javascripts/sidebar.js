@@ -13,7 +13,7 @@ function w3_close() {
 
 // Create and return chart based on socialmood
 function create_chart(socialmood) {
-    var chart = new Chartist.Pie('.ct-chart', {
+    var chart = new Chartist.Pie('#chart', {
         series: [
             {meta:'Relaxed: ', value:socialmood[0]},
             {meta:'Happy: ', value:socialmood[1]},

@@ -192,6 +192,10 @@ h3 {
     stroke: #f44336;
 }
 
+.ct-label {
+    font-size: 15px;
+}
+
 /* chart tooltip */
 .tooltip {
     position: absolute;

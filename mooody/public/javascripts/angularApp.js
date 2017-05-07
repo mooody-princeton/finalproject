@@ -672,7 +672,7 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
         $scope.addPost = function() {
             if (!$scope.title || $scope.title === '') return;
             if (typeof($scope.title) != 'string') return;
-            
+
             // Take care of image
             if ((!$scope.imagelink) == false) {
                 if (typeof($scope.imagelink) != "string") return;
@@ -1329,7 +1329,7 @@ app.controller('ChartsCtrl', ['$scope', '$state', 'auth', 'moodataPromise',
             studyArray: $scope.allmoodata.studyArray.slice(0, 31),
             socialArray: $scope.allmoodata.socialArray.slice(0, 31),
         };
-        // Currently, we're only allowing for up to 1 month 
+        // Currently, we're only allowing for up to 1 month
         // (At this point, charts would look empty and ugly if we allowed for more)
         // $scope.oneyear = {
         //     wellbeingArray: $scope.allmoodata.wellbeingArray.slice(0, 365),
@@ -1339,4 +1339,130 @@ app.controller('ChartsCtrl', ['$scope', '$state', 'auth', 'moodataPromise',
         //     socialArray: $scope.allmoodata.socialArray.slice(0, 365),
         // };
 
+        $scope.timeframe = 'week';
+        $scope.active_week = 'w3-light-gray';
+        $scope.active_month = '';
+
+        var data = get_moodchartdata($scope.oneweek, 7);
+        var chart = create_moodchart(data);
+        $scope.change_timeframe = function(timeframe) {
+            if (timeframe === 'week') {
+                $scope.timeframe == 'week';
+                $scope.active_week = 'w3-light-gray';
+                $scope.active_month = '';
+                data = get_moodchartdata($scope.oneweek, 7);
+                chart = create_moodchart(data);
+            } else {
+                $scope.timeframe = 'month';
+                $scope.active_week = '';
+                $scope.active_month = 'w3-light-gray';
+                data = get_moodchartdata($scope.onemonth, 31);
+                chart = create_moodchart(data);
+            }
+        }
+
+        var seq = 0,
+            delays = 10,
+            durations = 1000;
+
+        // Once the chart is fully created we reset the sequence
+        chart.on('created', function() {
+          seq = 0;
+        });
+
+        // On each drawn element by Chartist we use the Chartist.Svg API to trigger SMIL animations
+        chart.on('draw', function(data) {
+          seq++;
+
+          if(data.type === 'line') {
+            // If the drawn element is a line we do a simple opacity fade in. This could also be achieved using CSS3 animations.
+            data.element.animate({
+              opacity: {
+                // The delay when we like to start the animation
+                begin: seq * delays + 1000,
+                // Duration of the animation
+                dur: durations,
+                // The value where the animation should start
+                from: 0,
+                // The value where it should end
+                to: 1
+              }
+            });
+          } else if(data.type === 'label' && data.axis === 'x') {
+            data.element.animate({
+              y: {
+                begin: seq * delays,
+                dur: durations,
+                from: data.y + 100,
+                to: data.y,
+                // We can specify an easing function from Chartist.Svg.Easing
+                easing: 'easeOutQuart'
+              }
+            });
+          } else if(data.type === 'label' && data.axis === 'y') {
+            data.element.animate({
+              x: {
+                begin: seq * delays,
+                dur: durations,
+                from: data.x - 100,
+                to: data.x,
+                easing: 'easeOutQuart'
+              }
+            });
+          } else if(data.type === 'point') {
+            data.element.animate({
+              x1: {
+                begin: seq * delays,
+                dur: durations,
+                from: data.x - 10,
+                to: data.x,
+                easing: 'easeOutQuart'
+              },
+              x2: {
+                begin: seq * delays,
+                dur: durations,
+                from: data.x - 10,
+                to: data.x,
+                easing: 'easeOutQuart'
+              },
+              opacity: {
+                begin: seq * delays,
+                dur: durations,
+                from: 0,
+                to: 1,
+                easing: 'easeOutQuart'
+              }
+            });
+          } else if(data.type === 'grid') {
+            // Using data.axis we get x or y which we can use to construct our animation definition objects
+            var pos1Animation = {
+              begin: seq * delays,
+              dur: durations,
+              from: data[data.axis.units.pos + '1'] - 30,
+              to: data[data.axis.units.pos + '1'],
+              easing: 'easeOutQuart'
+            };
+
+            var pos2Animation = {
+              begin: seq * delays,
+              dur: durations,
+              from: data[data.axis.units.pos + '2'] - 100,
+              to: data[data.axis.units.pos + '2'],
+              easing: 'easeOutQuart'
+            };
+
+            var animations = {};
+            animations[data.axis.units.pos + '1'] = pos1Animation;
+            animations[data.axis.units.pos + '2'] = pos2Animation;
+            animations['opacity'] = {
+              begin: seq * delays,
+              dur: durations,
+              from: 0,
+              to: 1,
+              easing: 'easeOutQuart'
+            };
+
+            data.element.animate(animations);
+          }
+        });
     }]);

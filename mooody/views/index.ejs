@@ -25,6 +25,7 @@
     <script src="/javascripts/angular-spinkit.min.js"></script>
     <script src="/javascripts/angularApp.js"></script>
     <script src="/javascripts/sidebar.js"></script>
+    <script src="/javascripts/moodchart.js"></script>
     <script src="/javascripts/misc.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.scrollto/2.1.2/jquery.scrollTo.min.js"></script>
     <script src="http://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
@@ -763,12 +764,18 @@
             Enter/update today's mood <span class="glyphicon glyphicon-arrow-right"></span>
         </a>
 
-        <h3>Your Mood Charts</h3>
+        <h3>Your Mood Chart</h3>
+        <div class="w3-show-inline-block">
+            <div class="w3-bar">
+              <button class="w3-bar-item w3-button w3-border-left w3-border-top w3-border-bottom {{active_week}}" ng-click="change_timeframe('week')">Week</button>
+              <button class="w3-bar-item w3-button w3-border-right w3-border-top w3-border-bottom {{active_month}}" ng-click="change_timeframe('month')">Month</button>
+            </div>
+        </div>
         <hr>
 
         <!-- Mood charts -->
-        {{oneweek}}
-
+        <!--{{oneweek}}-->
+        <div><div class="ct-chart ct-octave" id="moodchart"></div></div>
 
     </script>
 
@@ -778,7 +785,7 @@
 
 <script type="text/javascript">
     function tog(v){return v?'addClass':'removeClass';};
-    
+
     $(document).on('input', '.clearable', function(){
         $(this)[tog(this.value)]('x');
     }).on('mousemove', '.x', function( e ){
