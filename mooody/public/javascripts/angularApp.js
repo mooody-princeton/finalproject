@@ -1340,33 +1340,27 @@ app.controller('ChartsCtrl', ['$scope', '$state', 'auth', 'moodataPromise',
         // };
 
         $scope.timeframe = 'week';
-        $scope.showWeek = true;
-        $scope.showMonth = false;
         $scope.active_week = 'w3-gray';
         $scope.active_month = 'w3-inactive';
 
-        var data_week = get_moodchartdata($scope.oneweek, 7);
-        var data_month = get_moodchartdata($scope.onemonth, 31);
-        var chart_week = create_moodchart(data_week, 'week');
-        var chart_month = create_moodchart(data_month, 'month');
+        var data = get_moodchartdata($scope.oneweek, 7);
+        var chart = create_moodchart(data);
 
         $scope.change_timeframe = function(timeframe) {
             if (timeframe === 'week') {
                 $scope.timeframe == 'week';
                 $scope.active_week = 'w3-gray';
                 $scope.active_month = 'w3-inactive';
-                // data = get_moodchartdata($scope.oneweek, 7);
-                // chart = create_moodchart(data);
-                $scope.showWeek = true;
-                $scope.showMonth = false;
+                document.getElementById("moodchart-legend").innerHTML = "";
+                data = get_moodchartdata($scope.oneweek, 7);
+                chart = create_moodchart(data);
             } else {
                 $scope.timeframe = 'month';
                 $scope.active_week = 'w3-inactive';
                 $scope.active_month = 'w3-gray';
-                // data = get_moodchartdata($scope.onemonth, 31);
-                // chart = create_moodchart(data);
-                $scope.showWeek = false;
-                $scope.showMonth = true;
+                document.getElementById("moodchart-legend").innerHTML = "";
+                data = get_moodchartdata($scope.onemonth, 31);
+                chart = create_moodchart(data);
             }
         }
 

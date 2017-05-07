@@ -74,8 +74,8 @@ get_moodchartdata = function(scope_data, timeframe) {
     return data;
 }
 
-create_moodchart = function(data, timeframe) {
-    var options_week = {
+create_moodchart = function(data) {
+    var options = {
         high: 9,
         low: 0,
         axisY: {
@@ -94,27 +94,6 @@ create_moodchart = function(data, timeframe) {
                legendNames: ['', 'Wellbeing', 'Sleep', 'Exercise', 'Study', 'Social'],
                position: document.getElementById('moodchart-legend')
            })
-       ]
-    };
-    var options_month = {
-        high: 9,
-        low: 0,
-        axisY: {
-           onlyInteger: true,
-           offset: 20,
-           showLabel: false // bwahaha everything is relative, remove the label
-       },
-       plugins: [
-           Chartist.plugins.tooltip({
-               class: 'tooltip',
-               transformTooltipTextFnc: function(value) {
-                   return ""; // bwahaha relativity
-               }
-           })
-        //    Chartist.plugins.legend({
-        //        legendNames: ['', 'Wellbeing', 'Sleep', 'Exercise', 'Study', 'Social'],
-        //        position: document.getElementById('moodchart-legend')
-        //    })
        ]
     };
 
@@ -137,12 +116,7 @@ create_moodchart = function(data, timeframe) {
       }]
     ];
 
-    if (timeframe === 'week') {
-        var chart = new Chartist.Line('#moodchart_week', data, options_week, responsiveOptions);
-    } else {
-        var chart = new Chartist.Line('#moodchart_month', data, options_month, responsiveOptions);
-    }
-
+    var chart = new Chartist.Line('#moodchart', data, options, responsiveOptions);
 
     return chart;
 }
