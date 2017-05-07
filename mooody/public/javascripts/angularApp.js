@@ -932,7 +932,13 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
             $scope.curComment = comment;
         };
 
-        // Expand delete modal on click
+        // Expand flag modal on click
+        $scope.flagCheck = function(post) {
+            document.getElementById('flagcheck2').style.display = 'block';
+            $scope.curPost = post;
+        };
+
+        // Expand flag modal on click
         $scope.flagComCheck = function(comment) {
             document.getElementById('flagcomcheck').style.display = 'block';
             $scope.curComment = comment;

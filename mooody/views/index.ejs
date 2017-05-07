@@ -344,22 +344,22 @@
                         <li ng-if="post.authorid===currentUserId()"><span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteCheck(post)"></span></li>
 
                         <!-- Delete popup (modal) -->
-                        <div id="delcheck" class="w3-modal w3-animate-opacity">
+                        <div id="delcheck" class="w3-modal w3-animate-opacity quick-anim">
                             <div class="w3-modal-content">
                                 <div class="w3-container w3-center w3-padding-large">
                                     <p class="post-body">Are you sure you want to delete your post? </p>
                                     <br>
                                     <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="deletePost(curPost)" onclick="document.getElementById('delcheck').style.display='none'"></span>
                                     <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('delcheck').style.display='none'"></span>
-                                </div>
+                                </div>D
                             </div>
                         </div>
 
-                        <!-- Delete popup (modal) -->
-                        <div id="flagcheck" class="w3-modal w3-animate-opacity">
+                        <!-- Flag popup (modal) -->
+                        <div id="flagcheck" class="w3-modal w3-animate-opacity quick-anim">
                             <div class="w3-modal-content">
                                 <div class="w3-container w3-center w3-padding-large">
-                                    <p class="post-body">Are you sure you want to flag this post? Posts will be removed after 5 flags. </p>
+                                    <p class="post-body">Flags aren't merely downvotes! You should only flag content that you deem inappropriate, offensive and/or spammy. Any content is removed at 3 flags. Are you sure you want to flag this post?</p>
                                     <br>
                                     <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="incrementFlags(curPost)" onclick="document.getElementById('flagcheck').style.display='none'"></span>
                                     <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('flagcheck').style.display='none'"></span>
@@ -372,7 +372,7 @@
                 </div>
 
                 <!-- Image expand popup -->
-                <div id="imgExpand" class="w3-modal w3-animate-opacity" ng-click="unexpandImg()">
+                <div id="imgExpand" class="w3-modal w3-animate-opacity quick-anim" ng-click="unexpandImg()">
                     <div class="w3-container w3-center">
                         <img class="w3-modal-content user-images-expanded" ng-attr-src="{{popupImg}}">
                     </div>
@@ -404,9 +404,21 @@
                     {{post.upvotes}}</li>
                     <li ng-if="post.flagged"><span class="glyphicon glyphicon-flag w3-text-dark-gray" ng-click="incrementFlagsPost()"></span>
                     {{post.flags}}</li>
-                    <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="incrementFlagsPost()"></span>
+                    <li ng-if="!post.flagged"><span class="glyphicon glyphicon-flag w3-text-light-gray" ng-click="flagCheck(post)"></span>
                     {{post.flags}}</li>
                 </ul>
+            </div>
+
+            <!-- Flag popup (modal) -->
+            <div id="flagcheck2" class="w3-modal w3-animate-opacity quick-anim">
+                <div class="w3-modal-content">
+                    <div class="w3-container w3-center w3-padding-large">
+                        <p class="post-body">Flags aren't merely downvotes! You should only flag content that you want to report as inappropriate, offensive and/or spammy. Any content is removed at 3 flags. Are you sure you want to flag this post?</p>
+                        <br>
+                        <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="incrementFlagsPost(curPost)" onclick="document.getElementById('flagcheck2').style.display='none'"></span>
+                        <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('flagcheck2').style.display='none'"></span>
+                    </div>
+                </div>
             </div>
         </div>
         <hr>
@@ -432,27 +444,26 @@
                         </span>
                     </li>
                     <!-- Delete popup (modal) -->
-                    <div id="delcomcheck" class="w3-modal w3-animate-opacity">
+                    <div id="delcomcheck" class="w3-modal w3-animate-opacity quick-anim">
                         <div class="w3-modal-content">
                             <header class="w3-container">
                             <span onclick="document.getElementById('delcomcheck').style.display='none'"
                             class="w3-button w3-display-topright">&times;</span>
                             </header>
                             <div class="w3-container w3-center w3-padding-large">
-                                <p class="post-body">Delete comment?
+                                <p class="post-body">Are you sure you want to delete your comment?</p>
                                 <br>
                                 <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="deleteComment(curComment)" onclick="document.getElementById('delcomcheck').style.display='none'"></span>
                                 <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('delcomcheck').style.display='none'"></span>
-                                </p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Flag popup (modal) -->
-                        <div id="flagcomcheck" class="w3-modal w3-animate-opacity">
+                        <div id="flagcomcheck" class="w3-modal w3-animate-opacity quick-anim">
                             <div class="w3-modal-content">
                                 <div class="w3-container w3-center w3-padding-large">
-                                    <p class="post-body">Are you sure you want to flag this comment? Posts will be removed after 5 flags. </p>
+                                    <p class="post-body">Flags aren't merely downvotes! You should only flag content that you deem inappropriate, offensive and/or spammy. Any content is removed at 3 flags. Are you sure you want to flag this post?</p>
                                     <br>
                                     <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="incrementFlags(curComment)" onclick="document.getElementById('flagcomcheck').style.display='none'"></span>
                                     <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('flagcomcheck').style.display='none'"></span>
@@ -478,7 +489,7 @@
         </div>
 
         <!-- Image expand popup -->
-        <div id="imgExpand" class="w3-modal w3-animate-opacity" ng-click="unexpandImg()">
+        <div id="imgExpand" class="w3-modal w3-animate-opacity quick-anim" ng-click="unexpandImg()">
             <div class="w3-container w3-center">
                 <img class="w3-modal-content user-images-expanded" ng-attr-src="{{popupImg}}">
             </div>

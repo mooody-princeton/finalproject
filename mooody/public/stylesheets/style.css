@@ -457,4 +457,8 @@ h3 {
   color:#3385ff;
 }
 
+.quick-anim {
+  animation-duration:0.2s;
+}
+
 /* add more custom styling here with comments */
