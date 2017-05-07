@@ -253,6 +253,34 @@ describe('work tests', function () {
     });
   });
 
+  it('should set resultProperty if option provided', function() {
+    var secret = 'shhhhhh';
+    var token = jwt.sign({foo: 'bar'}, secret);
+
+    req = { };
+    res = { };
+    req.headers = {};
+    req.headers.authorization = 'Bearer ' + token;
+    expressjwt({secret: secret, resultProperty: 'locals.user'})(req, res, function() {
+      assert.equal('bar', res.locals.user.foo);
+      assert.ok(typeof req.user === 'undefined');
+    });
+  });
+
+  it('should ignore userProperty if resultProperty option provided', function() {
+    var secret = 'shhhhhh';
+    var token = jwt.sign({foo: 'bar'}, secret);
+
+    req = { };
+    res = { };
+    req.headers = {};
+    req.headers.authorization = 'Bearer ' + token;
+    expressjwt({secret: secret, userProperty: 'auth', resultProperty: 'locals.user'})(req, res, function() {
+      assert.equal('bar', res.locals.user.foo);
+      assert.ok(typeof req.auth === 'undefined');
+    });
+  });
+
   it('should work if no authorization header and credentials are not required', function() {
     req = {};
     expressjwt({ secret: 'shhhh', credentialsRequired: false })(req, res, function(err) {
@@ -265,6 +293,19 @@ describe('work tests', function () {
     expressjwt({ secret: 'shhhh' })(req, res, function(err) {
       assert(typeof err !== 'undefined');
     });
+  });
+
+  it('should produce a stack trace that includes the failure reason', function() {
+    var req = {};
+    var token = jwt.sign({foo: 'bar'}, 'secretA');
+    req.headers = {};
+    req.headers.authorization = 'Bearer ' + token;
+
+    expressjwt({secret: 'secretB'})(req, res, function(err) {
+      var index = err.stack.indexOf('UnauthorizedError: invalid signature')
+      assert.equal(index, 0, "Stack trace didn't include 'invalid signature' message.")
+    });
+
   });
 
   it('should work with a custom getToken function', function() {
