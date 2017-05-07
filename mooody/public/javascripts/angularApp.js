@@ -670,11 +670,11 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
 
         // Add post
         $scope.addPost = function() {
-            if (!$scope.title || $scope.title === '') return;
-            if (typeof($scope.title) != 'string') return;
+            if (!$scope.title || $scope.title === '' || !$scope.isLoggedIn()) return;
+            else if (typeof($scope.title) != 'string') return;
 
             // Take care of image
-            if ((!$scope.imagelink) == false) {
+            else if ((!$scope.imagelink) == false) {
                 if (typeof($scope.imagelink) != "string") return;
                 // Validate image URL
                 else {
@@ -698,12 +698,18 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
 
         // Upvote post
         $scope.incrementUpvotes = function(post) {
-            posts.upvote(auth.currentUserId(), post).then(function() {$scope.checkUpvoted(post);});
+            if (!$scope.isLoggedIn()) return; 
+            else {
+                posts.upvote(auth.currentUserId(), post).then(function() {$scope.checkUpvoted(post);});
+            }
         };
 
         // Delete post
         $scope.deletePost = function(post) {
-            posts.delete(auth.currentUserId(), post);
+            if (!$scope.isLoggedIn()) return; 
+            else {
+                posts.delete(auth.currentUserId(), post);
+            }
         };
 
         // Set flag button toggle appropriately
@@ -716,7 +722,10 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
 
         // Flag post
         $scope.incrementFlags = function(post) {
-            posts.downvote(auth.currentUserId(), post).then(function() {$scope.checkFlagged(post);});
+            if (!$scope.isLoggedIn()) return;
+            else {
+                posts.downvote(auth.currentUserId(), post).then(function() {$scope.checkFlagged(post);});
+            }
         };
 
         // Filter posts by mood
@@ -818,14 +827,20 @@ app.controller('MainCtrl', ['$scope', '$rootScope', '$http', 'posts', 'auth',
 
         // Expand delete modal on click
         $scope.deleteCheck = function(post) {
-            document.getElementById('delcheck').style.display = 'block';
-            $scope.curPost = post;
+            if (!$scope.isLoggedIn()) return;
+            else {
+                document.getElementById('delcheck').style.display = 'block';
+                $scope.curPost = post;
+            }
         };
 
         // Expand flag modal on click
         $scope.flagCheck = function(post) {
-            document.getElementById('flagcheck').style.display = 'block';
-            $scope.curPost = post;
+            if (!$scope.isLoggedIn()) return;
+            else {
+                document.getElementById('flagcheck').style.display = 'block';
+                $scope.curPost = post;
+            }
         };
     }]);
 
@@ -839,19 +854,21 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
         $scope.popupImg = 'https://www.jainsusa.com/images/store/landscape/not-available.jpg';
 
         $scope.addComment = function() {
-            if (!$scope.body || $scope.body === '') { return; }
-            if (typeof($scope.body) != 'string') return;
+            if (!$scope.body || $scope.body === '' || !$scope.isLoggedIn()) { return; }
+            else if (typeof($scope.body) != 'string') return;
 
-            posts.addComment(post._id, {
-                body: $scope.body,
-                authorid: auth.currentUserId(),
-            }).success(function(comment) {
-                $scope.post.comments.push(comment);
-                $scope.post.commenters = comment.post.commenters;
-                $scope.post.commenterNumber = comment.post.commenterNumber;
-                $scope.$applyAsync();
-            });
-          $scope.body = '';
+            else {
+                posts.addComment(post._id, {
+                    body: $scope.body,
+                    authorid: auth.currentUserId(),
+                }).success(function(comment) {
+                    $scope.post.comments.push(comment);
+                    $scope.post.commenters = comment.post.commenters;
+                    $scope.post.commenterNumber = comment.post.commenterNumber;
+                    $scope.$applyAsync();
+                });
+                $scope.body = '';
+            }
         };
 
         // Set heart button toggle appropriately for a comment
@@ -864,13 +881,19 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
 
         // For a comment
         $scope.incrementUpvotes = function(comment) {
-            posts.upvoteComment(auth.currentUserId(), post, comment).then(function() {$scope.checkUpvoted(comment);});
+            if (!$scope.isLoggedIn()) return;
+            else {
+                posts.upvoteComment(auth.currentUserId(), post, comment).then(function() {$scope.checkUpvoted(comment);});
+            }
         };
 
         // Delete a comment
         $scope.deleteComment = function(comment) {
-            posts.deleteComment(auth.currentUserId(), post, comment);
-            $scope.$applyAsync();
+            if (!$scope.isLoggedIn()) return;
+            else {
+                posts.deleteComment(auth.currentUserId(), post, comment);
+                $scope.$applyAsync();
+            }
         };
 
         // Set flag button toggle appropriately for a comment
@@ -883,7 +906,10 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
 
         // For a comment
         $scope.incrementFlags = function(comment) {
-            posts.downvoteComment(auth.currentUserId(), post, comment).then(function() {$scope.checkFlagged(comment);});
+            if (!$scope.isLoggedIn()) return;
+            else {
+                posts.downvoteComment(auth.currentUserId(), post, comment).then(function() {$scope.checkFlagged(comment);});
+            }
         };
 
         // Set heart button toggle appropriately for this post
@@ -896,7 +922,10 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
 
         // For this post
         $scope.incrementUpvotesPost = function() {
-            posts.upvote(auth.currentUserId(), $scope.post).then(function() {$scope.checkUpvotedPost();});
+            if (!$scope.isLoggedIn()) return;
+            else {
+                posts.upvote(auth.currentUserId(), $scope.post).then(function() {$scope.checkUpvotedPost();});
+            }
         };
 
         // Set flag button toggle appropriately for this post
@@ -909,7 +938,10 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
 
         // For this post
         $scope.incrementFlagsPost = function() {
-            posts.downvote(auth.currentUserId(), $scope.post).then(function() {$scope.checkFlaggedPost();});
+            if (!$scope.isLoggedIn()) return;
+            else {
+                posts.downvote(auth.currentUserId(), $scope.post).then(function() {$scope.checkFlaggedPost();});
+            }
         };
 
         // Expand image on click
@@ -928,20 +960,29 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
 
         // Expand delete modal on click
         $scope.deleteComCheck = function(comment) {
-            document.getElementById('delcomcheck').style.display = 'block';
-            $scope.curComment = comment;
+            if (!$scope.isLoggedIn()) return;
+            else {
+                document.getElementById('delcomcheck').style.display = 'block';
+                $scope.curComment = comment;
+            }
         };
 
         // Expand flag modal on click
         $scope.flagCheck = function(post) {
-            document.getElementById('flagcheck2').style.display = 'block';
-            $scope.curPost = post;
+            if (!$scope.isLoggedIn()) return;
+            else {
+                document.getElementById('flagcheck2').style.display = 'block';
+                $scope.curPost = post;
+            }
         };
 
         // Expand flag modal on click
         $scope.flagComCheck = function(comment) {
-            document.getElementById('flagcomcheck').style.display = 'block';
-            $scope.curComment = comment;
+            if (!$scope.isLoggedIn()) return;
+            else {
+                document.getElementById('flagcomcheck').style.display = 'block';
+                $scope.curComment = comment;
+            }
         };
 
         // State-saving
@@ -963,58 +1004,62 @@ app.controller('AuthCtrl', ['$scope', '$state', '$window', 'auth',
         $scope.user.email = '';
 
         $scope.register = function() {
-            if (!$scope.user.password || !$scope.user.netid) return;
-            if (typeof($scope.user.password) != "string" || typeof($scope.user.netid) != "string") return;
-            if ((!$scope.user.optional) == false) {
+            if (!$scope.user.password || !$scope.user.netid || auth.isLoggedIn()) return;
+            else if (typeof($scope.user.password) != "string" || typeof($scope.user.netid) != "string") return;
+            else if ((!$scope.user.optional) == false) {
                 if (typeof($scope.user.optional) != "string") return;
             }
 
-            console.log($scope.user);
-            auth.register($scope.user).error(function(error) {
-                console.log("Error in angularApp.js");
-                $scope.error = error;
-            }).then(function() {
-                auth.logOut(); // Must verify first before being able to log in
-                $state.go('verify');
-            });
+            else {
+                console.log($scope.user);
+                auth.register($scope.user).error(function(error) {
+                    console.log("Error in angularApp.js");
+                    $scope.error = error;
+                }).then(function() {
+                    auth.logOut(); // Must verify first before being able to log in
+                    $state.go('verify');
+                });
+            }
         };
 
         $scope.logIn = function() {
-            if (!$scope.user.netid || !$scope.user.password) return;
-            if (typeof($scope.user.netid) != "string" || typeof($scope.user.password) != "string") return;
-            if ((!$scope.user.optional) == false) {
+            if (!$scope.user.netid || !$scope.user.password || auth.isLoggedIn()) return;
+            else if (typeof($scope.user.netid) != "string" || typeof($scope.user.password) != "string") return;
+            else if ((!$scope.user.optional) == false) {
                 if (typeof($scope.user.optional) != "string") return;
             }
+            else {
+                var tempString = '';
+                if ($scope.user.hasOwnProperty('optional') && "undefined" !== typeof $scope.user.optional) {
+                  tempString = $scope.user.optional;
+                }
+                $scope.user.email = $scope.user.netid + "@" + tempString + "princeton.edu";
 
-            var tempString = '';
-            if ($scope.user.hasOwnProperty('optional') && "undefined" !== typeof $scope.user.optional) {
-              tempString = $scope.user.optional;
-            }
-            $scope.user.email = $scope.user.netid + "@" + tempString + "princeton.edu";
-
-            auth.logIn($scope.user).error(function(error) {
-                $scope.error = error;
-            }).then(function() {
-                auth.getUserMood(auth.currentUserId()).then(function() {
-                    auth.getUserStatus(auth.currentUserId()).then(function() {
-                        $scope.user.email = '';
-                        $window.location.reload(); // Reload entire page to update Angular variables in sidebar
+                auth.logIn($scope.user).error(function(error) {
+                    $scope.error = error;
+                }).then(function() {
+                    auth.getUserMood(auth.currentUserId()).then(function() {
+                        auth.getUserStatus(auth.currentUserId()).then(function() {
+                            $scope.user.email = '';
+                            $window.location.reload(); // Reload entire page to update Angular variables in sidebar
+                        });
                     });
                 });
-            });
+            }
         };
 
         $scope.verifyNow = function() {
-            if (!$scope.code) return;
-            if (typeof($scope.code) != "string") return;
-
-            auth.verify($scope.code).error(function(error) {
-                $scope.error = error;
-                $scope.success = false;
-            }).success(function(msg){
-                $scope.success = msg;
-                $scope.error = false;
-            });
+            if (!$scope.code || auth.isLoggedIn()) return;
+            else if (typeof($scope.code) != "string") return;
+            else {
+                auth.verify($scope.code).error(function(error) {
+                    $scope.error = error;
+                    $scope.success = false;
+                }).success(function(msg){
+                    $scope.success = msg;
+                    $scope.error = false;
+                });
+            }    
         };
     }]);
 
@@ -1025,8 +1070,11 @@ app.controller('NavCtrl', ['$scope', '$state', 'auth',
         //$scope.currentUser = auth.currentUser;
         $scope.currentUserId = auth.currentUserId;
         $scope.logOut = function() {
-            auth.logOut();
-            $state.reload(); // Reload state so logged out view doesn't contain user info
+            if (!$scope.isLoggedIn()) return;
+            else {
+                auth.logOut();
+                $state.reload(); // Reload state so logged out view doesn't contain user info
+            }
         }
     }]);
 
@@ -1113,12 +1161,15 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
 
         // Check if current mood is equal to the parameter, to help decide which mood button to highlight
         $scope.checkMood = function(moodString) {
-            if ($scope.currentMood.length === 0) {
+            if (!$scope.isLoggedIn()) return;
+            else if (!$scope.currentMood) return;
+            else if ($scope.currentMood.length === 0) {
                 return false;
             }
             else if ("undefined" === typeof $scope.currentMood[0].mood) {
                 return false;
             }
+            else if ($scope.currentMood[0].mood == 'Select one below!');
             // Button only gets highlighted if current mood is equal to button mood (new users have nothing highlighted)
             else if ($scope.currentMood[0].mood === moodString) {
                 return true;
@@ -1130,44 +1181,52 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
 
         // Update user mood
         $scope.setMoodTo = function(moodString) {
+            if (!$scope.isLoggedIn()) return;
             // If same mood as current mood, don't do anything
-            if ($scope.currentMood[0].mood === moodString) {
+            else if ($scope.currentMood[0].mood === moodString) {
                 return;
             }
-            // If not new user, decrement social mood count of current mood
-            if ($scope.currentMood[0].mood !== 'Select one below!') {
-                auth.decrementSocialMood($scope.currentMood[0].mood).then(function(){
-                    // Then, set to new mood
+            else {
+                // If not new user, decrement social mood count of current mood
+                if ($scope.currentMood[0].mood !== 'Select one below!') {
+                    auth.decrementSocialMood($scope.currentMood[0].mood).then(function(){
+                        // Then, set to new mood
+                        auth.setUserMood($scope.currentUserId(), moodString).then(function(){
+                            // Finally, increment social mood count of newly selected mood
+                            auth.incrementSocialMood(moodString);
+                        });
+                    });
+                }
+                // If new user, then nothing to decrement (the rest remains the same)
+                else {
                     auth.setUserMood($scope.currentUserId(), moodString).then(function(){
-                        // Finally, increment social mood count of newly selected mood
                         auth.incrementSocialMood(moodString);
                     });
-                });
-            }
-            // If new user, then nothing to decrement (the rest remains the same)
-            else {
-                auth.setUserMood($scope.currentUserId(), moodString).then(function(){
-                    auth.incrementSocialMood(moodString);
-                });
+                }
             }
          };
 
          // Flip status from saved to update
          $scope.flipStatus = function() {
-            $scope.currentStatusSaved = false;
-            $scope.copyStatus = angular.copy($scope.currentStatus);
-            $scope.$applyAsync(); // Apply changes in view
+            if (!$scope.isLoggedIn()) return;
+            else {
+                $scope.currentStatusSaved = false;
+                $scope.copyStatus = angular.copy($scope.currentStatus);
+                $scope.$applyAsync(); // Apply changes in view
+            }
          };
 
           // Save status and flip back to saved mode
          $scope.saveStatus = function() {
-            if (typeof(this.copyStatus) != 'string') return;
-
-            auth.setUserStatus($scope.currentUserId(), this.copyStatus).then(function() {
-                $scope.currentStatusSaved = true;
-                $scope.currentStatus = auth.status;
-                $scope.$applyAsync(); // Apply changes in view
-            });
+            if (!$scope.isLoggedIn()) return;
+            else if (typeof(this.copyStatus) != 'string') return;
+            else {
+                auth.setUserStatus($scope.currentUserId(), this.copyStatus).then(function() {
+                    $scope.currentStatusSaved = true;
+                    $scope.currentStatus = auth.status;
+                    $scope.$applyAsync(); // Apply changes in view
+                });
+            }
          };
 
          // Select a random user who's feeling low, who's not the current user
