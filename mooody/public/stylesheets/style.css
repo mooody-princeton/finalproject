@@ -233,7 +233,7 @@ h3 {
 
 .ct-legend {
     position: relative;
-    z-index: 10;
+    z-index: 2;
     list-style: none;
     text-align: center;
 }
