@@ -83,6 +83,9 @@ create_moodchart = function(data) {
            offset: 20,
            showLabel: false // bwahaha everything is relative, remove the label
        },
+       lineSmooth: Chartist.Interpolation.cardinal({
+                fillHoles: true,
+            }),
        plugins: [
            Chartist.plugins.tooltip({
                class: 'tooltip',
