@@ -390,7 +390,7 @@
         <!-- Header -->
         <div>
             <a ng-click="goBack()">
-                <div><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
+                <div style="cursor:pointer !important;"><span class="glyphicon glyphicon-arrow-left"></span> Back</div><br>
             </a>
             <div class="w3-panel w3-white w3-border post {{'post-' + post.mood}}">
                 <div align="center" style="margin-top:10px;"><img class="user-images w3-hover-opacity" ng-attr-src="{{post.imagelink}}" ng-click="expandImg(post.title, post.imagelink)"><br><hr ng-if="post.imagelink"></div>

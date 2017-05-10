@@ -28,6 +28,8 @@ app.run(function($rootScope) {
         // Loading spinner
         $rootScope.isStateLoading = false;
         $('#main-cont').css('visibility', '');
+        console.log('Prev: ' + $rootScope.previousState);
+        console.log('Curr: ' + $rootScope.currentState);
     });
 });
 
@@ -77,10 +79,12 @@ app.config(['$stateProvider','$urlRouterProvider',
         url: '/login',
         templateUrl: '/login.html',
         controller : 'AuthCtrl',
-        onEnter : ['$state', 'auth',
-    		function($state, auth) {
+        onEnter : ['$timeout', '$state', 'auth',
+    		function($timeout, $state, auth) {
     			if (auth.isLoggedIn()) {
-    				$state.go('home');
+                    $timeout(function() { // Let onEnter's transition finish first, to avoid screw up, before starting a new transition
+                           $state.go('home');
+                        },0);
     			}
             }]
     });
@@ -88,10 +92,12 @@ app.config(['$stateProvider','$urlRouterProvider',
         url : '/register',
         templateUrl : '/register.html',
         controller : 'AuthCtrl',
-        onEnter : ['$state', 'auth',
-            function($state, auth) {
+        onEnter : ['$timeout', '$state', 'auth',
+            function($timeout, $state, auth) {
                 if (auth.isLoggedIn()) {
-                    $state.go('home');
+                    $timeout(function() {
+                           $state.go('home');
+                        },0);
                 }
             }]
     });
@@ -99,10 +105,12 @@ app.config(['$stateProvider','$urlRouterProvider',
         url : '/verify',
         templateUrl : '/verify.html',
         controller : 'AuthCtrl',
-        onEnter : ['$state', 'auth',
-            function($state, auth) {
+        onEnter : ['$timeout', '$state', 'auth',
+            function($timeout, $state, auth) {
                 if (auth.isLoggedIn()) {
-                    $state.go('home');
+                    $timeout(function() {
+                           $state.go('home');
+                        },0);
                 }
             }]
     });
@@ -110,13 +118,17 @@ app.config(['$stateProvider','$urlRouterProvider',
       url: '/mymessages/{id}',
       templateUrl: '/mymessages.html',
       controller: 'MsgCtrl',
-      onEnter : ['$state', '$stateParams', 'auth',
-            function($state, $stateParams, auth) {
+      onEnter : ['$timeout', '$state', '$stateParams', 'auth',
+            function($timeout, $state, $stateParams, auth) {
                 if (!auth.isLoggedIn()) {
-                    $state.go('home');
+                    $timeout(function() {
+                           $state.go('home');
+                        },0);
                 }
                 else if (auth.currentUserId() != $stateParams.id) {
-                    $state.go('home');
+                    $timeout(function() {
+                           $state.go('home');
+                        },0);
                 }
             }],
       resolve: {
@@ -137,16 +149,22 @@ app.config(['$stateProvider','$urlRouterProvider',
         url: '/mymoodtracker/{id}/{mode}',
         templateUrl: '/mymoodtracker.html',
         controller: 'TrackerCtrl',
-        onEnter : ['$state', '$stateParams', 'auth',
-            function($state, $stateParams, auth) {
+        onEnter : ['$timeout', '$state', '$stateParams', 'auth',
+            function($timeout, $state, $stateParams, auth) {
                 if (!auth.isLoggedIn()) {
-                    $state.go('home');
+                    $timeout(function() {
+                           $state.go('home');
+                        },0);
                 }
                 else if (auth.currentUserId() != $stateParams.id) {
-                    $state.go('home');
+                    $timeout(function() {
+                           $state.go('home');
+                        },0);
                 }
                 else if ($stateParams.mode != "go" && $stateParams.mode != "stay") {
-                    $state.go('home');
+                    $timeout(function() {
+                           $state.go('home');
+                        },0);
                 }
             }],
         resolve: {
@@ -162,13 +180,17 @@ app.config(['$stateProvider','$urlRouterProvider',
         url: '/mymoodcharts/{id}',
         templateUrl: '/mymoodcharts.html',
         controller: 'ChartsCtrl',
-        onEnter : ['$state', '$stateParams', 'auth',
-            function($state, $stateParams, auth) {
+        onEnter : ['$timeout', '$state', '$stateParams', 'auth',
+            function($timeout, $state, $stateParams, auth) {
                 if (!auth.isLoggedIn()) {
-                    $state.go('home');
+                    $timeout(function() {
+                           $state.go('home');
+                        },0);
                 }
                 else if (auth.currentUserId() != $stateParams.id) {
-                    $state.go('home');
+                    $timeout(function() {
+                           $state.go('home');
+                        },0);
                 }
             }],
         resolve: {
@@ -184,8 +206,8 @@ app.config(['$stateProvider','$urlRouterProvider',
 // Factories **********************************************
 
 // Authorization factory, simultaneously takes care of mood tracking and other user functionalities
-app.factory('auth', ['$http', '$state', '$window',
-function($http, $state, $window) {
+app.factory('auth', ['$http', '$timeout', '$state', '$window',
+function($http, $timeout, $state, $window) {
 	var auth = {
         usermood: [],
         socialmood: [],
@@ -349,7 +371,9 @@ function($http, $state, $window) {
             headers: { Authorization: 'Bearer ' + auth.getToken()}
         }).then(function(res) {
             if (res.data[0].doneToday) {
-                $state.go('mymoodcharts', {id: userid});
+                $timeout(function() {
+                    $state.go('mymoodcharts', {id: userid});
+                    },0);
                 return;
             }
             else {return;}
@@ -361,7 +385,9 @@ function($http, $state, $window) {
             headers: { Authorization: 'Bearer ' + auth.getToken()}
         }).error(function(error) {
             console.log(error);
-            $state.go('home');
+            $timeout(function() {
+                $state.go('home');
+                },0);
         }).then(function(res) {
             return res.data[0];
         });
@@ -370,7 +396,7 @@ function($http, $state, $window) {
 }]);
 
 // Posts factory
-app.factory('posts', ['$http', '$state', 'auth', function($http, $state, auth) {
+app.factory('posts', ['$http', '$timeout', '$state', 'auth', function($http, $timeout, $state, auth) {
     var o = {
         posts: []
     };
@@ -425,7 +451,9 @@ app.factory('posts', ['$http', '$state', 'auth', function($http, $state, auth) {
 	};
     o.get = function(id) {
         return $http.get('/posts/' + id).error(function(error) {
-                $state.go('home');
+                $timeout(function() {
+                    $state.go('home');
+                    },0);
             }).then(function(res) {
                 // Take care of heart/flag buttons display for the post's comments
                 var i;
@@ -990,9 +1018,12 @@ app.controller('PostsCtrl', ['$scope', '$state', '$rootScope', 'posts', 'post', 
             if ($rootScope.previousState === '') {
                 $state.go('home');
             }
-            else {
-                $state.go($rootScope.previousState);
+            else if ($rootScope.previousState === 'home') {
+                $state.go('home');
                 $('html, body').animate({scrollTop:$rootScope.scrollPos}, 100);
+            }
+            else {
+                $state.go('home');
             }
         };
     }]);
@@ -1250,7 +1281,6 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
             $scope.showbox = false;
             document.getElementById('helpsomeone').style.display = 'block';
             auth.selectRandomUser($scope.currentUserId()).then(function(data) {
-                console.log(data[0]);
                 if (data[0].mood == 'NA' && data[0].status == 'NA') {
                     $scope.selectedMood = 'N/A';
                     $scope.selectedStatus = 'N/A';
@@ -1287,7 +1317,6 @@ app.controller('SidebarCtrl', ['$scope', 'auth', 'socialinfo', 'usermoodinfo', '
             $scope.showbox = false;
             document.getElementById('helpsomeone').style.display = 'block';
             auth.selectAnotherUser($scope.currentUserId(), provideduserId).then(function(data) {
-                console.log(data[0]);
                 if (data[0].mood == 'NA' && data[0].status == 'NA') {
                     $scope.selectedMood = 'N/A';
                     $scope.selectedStatus = 'N/A';
