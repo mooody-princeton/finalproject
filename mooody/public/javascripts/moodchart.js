@@ -102,7 +102,7 @@ create_moodchart = function(data) {
 
     var responsiveOptions = [
       ['screen and (min-width: 641px) and (max-width: 1024px)', {
-        showPoint: false,
+        //showPoint: false,
         axisX: {
           labelInterpolationFnc: function(value) {
             return "";
@@ -110,7 +110,7 @@ create_moodchart = function(data) {
         }
       }],
       ['screen and (max-width: 640px)', {
-        showPoint: false,
+        //showPoint: false,
         axisX: {
           labelInterpolationFnc: function(value) {
             return "";
