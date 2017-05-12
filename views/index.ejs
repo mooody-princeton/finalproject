@@ -712,8 +712,19 @@
                     <ul class="w3-right post-buttons">
                         <li class="w3-hide-small" style="font-size:15px;">{{note.date | date:'MMM dd hh:mm a'}}</li>
                         <li class="w3-hide-large w3-hide-medium" style="font-size:15px;">{{note.date | date:'MM/dd hh:mm a'}}<br></li>
-                        <li><span class="glyphicon glyphicon-trash w3-text-gray" ng-click="deleteMessage(note)">
+                        <li><span class="glyphicon glyphicon-trash w3-text-gray" ng-click="noteCheck(note)">
                         </span></li>
+                        <!-- Delete popup (modal) -->
+                        <div id="notecheck" class="w3-modal w3-animate-opacity quick-anim">
+                            <div class="w3-modal-content">
+                                <div class="w3-container w3-center w3-padding-large">
+                                    <p class="post-body">Are you sure you want to delete this message? </p>
+                                    <br>
+                                    <span class="glyphicon glyphicon-ok-circle w3-text-green w3-xxlarge" ng-click="deleteMessage(curNote)" onclick="document.getElementById('notecheck').style.display='none'"></span>
+                                    <span class="glyphicon glyphicon-remove-circle w3-text-red w3-xxlarge" onclick="document.getElementById('notecheck').style.display='none'"></span>
+                                </div>
+                            </div>
+                        </div>
                     </ul>
                 </div>
             </div>

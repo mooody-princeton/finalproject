@@ -1391,6 +1391,14 @@ app.controller('MsgCtrl', ['$scope', 'auth',
                 auth.deleteMessage(auth.currentUserId(), selectedNote);
             }
         };
+
+        $scope.noteCheck = function(note) {
+            if (!auth.isLoggedIn()) return;
+            else {
+                document.getElementById('notecheck').style.display = 'block';
+                $scope.curNote = note;
+            }
+        };
     }]);
 
 // Mood tracker controller
