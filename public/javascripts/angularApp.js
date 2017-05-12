@@ -359,6 +359,14 @@ function($http, $timeout, $state, $window) {
             }
         });
     };
+    // Delete a message
+    auth.deleteMessage = function(userid, note) {
+        return $http.put('/notes/' + note._id + '/delete', {usr: userid}, {
+            headers: { Authorization: 'Bearer ' + auth.getToken()}
+        }).success(function(data) {
+            note.deleted = data.deleted;
+            });
+    };
     // Create a new mood data entry
     auth.createMoodata = function(moodata) {
         return $http.post('/moodata', moodata, {
@@ -1376,6 +1384,13 @@ app.controller('MsgCtrl', ['$scope', 'auth',
     function($scope, auth) {
         $scope.notes = auth.notes;
         $scope.notesEmpty = auth.notesEmpty;
+
+        $scope.deleteMessage = function(selectedNote) {
+            if (!auth.isLoggedIn()) return; 
+            else {
+                auth.deleteMessage(auth.currentUserId(), selectedNote);
+            }
+        };
     }]);
 
 // Mood tracker controller

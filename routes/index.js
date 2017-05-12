@@ -468,9 +468,9 @@ router.post('/messages', function(req, res, next) {
   });
 });
 
-// GET all notes for a user
+// GET 30 most recent notes for a user
 router.get('/allnotes/:user', function(req, res, next) {
-  var filters = { recipient: req.userdocument._id };
+  var filters = { recipient: req.userdocument._id, deleted: false };
   var fields = {}; 
   var options = {limit: 30, sort: {'date': -1}};
 
@@ -478,8 +478,30 @@ router.get('/allnotes/:user', function(req, res, next) {
 
   query.exec(function(err, notes) {
     if(err) { return next(err); }
-    if (!notes.length) { res.json([{author:'Dummy string', body:'Dummy string'}]); }
+    if (!notes.length) { res.json([{author:'Dummy string', recipient:'Dummy string', body:'Dummy string', date: new Date(), deleted: true}]); }
     else {res.json(notes)};
+  });
+});
+
+// Note parameter
+router.param('note', function(req, res, next, id) {
+  var query = Message.findById(id);
+
+  query.exec(function (err, selectedNote){
+    if (err) { return next(err); }
+    if (!selectedNote) { return next(new Error('can\'t find note')); }
+
+    req.selectedNote = selectedNote;
+    return next();
+  });
+});
+
+// PUT delete to true for a message/note
+router.put('/notes/:note/delete', auth, function(req, res, next) {
+  req.selectedNote.delete(req.body.usr, function(err, note){
+    if (err) { return next(err); }
+
+    res.json(note);
   });
 });
 
