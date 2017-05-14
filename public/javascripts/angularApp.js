@@ -378,6 +378,7 @@ function($http, $timeout, $state, $window) {
         $http.put('/trackedtoday', {curruser: userid}, {
             headers: { Authorization: 'Bearer ' + auth.getToken()}
         }).then(function(res) {
+            console.log(res.data[0].doneToday);
             if (res.data[0].doneToday) {
                 $timeout(function() {
                     $state.go('mymoodcharts', {id: userid});
