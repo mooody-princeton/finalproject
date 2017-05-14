@@ -378,8 +378,6 @@ function($http, $timeout, $state, $window) {
         $http.put('/trackedtoday', {curruser: userid}, {
             headers: { Authorization: 'Bearer ' + auth.getToken()}
         }).then(function(res) {
-            console.log(res.data[0].doneToday);
-            console.log(res.data[0].teststring);
             if (res.data[0].doneToday) {
                 $timeout(function() {
                     $state.go('mymoodcharts', {id: userid});
@@ -1447,7 +1445,6 @@ app.controller('TrackerCtrl', ['$scope', '$state', 'auth',
                 study: $scope.moodata.study,
                 social: $scope.moodata.social
             }).then(function() {
-                console.log(todayString);
                 $state.go('mymoodcharts', {id: auth.currentUserId()});
             });
         };
