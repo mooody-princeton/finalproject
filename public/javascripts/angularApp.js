@@ -1447,6 +1447,7 @@ app.controller('TrackerCtrl', ['$scope', '$state', 'auth',
                 study: $scope.moodata.study,
                 social: $scope.moodata.social
             }).then(function() {
+                console.log(todayString);
                 $state.go('mymoodcharts', {id: auth.currentUserId()});
             });
         };

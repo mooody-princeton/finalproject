@@ -531,7 +531,7 @@ router.put('/trackedtoday', function(req, res, next) {
   Moodata.find(filters, fields, options, function(err, results) {
     if (err) { return next(err); }
     if (!results.length) { res.json([{teststring:todayString, doneToday: false}]); }
-    else { res.json([{doneToday: true}]); }
+    else { res.json([{teststring:todayString, doneToday: true}]); }
   });
 });
 
